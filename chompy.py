@@ -3,7 +3,7 @@
 import random
 
 def main(rows, cols):
-	game_engine((2,2))
+	game_engine((rows,cols))
 
 
 def display(board):
