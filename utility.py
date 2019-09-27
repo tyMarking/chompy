@@ -117,6 +117,20 @@ def getBoardPermutations(board):
 	global_perms[globalKey] = (perms, bXparent)
 	return (perms, bXparent)
 
+def rank(board):
+	for i in reversed(range(len(board))):
+		if board[i][-1] == 1:
+			return i+1
+	return 0
+
+
+def file(board):
+	for i in range(len(board[0])):
+		if board[0][i] == 1:
+			return len(board[0])-i
+	return 0
+	
+
 #data = [(board,[parents,],num),]
 def store(data, fileName):
 	try:
