@@ -130,6 +130,17 @@ def file(board):
 			return len(board[0])-i
 	return 0
 	
+def gamma(board):
+	count = 0
+	for i in range(len(board)):
+		for j in range(len(board[0])):
+			if board[i][j] == 1:
+				count += len(board[0]) - j
+				break
+	return count
+
+def phi(board):
+	return len(gamma)
 
 #data = [(board,[parents,],num),]
 def store(data, fileName):
