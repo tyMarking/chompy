@@ -1,3 +1,6 @@
+import random
+import json
+
 def display(board):
 	#print(board)
 	print("")
@@ -113,4 +116,24 @@ def getBoardPermutations(board):
 
 	global_perms[globalKey] = (perms, bXparent)
 	return (perms, bXparent)
+
+#data = [(board,[parents,],num),]
+def store(data, fileName):
+	try:
+		with open(fileName, "w") as file:
+			jData = json.dumps(data)
+			file.write(jData)
+			return 1
+	except:
+		return -1
+
+def load(fileName):
+	try:
+		with open(fileName, "r") as file:
+			jData = file.read()
+			data = json.loads(jData)
+			return data
+	except:
+		print("ERROR: could not find file: " + str(fileName))
+		return []
 
