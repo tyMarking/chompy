@@ -107,11 +107,42 @@ def gamma(board):
 def phi(board):
 	return len(gamma)
 
+#s1-s2
+def setSubtract(s1, s2):
+	diff = []
+	for a in s1:
+		inS2 = False
+		for b in s2:
+			if b == a:
+				inS2 = True
+		if not inS2:
+			diff.append(a)
+	return diff
+
 def delta(board1, board2):
+	g1 = gamma(board1)
+	g2 = gamma(board2)
+	return setSubtract(g1,g2) + setSubtract(g2,g1)
+
+#1 << 2 or 2 << 1
+def isRelated(board1, board2):
 	g1 = gamma(board1)
 	g2 = gamma(board2)
 	if len(g2) > len(g1):
 		g1, g2, board1, board2 = g2, g1, board2, board1
+	if len(setSubtract(g2,g1)) > 0:
+		return False
+	else:
+		return True
+
+#1<<2
+def isDecendent(board1, board2):
+	g1 = gamma(board1)
+	g2 = gamma(board2)
+	if len(setSubtract(g2,g1)) > 0:
+		return False
+	else:
+		return True
 
 #data = [(board,[parents,],num),]
 def store(data, fileName):
