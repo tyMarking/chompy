@@ -1,10 +1,10 @@
 import utility as util
 
 board = util.genBoard(3,5)
-#board[0][4] = 1
-#board[0][3] = 1
-#board[1][4] = 1
-#board[2][4] = 1
+board[0][4] = 1
+board[0][3] = 1
+board[1][4] = 1
+board[2][4] = 1
 util.display(board)
 #board[2][3] = 1
 """

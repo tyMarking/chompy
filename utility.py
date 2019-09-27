@@ -80,42 +80,6 @@ def choiceRandom(board):
 		return (len(board)-1, 0)
 	return random.choice(options)
 
-#only depends on size of board, contents ignored
-def getBoardPermutations(board):
-	rows = len(board)
-	cols = len(board[0])
-
-	globalKey = str(rows) + "--" + str(cols)
-	if globalKey in global_perms.keys():
-		return global_perms[globalKey]
-	#build 
-	baseB = genBoard(rows,cols)
-	perms = []
-	bXparent = {dKey(baseB) : []}
-	endB = genEndBoard(rows,cols)
-	cB = baseB
-	toCheck = [baseB]
-	while len(toCheck) > 0:
-		moves = getChoices(cB)
-		for move in moves:
-			nB = copy(cB)
-			bite(nB,move)
-			if dKey(nB) in bXparent.keys():
-				if cB not in bXparent[dKey(nB)]:
-					bXparent[dKey(nB)].append(cB)
-			else:
-				bXparent[dKey(nB)] = [cB]
-
-			if nB not in toCheck:
-				toCheck.append(nB)
-		toCheck.remove(cB)
-		perms.append(cB)
-		if len(toCheck) == 0:
-			break
-		cB = toCheck[0]
-
-	global_perms[globalKey] = (perms, bXparent)
-	return (perms, bXparent)
 
 def rank(board):
 	for i in reversed(range(len(board))):
@@ -131,16 +95,23 @@ def file(board):
 	return 0
 	
 def gamma(board):
-	count = 0
+	bites = []
 	for i in range(len(board)):
 		for j in range(len(board[0])):
 			if board[i][j] == 1:
-				count += len(board[0]) - j
+				for k in range(j, len(board[i])):
+					bites.append((i,k))
 				break
-	return count
+	return bites
 
 def phi(board):
 	return len(gamma)
+
+def delta(board1, board2):
+	g1 = gamma(board1)
+	g2 = gamma(board2)
+	if len(g2) > len(g1):
+		g1, g2, board1, board2 = g2, g1, board2, board1
 
 #data = [(board,[parents,],num),]
 def store(data, fileName):
