@@ -13,6 +13,7 @@ solved/mXn - [(board,[parents,],num),] for m x n board
 firstMoves.txt - list of first moves for mxn boards. JSON or CSV?
 """
 DATA_FOLDER = "./data/epoc1/"
+SOLVED_FOLDER = DATA_FOLDER + "solved/"
 THREAD_MAX = 6
 
 #have to seed 2x2 
@@ -50,8 +51,20 @@ def main():
 	for node in nodes:
 		pHandler.run( (node[0], node[1]) )
 	time.sleep(20)
+	pHandler.terminate()
 
 
+def genIndexData():
+	files = os.listdir(SOLVED_FOLDER)
+	if ".DS_Store" in files:
+		files.remove(".DS_Store")
+
+	solved = []
+	#each file shoud be in form of mXn.json 0 - not checking yet
+	for file in files:
+		solved.append( (file[0], file[2]) )
+
+	
 
 class ProccesHandler:
 	queue = None
@@ -118,32 +131,79 @@ class ProccesHandler:
 			self.addToSolved.put( (size[0], size[1]) )
 			self.queue.task_done()
 
+	"""
+	def indexNodeHandler(self, solved, nodes):
+		while True:
+			nodeSize = self.addToNodes.get()
+			print("\nNode Handler: ")
+			print(nodeSize)
+			print()
+			if not (nodeSize is None):
+				nodes.append(solvedSize)
+
+			#util.store([solved, nodes], DATA_FOLDER + "index.json")
+			self.queue.task_done()
+
+	def indexSolvedHandler(self, solved, nodes):
+		while True:
+			solvedSize = self.addToSolved.get()
+			print("\nSolved Handler: ")
+			print(solvedSize)
+			print()
+			if not (solvedSize is None):
+				print("Nodes & Solved before and after")
+				print(nodes)
+				print(solvedSize)
+				solved.append(solvedSize)
+				nodes.remove(solvedSize)
+				print(nodes)
+				print(solvedSize)
+
+			util.store([solved, nodes], DATA_FOLDER + "index.json")
+			self.queue.task_done()
+	"""	
 	def indexHandler(self, solved, nodes):
 		while True:
 			solvedSize = self.addToSolved.get()
 			nodeSize = self.addToNodes.get()
-			print("\nIndex Handler: ")
+			print("\nIndex Handler: solvedSize, nodeSize, solved, nodes ")
 			print(solvedSize)
 			print(nodeSize)
+			print(solvedSize)
+			print(nodes)
 			print()
-			if not (solvedSize is None):
-				solved.append(solvedSize)
-				print(nodes)
+
+			while not (nodeSize is None):
+				print("Adding node: " + str(nodeSize))
+				nodes.append(nodeSize)
+				self.addToNodes.task_done()
+				nodeSize = self.addToNodes.get()
+
+			while not (solvedSize is None):
+				print("Solved & Nodes before and after")
 				print(solvedSize)
+				print(nodes)
+				solved.append(solvedSize)
 				nodes.remove(solvedSize)
+				print(solvedSize)
+				print(nodes)
 
-			if not (nodeSize is None):
-				nodes.append(solvedSize)
-
-			util.store([solved, nodes], DATA_FOLDER + "index.json")
-			self.queue.task_done()
+				self.addToSolved.task_done()
+				solvedSize.addToSolved.get()
 			
+			print("Storing...")
+			util.store([solved, nodes], DATA_FOLDER + "index.json")
+			
+			
+
+	
 
 	def terminate(self):
 		""" wait until queue is empty and terminate processes """
-		self.queue.join()
+		#self.queue.join()
 		self.addToNodes.join()
 		self.addToSolved.join()
+
 		self.indexHandlerProcesses.terminate()
 		for p in self.processes:
 			p.terminate()
@@ -158,8 +218,9 @@ def seed():
 
 if __name__ == "__main__":
 	mp.set_start_method('spawn')
-	seed()
-	main()
+	#seed()
+	genIndexData()
+	#main()
 
 
 	
