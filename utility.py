@@ -152,6 +152,7 @@ def isDecendent(board1, board2):
 
 #data = [(board,[parents,],num),]
 def store(data, fileName):
+	
 	try:
 		with open(fileName, "w") as file:
 			jData = json.dumps(data)
@@ -159,6 +160,7 @@ def store(data, fileName):
 			return 1
 	except:
 		return -1
+
 
 def load(fileName):
 	try:
