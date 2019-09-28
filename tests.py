@@ -1,4 +1,4 @@
-import utility as util
+import npUtil as util
 """
 board = util.genBoard(3,5)
 board[0][4] = 1
@@ -18,9 +18,6 @@ print(data[0][2])
 #util.store([(board, [], 1)], "./data/3x5TEST2")
 
 
-
-"""
-
 b1, b2 = util.genBoard(3,5), util.genBoard(3,5)
 util.bite(b1, (0,4))
 util.bite(b1, (2,4))
@@ -34,3 +31,13 @@ util.display(b2)
 print(util.delta(b1,b2))
 print(util.isRelated(b1,b2))
 print(util.isDecendent(b2,b1))
+"""
+b = util.genBoard(3,5)
+util.display(b)
+util.bite(b, (2,1))
+util.display(b)
+#print(util.getInverseChoices(b))
+#print(util.rank(b))
+#print(util.file(b))
+print(util.gamma(b))
+print(util.phi(b))

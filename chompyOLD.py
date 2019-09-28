@@ -236,14 +236,14 @@ def game_tick(board, turn):
 
 if __name__ == '__main__':
 	
-	board = genEndBoard(3,3)
+	#board = genEndBoard(3,15)
 	
 	#print(gen_path_numbers(board))
-	for i in range(21,30):
-		print("3x"+str(i))
-		game_engine((3,i))
+	#for i in range(21,30):
+		#print("3x"+str(i))
+		#game_engine((3,i))
 
-	
+	game_engine((8,10))
 	#gen_path_numbers(genBoard(4,5))
 	#main(2,5)
 

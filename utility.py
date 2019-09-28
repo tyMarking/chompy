@@ -1,5 +1,6 @@
 import random
 import json
+import numpy as np
 
 def display(board):
 	#print(board)
@@ -20,14 +21,14 @@ def display(board):
 			rowStr += " "
 		print(rowStr)
 
-def genBoard(rows,cols):
-	board = [x[:] for x in [[0] * cols] * rows]
-	board[rows-1][0] = -1
+def genBoard(m, n):
+	board = np.zeros((m, n))
+	board[-1][0] = -1
 	return board
 
-def genEndBoard(rows,cols):
-	board = [x[:] for x in [[1] * cols] * rows]
-	board[rows-1][0] = -1
+def genEndBoard(m, n):
+	board = np.ones((m, n))
+	board[-1][0] = -1
 	return board
 
 def dKey(board):
@@ -38,24 +39,28 @@ def dKey(board):
 			key += str(s)
 	return key
 
+"""
+DEPRICATED: Using np.copy after np refactor
 def copy(board):
 	return [row[:] for row in board]
+"""
 
 def bite(board,pos):
-	row = pos[0]
-	col = pos[1]
-	if row > len(board)-1 or col > len(board[0])-1 or row < 0 or col < 0:
+	m = pos[0]
+	n = pos[1]
+	if m > len(board)-1 or n > len(board[0])-1 or m < 0 or n < 0:
 		print("Error: Bite taken out of range")
 		return
 	
-	for i in range(0,row+1):
-		for j in range(col, len(board[0])):
+	for i in range(0,m+1):
+		for j in range(n, len(board[0])):
 			board[i][j] = 1
 
-	if row == len(board)-1 and col == 0:
+	if m == len(board)-1 and n == 0:
 		print("Ate The Poision!")
-		#board[row][col] = -1
+		#board[m][n] = -1
 
+#get list of possible moves (all 0 squares)
 def getChoices(board):
 	options = []
 	for i in range(len(board)):
@@ -64,22 +69,23 @@ def getChoices(board):
 				options.append((i,j))
 	return options
 
-def getInverseChoices(board):
-	options = []
+#previously called getInverseChoices
+def getBitten(board):
+	bitten = []
 	for i in range(len(board)):
 		for j in range(len(board[0])):
 			if board[i][j] == 1:
-				options.append((i,j))
-	return options
+				bitten.append((i,j))
+	return bitten
 
-
+"""
 def choiceRandom(board):
 	options = get_choices(board)
 	#only poison left
 	if len(options) == 0:
 		return (len(board)-1, 0)
 	return random.choice(options)
-
+"""
 
 def rank(board):
 	for i in reversed(range(len(board))):
@@ -105,7 +111,7 @@ def gamma(board):
 	return bites
 
 def phi(board):
-	return len(gamma)
+	return len(gamma(board))
 
 #s1-s2
 def setSubtract(s1, s2):
