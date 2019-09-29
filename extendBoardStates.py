@@ -30,36 +30,37 @@ def appendRowToBoardStates(oldStates):
 
 	return newStates
 
+#TODO modify the col expansion to add at the beginning
 def appendColToBoardStates(oldStates):
 	newStates = []
 	for oldState in oldStates:
-		rank = util.rank(oldState)
+		lastColRank = util.lastColRank(oldState)
 		#n = len(oldState[0])
 		m = len(oldState)
 
-		#firstRow is the first row of all new cols that have bites taken from it
-		#since rank starts at 1 and ends at m, we subract 1
-		firstRow = rank - 1
-		# print("Rank: " + str(rank) + "\n")
+		#lastRow is the upper bound of the for loop.
+		#Do not add 1 even though the upper bound is not inclusive b/c then poison would be bitten
+		lastRow = lastColRank
+
+		#insert a new column at the beginning, then shif the poison over
 		blankNewState = np.insert(oldState, 0, 0, axis=1)
 		blankNewState[-1][1] = 0
 		blankNewState[-1][0] = -1
-		#if the oldState does not have any bites or bites only
-		#from the first column, the bites in the new row can be from
-		#any column up to n
-		if rank <= 1:
-			if rank == 0:
-				#for the special case of 0, add the blank state
-				newStates.append(blankNewState)
-				# print(blankNewState)
-				# print("\n")
-			firstRow = 0
 
-		#for rank == m, the default maxRow 1, requires that only the bite with
-		#the whole column is taken.
-		# print(m)
-		for i in range(firstRow, m):
-			addNewBittenCol(newStates, blankNewState, i, m)
+		#if it is valid for a bite to be there, add a new state where there is a bite
+		#where the old poison was
+		#the first part of the if is the same as saying blankNewState[-2][1] == 1
+		if lastRow == m-1 and blankNewState[-1][2] == 1:
+			moddedNewState = np.copy(blankNewState)
+			moddedNewState[-1][1] = 1
+			addNewBittenColsInRange(newStates, moddedNewState, lastRow)
+
+		#if there are no bites next to the new column, add only the blank state
+		if lastColRank == 0:
+			newStates.append(blankNewState)
+			continue
+
+		addNewBittenColsInRange(newStates, blankNewState, lastRow)
 	return newStates
 
 #newStates is what the state is appended to
@@ -75,11 +76,9 @@ def addNewBittenRowsInRange(newStates, blankNewState, rMin, rMax):
 
 #same as addNewBittenRow, but col is replaced with row
 #row is the row that the bite is taken from
-#m is the last column
-#the bite is taken at [row, m]
-def addNewBittenCol(newStates, blankNewState, row, m):
-	newState = np.copy(blankNewState)
-	util.bite(newState, [row, m])
-	# print(newState)
-	# print("\n")
-	newStates.append(newState)
+def addNewBittenColsInRange(newStates, blankNewState, rowMax):
+	newStates.append(blankNewState)
+	for i in range(0, rowMax):
+		newState = np.copy(blankNewState)
+		util.bite(newState, [i, 0])
+		newStates.append(newState)

@@ -125,6 +125,12 @@ def rank(board):
 			return i+1
 	return 0
 
+def lastColRank(board):
+	for i in reversed(range(len(board))):
+		if board[i][0] == 1:
+			return i+1
+	return 0
+
 
 def file(board):
 	for i in range(len(board[0])):

@@ -37,11 +37,9 @@ print(data[0][2])
 # print(util.isRelated(b1,b2))
 # print(util.isDecendent(b2,b1))
 
-#arr = [[1, 1, 1], [2, 2, 2], [3, 3, 3], [4, 4, 4]]
-#added = np.insert(arr, 0, 0, axis=0)
-#print(added)
 
-states2x2 = [
+def extendToMxN(m, n):
+	states2x2 = [
 	[[0 ,0],
 	 [-1,0]],
 	[[0 ,1],
@@ -52,28 +50,38 @@ states2x2 = [
 	 [-1,1]],
 	[[1 ,1],
 	 [-1,1]]
-]
-# states2x3 = ebs.appendColToBoardStates(states2x2)
-states3x3 = ebs.appendRowToBoardStates(states2x2)
-# states3x4 = ebs.appendColToBoardStates(states3x3)
-# states4x4 = ebs.appendRowToBoardStates(states3x4)
-# states4x5 = ebs.appendColToBoardStates(states4x4)
-# states5x5 = ebs.appendRowToBoardStates(states4x5)
-# states5x6 = ebs.appendColToBoardStates(states5x5)
-# states6x6 = ebs.appendRowToBoardStates(states5x6)
+	]
+	if m < 2 or n < 2:
+		print("Board must be at least 2x2")
+	elif m == 2 and n == 2:
+		return states2x2
 
+	currBoards = np.copy(states2x2)
 
-# print(len(states2x2))
-# print(len(states2x3))
-# print(len(states3x3))
-# print(len(states3x4))
-# print(len(states4x4))
-# print(len(states4x5))
-# print(len(states5x5))
-# print(len(states5x6))
-# print(len(states6x6))
+	# print(m)
+	# print(n)
 
+	currM = 2
+	currN = 2
+	while (currM < n and currN < n):
+		if (currM < m):
+			currBoards = ebs.appendColToBoardStates(currBoards)
+			print(len(currBoards))
+		if (currN < n):
+			currBoards = ebs.appendRowToBoardStates(currBoards)
+			print(len(currBoards))
+		currM = len(currBoards[0])
+		currN = len(currBoards[0][0])
+		# print(currM)
+		# print(currN)
 
-for state in states3x3:
-	print(state)
-	print("\n")
+	return currBoards
+
+extendedBoardStates = extendToMxN(10, 10)
+print(len(extendedBoardStates[0]))
+print(len(extendedBoardStates[0][0]))
+# for i in range(len(extendedBoardStates)):
+	# print(extendedBoardStates[i])
+	# print("\n")
+	# if i > 50:
+		# break
