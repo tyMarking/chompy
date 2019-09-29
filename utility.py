@@ -52,6 +52,12 @@ def bite(board,pos):
 		print("Error: Bite taken out of range")
 		return
 	
+	#convert the values of m and n to positives, so the for loop works
+	if m < 0:
+		m = len(board) + m
+	if n < 0:
+		n = len(board[0]) + n
+
 	for i in range(0,m+1):
 		for j in range(n, len(board[0])):
 			board[i][j] = 1
@@ -123,6 +129,12 @@ def rank(board):
 def file(board):
 	for i in range(len(board[0])):
 		if board[0][i] == 1:
+			return len(board[0])-i
+	return 0
+
+def lastRowFile(board):
+	for i in range(len(board[-1])):
+		if board[-1][i] == 1:
 			return len(board[0])-i
 	return 0
 	
