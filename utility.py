@@ -48,7 +48,7 @@ def copy(board):
 def bite(board,pos):
 	m = pos[0]
 	n = pos[1]
-	if m > len(board)-1 or n > len(board[0])-1 or m < 0 or n < 0:
+	if abs(m) > len(board)-1 or abs(n) > len(board[0])-1:
 		print("Error: Bite taken out of range")
 		return
 	
@@ -83,6 +83,26 @@ def getBitten(board):
 			if board[i][j] == 1:
 				bitten.append((i,j))
 	return bitten
+
+def unBite(board, pos):
+	
+	modPos = (pos[0],pos[1])
+	#looking down
+	while modPos[0] < len(board) and board[modPos[0]][modPos[1]] == 1:
+		print("ModePos")
+		print(modPos)
+		modPosPrime = (modPos[0], modPos[1])
+
+		#looking left
+		while modPosPrime[1] > 0 and board[modPosPrime[0]][modPosPrime[1]] == 1:
+			print("ModePosPrime")
+			print(modPosPrime)
+
+			board[modPosPrime[0]][modPosPrime[1]] = 0
+			modPosPrime = ( modPosPrime[0], modPosPrime[1] - 1)
+		
+		modPos= ( modPos[0] + 1, modPos[1])
+
 
 """
 def choiceRandom(board):
