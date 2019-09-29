@@ -53,27 +53,27 @@ states2x2 = [
 	[[1 ,1],
 	 [-1,1]]
 ]
-states2x3 = ebs.appendColToBoardStates(states2x2)
-states3x3 = ebs.appendRowToBoardStates(states2x3)
-states3x4 = ebs.appendColToBoardStates(states3x3)
-states4x4 = ebs.appendRowToBoardStates(states3x4)
-states4x5 = ebs.appendColToBoardStates(states4x4)
-states5x5 = ebs.appendRowToBoardStates(states4x5)
-states5x6 = ebs.appendColToBoardStates(states5x5)
-states6x6 = ebs.appendRowToBoardStates(states5x6)
+# states2x3 = ebs.appendColToBoardStates(states2x2)
+states3x3 = ebs.appendRowToBoardStates(states2x2)
+# states3x4 = ebs.appendColToBoardStates(states3x3)
+# states4x4 = ebs.appendRowToBoardStates(states3x4)
+# states4x5 = ebs.appendColToBoardStates(states4x4)
+# states5x5 = ebs.appendRowToBoardStates(states4x5)
+# states5x6 = ebs.appendColToBoardStates(states5x5)
+# states6x6 = ebs.appendRowToBoardStates(states5x6)
 
 
-print(len(states2x2))
-print(len(states2x3))
-print(len(states3x3))
-print(len(states3x4))
-print(len(states4x4))
-print(len(states4x5))
-print(len(states5x5))
-print(len(states5x6))
-print(len(states6x6))
+# print(len(states2x2))
+# print(len(states2x3))
+# print(len(states3x3))
+# print(len(states3x4))
+# print(len(states4x4))
+# print(len(states4x5))
+# print(len(states5x5))
+# print(len(states5x6))
+# print(len(states6x6))
 
 
-# for state in states4x4:
-	# print(state)
-	# print("\n")
+for state in states3x3:
+	print(state)
+	print("\n")

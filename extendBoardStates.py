@@ -7,8 +7,13 @@ def appendRowToBoardStates(oldStates):
 		file = util.file(oldState)
 		n = len(oldState[0])
 		maxCol = n - file + 1
+		print(n)
 		# print("File: " + str(file) + "\n")
-		blankNewState = np.insert(oldState, 0, 0, axis=0)
+		print(oldState)
+		blankNewState = np.append(oldState, np.zeros((1, n)), axis=0)
+		#move the poison square to the end, where it should be
+		blankNewState[-2][0] = 0
+		blankNewState[-1][0] = -1
 		#if the oldState does not have any bites or bites only
 		#from the first column, the bites in the new row can be from
 		#any column up to n
@@ -42,7 +47,9 @@ def appendColToBoardStates(oldStates):
 		#since rank starts at 1 and ends at m, we subract 1
 		firstRow = rank - 1
 		# print("Rank: " + str(rank) + "\n")
-		blankNewState = np.insert(oldState, m, 0, axis=1)
+		blankNewState = np.insert(oldState, 0, 0, axis=1)
+		blankNewState[-1][1] = 0
+		blankNewState[-1][0] = -1
 		#if the oldState does not have any bites or bites only
 		#from the first column, the bites in the new row can be from
 		#any column up to n
@@ -68,7 +75,7 @@ def appendColToBoardStates(oldStates):
 #the bite is taken at [0, col]
 def addNewBittenRow(newStates, blankNewState, col):
 	newState = np.copy(blankNewState)
-	util.bite(newState, [0, col])
+	util.bite(newState, [-1, col])
 	# print(newState)
 	# print("\n")
 	newStates.append(newState)

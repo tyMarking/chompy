@@ -239,10 +239,10 @@ if __name__ == '__main__':
 	board = genEndBoard(1,1)
 	display(board)
 	
-	#print(gen_path_numbers(board))
-	#for i in range(21,30):
-		#print("3x"+str(i))
-		#game_engine((3,i))
+	print(gen_path_numbers(board))
+	for i in range(6,30):
+		print("4x"+str(i))
+		game_engine((4,i))
 
 	game_engine((1,1))
 	#gen_path_numbers(genBoard(4,5))
