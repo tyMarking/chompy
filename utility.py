@@ -60,6 +60,12 @@ def bite(board,pos):
 		print("Ate The Poision!")
 		#board[m][n] = -1
 
+def superimpose(size, bites):
+	b = genBoard(size[0], size[1])
+	for singBite in bites:
+		bite(b, singBite)
+	return b
+
 #get list of possible moves (all 0 squares)
 def getChoices(board):
 	options = []
@@ -166,7 +172,7 @@ def load(fileName):
 	try:
 		with open(fileName, "r") as file:
 			jData = file.read()
-			data = json.loads(jData)
+			data = np.array(json.loads(jData))
 			return data
 	except:
 		print("ERROR: could not find file: " + str(fileName))
