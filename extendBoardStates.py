@@ -6,11 +6,6 @@ def appendRowToBoardStates(oldStates):
 	for oldState in oldStates:
 		lastFile = util.lastRowFile(oldState)
 
-		#if the second to last row does not have any bites, only add the blank state
-		if lastFile == 0:
-			newStates.append(blankNewState)
-			continue
-
 		n = len(oldState[0])
 
 		#the first column that new bites are taken from
@@ -21,6 +16,11 @@ def appendRowToBoardStates(oldStates):
 		blankNewState = np.append(oldState, np.zeros((1, n)), axis=0)
 		blankNewState[-2][0] = 0
 		blankNewState[-1][0] = -1
+
+		#if the second to last row does not have any bites, only add the blank state
+		if lastFile == 0:
+			newStates.append(blankNewState)
+			continue
 
 		if firstCol == 1 and blankNewState[-3][0] == 1:
 			moddedNewState = np.copy(blankNewState)
@@ -37,11 +37,6 @@ def appendColToBoardStates(oldStates):
 	for oldState in oldStates:
 		lastColRank = util.lastColRank(oldState)
 
-		#if there are no bites next to the new column, add only the blank state
-		if lastColRank == 0:
-			newStates.append(blankNewState)
-			continue
-
 		#n = len(oldState[0])
 		m = len(oldState)
 
@@ -53,6 +48,11 @@ def appendColToBoardStates(oldStates):
 		blankNewState = np.insert(oldState, 0, 0, axis=1)
 		blankNewState[-1][1] = 0
 		blankNewState[-1][0] = -1
+
+		#if there are no bites next to the new column, add only the blank state
+		if lastColRank == 0:
+			newStates.append(blankNewState)
+			continue
 
 		#if it is valid for a bite to be there, add a new state where there is a bite
 		#where the old poison was

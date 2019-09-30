@@ -3,6 +3,7 @@ import json
 import numpy as np
 import extendBoardStates as ebs
 from datetime import datetime
+import xlsxwriter as xlsxw
 
 def display(board):
 	#print(board)
@@ -29,6 +30,15 @@ def genBoard(m, n):
 	return board
 
 def extendToMxN(m, n):
+	workbook = xlsxw.Workbook(r'C:\Users\hbshr\documents\programming\chompy\chompy\extensionTimesAndLengths.xlsx')
+	worksheet = workbook.add_worksheet()
+	row = 2
+	col = 2
+	worksheet.write(0, 0, "M")
+	worksheet.write(0, 1, "N")
+	worksheet.write(0, 2, "Num States")
+	worksheet.write(0, 3, "Added Time")
+
 	states2x2 = [
 	[[0 ,0],
 	 [-1,0]],
@@ -41,6 +51,12 @@ def extendToMxN(m, n):
 	[[1 ,1],
 	 [-1,1]]
 	]
+
+	worksheet.write(1, 0, 2)
+	worksheet.write(1, 1, 2)
+	worksheet.write(1, col, len(states2x2))
+	worksheet.write(1, col + 1, 0)
+
 	if m < 2 or n < 2:
 		print("Board must be at least 2x2")
 	elif m == 2 and n == 2:
@@ -57,22 +73,31 @@ def extendToMxN(m, n):
 	startDateTime = 0
 	endDateTime = 0
 	while (currM < n and currN < n):
+		print(str(currM) + "x" + str(currN))
 		startDateTime = datetime.now()
 		if (currM < m):
-			currBoards = ebs.appendColToBoardStates(currBoards)
-			print(len(currBoards))
-		if (currN < n):
 			currBoards = ebs.appendRowToBoardStates(currBoards)
 			print(len(currBoards))
-		print(str(currM) + "x" + str(currN))
+		if (currN < n):
+			currBoards = ebs.appendColToBoardStates(currBoards)
+			print(len(currBoards))
 		currM = len(currBoards[0])
 		currN = len(currBoards[0][0])
 
 		endDateTime = datetime.now()
-		print(endDateTime - startDateTime)
+		addedTime = endDateTime - startDateTime
+		print(addedTime)
+
+		currRow = row + currN - 3
+		worksheet.write(currRow, 0, 2)
+		worksheet.write(currRow, 1, currN)
+		worksheet.write(currRow, col, len(currBoards))
+		worksheet.write(currRow, col + 1, addedTime)
+
 		startDateTime = endDateTime
 
 	print("Total time: " + str(datetime.now() - beginningDateTime))
+	workbook.close()
 	return currBoards
 
 def genEndBoard(m, n):
@@ -175,7 +200,6 @@ def lastColRank(board):
 		if board[i][0] == 1:
 			return i+1
 	return 0
-
 
 def file(board):
 	for i in range(len(board[0])):
