@@ -89,14 +89,10 @@ def unBite(board, pos):
 	modPos = (pos[0],pos[1])
 	#looking down
 	while modPos[0] < len(board) and board[modPos[0]][modPos[1]] == 1:
-		print("ModePos")
-		print(modPos)
 		modPosPrime = (modPos[0], modPos[1])
 
 		#looking left
 		while modPosPrime[1] > 0 and board[modPosPrime[0]][modPosPrime[1]] == 1:
-			print("ModePosPrime")
-			print(modPosPrime)
 
 			board[modPosPrime[0]][modPosPrime[1]] = 0
 			modPosPrime = ( modPosPrime[0], modPosPrime[1] - 1)
