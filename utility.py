@@ -30,7 +30,8 @@ def genBoard(m, n):
 	return board
 
 def extendToMxN(m, n):
-	workbook = xlsxw.Workbook(r'C:\Users\hbshr\documents\programming\chompy\chompy\extensionTimesAndLengths.xlsx')
+	#workbook = xlsxw.Workbook(r'C:\Users\hbshr\documents\programming\chompy\chompy\extensionTimesAndLengths.xlsx')
+	workbook = xlsxw.Workbook(r'./extensionTimesAndLengthsTy'+str(m)+'X'+str(n)+'.xlsx')
 	worksheet = workbook.add_worksheet()
 	row = 2
 	col = 2
@@ -263,23 +264,27 @@ def isDecendent(board1, board2):
 	else:
 		return True
 
-#data = [(board,[parents,],num),]
+#data = [(board,[parents,]),]
 def store(data, fileName):
-	
+
 	try:
 		with open(fileName, "w") as file:
 			jData = json.dumps(data)
 			file.write(jData)
 			return 1
 	except:
+		print("Failed to store to " + str(fileName))
 		return -1
+	
 
-
-def load(fileName):
+def load(fileName, npArray = True):
+	#print("LOAD FUNCTION LOADING: " + fileName)
 	try:
 		with open(fileName, "r") as file:
 			jData = file.read()
-			data = np.array(json.loads(jData))
+			data = json.loads(jData)
+			if npArray:
+				data = np.array(data)
 			return data
 	except:
 		print("ERROR: could not find file: " + str(fileName))
