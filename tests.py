@@ -38,7 +38,7 @@ print(data[0][2])
 # print(util.isDecendent(b2,b1))
 
 
-extendedBoardStates = util.extendToMxN(2, 1000)
+extendedBoardStates = util.extendToMxN(2, 200)
 print(len(extendedBoardStates[0]))
 print(len(extendedBoardStates[0][0]))
 # for i in range(len(extendedBoardStates)):
