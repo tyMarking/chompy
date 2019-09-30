@@ -15,7 +15,7 @@ firstMoves.txt - list of first moves for mxn boards. JSON or CSV?
 """
 DATA_FOLDER = "./data/epoc1/"
 SOLVED_FOLDER = DATA_FOLDER + "solved/"
-THREAD_MAX = 16
+SOLVE_THREADS = 16
 
 #have to seed 2x2 
 
@@ -36,7 +36,7 @@ def main():
 
 	solved,nodes = genIndexData()
 
-	pHandler = ProccesHandler(THREAD_MAX)
+	pHandler = ProccesHandler(1)
 
 	for node in nodes:
 		pHandler.run( node )
@@ -81,23 +81,31 @@ def solveThread(q):
 			states = []
 			#square node, start of new column
 			if size[0] == size[1]:
-				data = util.load(DATA_FOLDER + "solved/" + str(size[0]-1)+"X"+str(size[1]) + ".json")
+				"""
+				#data = util.load(DATA_FOLDER + "solved/" + str(size[0]-1)+"X"+str(size[1]) + ".json")
 				#expand vert
 				#get states of root size - this case m-1Xn since square
-				#data = [(board,[parents,],num),]
-				oldData = util.load(SOLVED_FOLDER+str(size[0]-1)+"X"+str(size[1])+".json")
+				#data = [(board,[parents,]),]
+				oldData = np.array(util.load(SOLVED_FOLDER+str(size[0])+"X"+str(size[1]-1)+".json"))
 				oldStates = oldData[:,0] 
 				states = appendRowToBoardStates(oldStates)
+				"""
+				pass
 			#not square
 			else:
-				data = util.load(DATA_FOLDER + "solved/" + str(size[0])+"X"+str(size[1]-1) + ".json")
+
+				#data = util.load(DATA_FOLDER + "solved/" + str(size[0])+"X"+str(size[1]-1) + ".json")
 				#extend horiz
 				#get states of root size - this case mXn-1
-				#data = [(board,[parents,],num),]
-				oldData = util.load(SOLVED_FOLDER+str(size[0]-1)+"X"+str(size[1])+".json")
+				#data = [(board,[parents,]),]
+				"""
+				oldData = np.array(util.load(SOLVED_FOLDER+str(size[0])+"X"+str(size[1]-1)+".json"))
+				#print("Old Data: " )
+				#print(oldData)
 				oldStates = oldData[:,0] 
 				states = appendColToBoardStates(oldStates)
-
+				"""
+				pass
 			#extend heritage
 			#calc state nums
 			#find best first move(s)
@@ -120,6 +128,63 @@ def solveThread(q):
 				print("Added " + str(size[0]+1) + "X" + str(size[1]) + " to queue")
 			
 			q.task_done()
+
+def cleanup():
+	#read files names from folder
+	#find all redundent files (not going to be used for inheriting by any nodes)
+	#read storage file
+	#add new data to old data from storage file
+	#write to storage file
+	#delet redundent files
+
+	files = os.listdir(SOLVED_FOLDER)
+	if ".DS_Store" in files:
+		files.remove(".DS_Store")
+
+	#Keep the seed to replant if neccessary
+	files.remove("2X2.json")
+	solved = []
+	solvedSizeOnly = []
+	#each file shoud be in form of mXn.json 0 - not fully checking yet
+	for file in files:
+		#rudementry check for format
+		if file[1] == "X" and file[3] == ".":
+			solved.append( ((int(file[0]), int(file[2])), file) )
+			solvedSizeOnly.append( (int(file[0]), int(file[2])) )
+	print("Solved: " + str(solved))
+	redundent = []
+	for size1 in solved:
+		size = size1[0]
+		print(size)
+		#if the next one in form mXn+1 is solved then redundent
+		if ((size[0], size[1]+1) in solvedSizeOnly):
+			#if needed for the m+1 square node
+			if size[0] + 1 == size[1] and not ((size[0]+1, size[1]) in solved):
+				continue
+			redundent.append( size1[1] )
+
+	print("redundent: " + str(redundent))
+	oldIndex = util.load(DATA_FOLDER + "index.json")
+	data = oldIndex
+
+	#means could not find file
+	if oldIndex == []:
+		data = {}
+
+	for file in redundent:
+		fileName = SOLVED_FOLDER + file
+		fData = util.load(fileName)
+		if fData == []:
+			util.store("THIS WAS DONE THROUGH CLEANUP", fileName)
+		data[file] = fData
+	print("Storing")
+	print(data)
+	print(util.store(data, DATA_FOLDER + "index.json"))
+
+
+
+	
+
 
 class ProccesHandler:
 	queue = None
@@ -149,7 +214,7 @@ class ProccesHandler:
 def seed():
 	#Replace filler with actual data
 	util.store(["FILLER"], DATA_FOLDER + "solved/2X2.json")
-	util.store([[[2, 2]], [[2, 3]]], DATA_FOLDER + "index.json")
+	util.store({}, DATA_FOLDER + "index.json")
 
 
 if __name__ == "__main__":

@@ -263,7 +263,7 @@ def isDecendent(board1, board2):
 	else:
 		return True
 
-#data = [(board,[parents,],num),]
+#data = [(board,[parents,]),]
 def store(data, fileName):
 	
 	try:
@@ -272,14 +272,18 @@ def store(data, fileName):
 			file.write(jData)
 			return 1
 	except:
+		print("Failed to store to " + str(fileName))
 		return -1
 
 
-def load(fileName):
+def load(fileName, npArray = True):
+	print("LOAD FUNCTION LOADING: " + fileName)
 	try:
 		with open(fileName, "r") as file:
 			jData = file.read()
-			data = np.array(json.loads(jData))
+			data = json.loads(jData)
+			if npArray:
+				data = npArray(data)
 			return data
 	except:
 		print("ERROR: could not find file: " + str(fileName))
