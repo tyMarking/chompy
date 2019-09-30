@@ -36,7 +36,7 @@ def main():
 
 	solved,nodes = genIndexData()
 
-	pHandler = ProccesHandler(1)
+	pHandler = ProccesHandler(SOLVE_THREADS)
 
 	for node in nodes:
 		pHandler.run( node )
@@ -112,7 +112,7 @@ def solveThread(q):
 			#save data
 
 			#MAKE SURE TO REMOVE THIS LOL
-			time.sleep( float(size[0]*size[1]) ** 0.5 )
+			time.sleep( (float(size[0]*size[1]) ** 0.5) / 2 )
 
 			util.store(["FILLER"], DATA_FOLDER + "solved/" + str(size[0]) + "X" + str(size[1]) + ".json")
 			
@@ -136,51 +136,71 @@ def cleanup():
 	#add new data to old data from storage file
 	#write to storage file
 	#delet redundent files
+	while True:
+		files = os.listdir(SOLVED_FOLDER)
+		if ".DS_Store" in files:
+			files.remove(".DS_Store")
 
-	files = os.listdir(SOLVED_FOLDER)
-	if ".DS_Store" in files:
-		files.remove(".DS_Store")
+		#Keep the seed to replant if neccessary
+		files.remove("2X2.json")
+		#indexes should corresponnd
+		solvedFiles = []
+		solvedSizeOnly = []
+		#each file shoud be in form of mXn.json 0 - not fully checking yet
+		for file in files:
+			#rudementry check for format
+			#if file[1] == "X" and file[3] == ".":
+			#print(file)
+			charI = 0
+			while file[charI] != "X":
+				charI += 1
+			m = int(file[:charI])
+			charI2 = charI
+			while file[charI2] != ".":
+				charI2 += 1
+			n = int(file[charI+1:charI2])
 
-	#Keep the seed to replant if neccessary
-	files.remove("2X2.json")
-	solved = []
-	solvedSizeOnly = []
-	#each file shoud be in form of mXn.json 0 - not fully checking yet
-	for file in files:
-		#rudementry check for format
-		if file[1] == "X" and file[3] == ".":
-			solved.append( ((int(file[0]), int(file[2])), file) )
-			solvedSizeOnly.append( (int(file[0]), int(file[2])) )
-	print("Solved: " + str(solved))
-	redundent = []
-	for size1 in solved:
-		size = size1[0]
-		print(size)
-		#if the next one in form mXn+1 is solved then redundent
-		if ((size[0], size[1]+1) in solvedSizeOnly):
-			#if needed for the m+1 square node
-			if size[0] + 1 == size[1] and not ((size[0]+1, size[1]) in solved):
-				continue
-			redundent.append( size1[1] )
+			solvedFiles.append( file )
+			solvedSizeOnly.append( (m, n) )
+		#print("Solved: " + str(solvedFiles))
+		redundent = []
+		for i in range(len(solvedFiles)):
+			size = solvedSizeOnly[i]
+			print(size)
+			#if the next one in form mXn+1 is solved then redundent
+			if ((size[0], size[1]+1) in solvedSizeOnly):
+				#if needed for the m+1 square node
+				if size[0] + 1 == size[1] and not ((size[0]+1, size[1]) in solvedSizeOnly):
+					continue
+				redundent.append( solvedFiles[i] )
 
-	print("redundent: " + str(redundent))
-	oldIndex = util.load(DATA_FOLDER + "index.json")
-	data = oldIndex
+		#print("redundent: " + str(redundent))
+		data = util.load(DATA_FOLDER + "index.json", False)
 
-	#means could not find file
-	if oldIndex == []:
-		data = {}
+		#means could not find file
+		if type(data) == type([]):
+			data = {}
 
-	for file in redundent:
-		fileName = SOLVED_FOLDER + file
-		fData = util.load(fileName)
-		if fData == []:
-			util.store("THIS WAS DONE THROUGH CLEANUP", fileName)
-		data[file] = fData
-	print("Storing")
-	print(data)
-	print(util.store(data, DATA_FOLDER + "index.json"))
+		#print("DATA BITCHES")
+		#print(data)
+		#print("Type: " + str(type(data)))
+		for file in redundent:
+			fileName = SOLVED_FOLDER + file
 
+			fData = util.load(fileName, False)
+			#if fData == []:
+				#util.store("THIS WAS DONE THROUGH CLEANUP", fileName)
+			data[file] = fData
+		#print("Storing")
+		#print(data)
+		util.store(data, DATA_FOLDER + "index.json")
+
+		#remove old files
+		for file in redundent:
+			fileName = SOLVED_FOLDER + file
+			os.remove(fileName)
+
+		time.sleep(5)
 
 
 	
@@ -192,7 +212,8 @@ class ProccesHandler:
 	def __init__(self, nb_workers=6):
 		self.queue = mp.JoinableQueue()
 		self.processes = [mp.Process(target=solveThread, args=(self.queue,), daemon=False) for i in range(nb_workers)]
-		
+		self.cleanupProcesses = mp.Process(target=cleanup)
+		self.cleanupProcesses.start()
 		for p in self.processes:
 			p.start()
 
@@ -208,6 +229,7 @@ class ProccesHandler:
 
 		for p in self.processes:
 			p.terminate()
+		self.cleanupProcesses.terminate()
 	
 
 #Creates the 2x2 solved case to act as seed for the expansion cycles
@@ -219,7 +241,7 @@ def seed():
 
 if __name__ == "__main__":
 	mp.set_start_method('spawn')
-	#seed()
+	seed()
 	main()
 
 
