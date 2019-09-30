@@ -1,6 +1,8 @@
 import random
 import json
 import numpy as np
+import extendBoardStates as ebs
+from datetime import datetime
 
 def display(board):
 	#print(board)
@@ -25,6 +27,53 @@ def genBoard(m, n):
 	board = np.zeros((m, n))
 	board[-1][0] = -1
 	return board
+
+def extendToMxN(m, n):
+	states2x2 = [
+	[[0 ,0],
+	 [-1,0]],
+	[[0 ,1],
+	 [-1,0]],
+	[[1 ,1],
+	 [-1,0]],
+	[[0 ,1],
+	 [-1,1]],
+	[[1 ,1],
+	 [-1,1]]
+	]
+	if m < 2 or n < 2:
+		print("Board must be at least 2x2")
+	elif m == 2 and n == 2:
+		return states2x2
+
+	currBoards = np.copy(states2x2)
+
+	# print(m)
+	# print(n)
+
+	currM = 2
+	currN = 2
+	beginningDateTime = datetime.now()
+	startDateTime = 0
+	endDateTime = 0
+	while (currM < n and currN < n):
+		startDateTime = datetime.now()
+		if (currM < m):
+			currBoards = ebs.appendColToBoardStates(currBoards)
+			print(len(currBoards))
+		if (currN < n):
+			currBoards = ebs.appendRowToBoardStates(currBoards)
+			print(len(currBoards))
+		print(str(currM) + "x" + str(currN))
+		currM = len(currBoards[0])
+		currN = len(currBoards[0][0])
+
+		endDateTime = datetime.now()
+		print(endDateTime - startDateTime)
+		startDateTime = endDateTime
+
+	print("Total time: " + str(datetime.now() - beginningDateTime))
+	return currBoards
 
 def genEndBoard(m, n):
 	board = np.ones((m, n))

@@ -38,46 +38,7 @@ print(data[0][2])
 # print(util.isDecendent(b2,b1))
 
 
-def extendToMxN(m, n):
-	states2x2 = [
-	[[0 ,0],
-	 [-1,0]],
-	[[0 ,1],
-	 [-1,0]],
-	[[1 ,1],
-	 [-1,0]],
-	[[0 ,1],
-	 [-1,1]],
-	[[1 ,1],
-	 [-1,1]]
-	]
-	if m < 2 or n < 2:
-		print("Board must be at least 2x2")
-	elif m == 2 and n == 2:
-		return states2x2
-
-	currBoards = np.copy(states2x2)
-
-	# print(m)
-	# print(n)
-
-	currM = 2
-	currN = 2
-	while (currM < n and currN < n):
-		if (currM < m):
-			currBoards = ebs.appendColToBoardStates(currBoards)
-			print(len(currBoards))
-		if (currN < n):
-			currBoards = ebs.appendRowToBoardStates(currBoards)
-			print(len(currBoards))
-		currM = len(currBoards[0])
-		currN = len(currBoards[0][0])
-		# print(currM)
-		# print(currN)
-
-	return currBoards
-
-extendedBoardStates = extendToMxN(10, 10)
+extendedBoardStates = util.extendToMxN(2, 1000)
 print(len(extendedBoardStates[0]))
 print(len(extendedBoardStates[0][0]))
 # for i in range(len(extendedBoardStates)):

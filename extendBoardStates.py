@@ -5,6 +5,12 @@ def appendRowToBoardStates(oldStates):
 	newStates = []
 	for oldState in oldStates:
 		lastFile = util.lastRowFile(oldState)
+
+		#if the second to last row does not have any bites, only add the blank state
+		if lastFile == 0:
+			newStates.append(blankNewState)
+			continue
+
 		n = len(oldState[0])
 
 		#the first column that new bites are taken from
@@ -21,11 +27,6 @@ def appendRowToBoardStates(oldStates):
 			moddedNewState[-2][0] = 1
 			addNewBittenRowsInRange(newStates, moddedNewState, firstCol, n)
 
-		#if the second to last row does not have any bites, only add the blank state
-		if lastFile == 0:
-			newStates.append(blankNewState)
-			continue
-
 		addNewBittenRowsInRange(newStates, blankNewState, firstCol, n)
 
 	return newStates
@@ -35,6 +36,12 @@ def appendColToBoardStates(oldStates):
 	newStates = []
 	for oldState in oldStates:
 		lastColRank = util.lastColRank(oldState)
+
+		#if there are no bites next to the new column, add only the blank state
+		if lastColRank == 0:
+			newStates.append(blankNewState)
+			continue
+
 		#n = len(oldState[0])
 		m = len(oldState)
 
@@ -54,11 +61,6 @@ def appendColToBoardStates(oldStates):
 			moddedNewState = np.copy(blankNewState)
 			moddedNewState[-1][1] = 1
 			addNewBittenColsInRange(newStates, moddedNewState, lastRow)
-
-		#if there are no bites next to the new column, add only the blank state
-		if lastColRank == 0:
-			newStates.append(blankNewState)
-			continue
 
 		addNewBittenColsInRange(newStates, blankNewState, lastRow)
 	return newStates
