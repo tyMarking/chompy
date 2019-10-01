@@ -31,7 +31,8 @@ def genBoard(m, n):
 	return board
 
 def extendToMxN(m, n):
-	workbook = xlsxw.Workbook('extensionTimesAndLengths.xlsx')
+	#workbook = xlsxw.Workbook(r'C:\Users\hbshr\documents\programming\chompy\chompy\extensionTimesAndLengths.xlsx')
+	workbook = xlsxw.Workbook(r'./extensionTimesAndLengthsTy'+str(m)+'X'+str(n)+'.xlsx')
 	worksheet = workbook.add_worksheet()
 	row = 2
 	col = 2
@@ -130,7 +131,7 @@ def bite(board,pos):
 	if abs(m) > len(board)-1 or abs(n) > len(board[0])-1:
 		print("Error: Bite taken out of range")
 		return
-	
+
 	#convert the values of m and n to positives, so the for loop works
 	if m < 0:
 		m = len(board) + m
@@ -170,7 +171,7 @@ def getBitten(board):
 	return bitten
 
 def unBite(board, pos):
-	
+
 	modPos = (pos[0],pos[1])
 	#looking down
 	while modPos[0] < len(board) and board[modPos[0]][modPos[1]] == 1:
@@ -181,7 +182,7 @@ def unBite(board, pos):
 
 			board[modPosPrime[0]][modPosPrime[1]] = 0
 			modPosPrime = ( modPosPrime[0], modPosPrime[1] - 1)
-		
+
 		modPos= ( modPos[0] + 1, modPos[1])
 
 
@@ -217,7 +218,7 @@ def lastRowFile(board):
 		if board[-1][i] == 1:
 			return len(board[0])-i
 	return 0
-	
+
 def gamma(board):
 	bites = []
 	for i in range(len(board)):
@@ -268,25 +269,28 @@ def isDecendent(board1, board2):
 	else:
 		return True
 
-#data = [(board,[parents,],num),]
+#data = [(board,[parents,]),]
 def store(data, fileName):
-	
+
 	try:
 		with open(fileName, "w") as file:
 			jData = json.dumps(data)
 			file.write(jData)
 			return 1
 	except:
+		print("Failed to store to " + str(fileName))
 		return -1
 
 
-def load(fileName):
+def load(fileName, npArray = True):
+	#print("LOAD FUNCTION LOADING: " + fileName)
 	try:
 		with open(fileName, "r") as file:
 			jData = file.read()
-			data = np.array(json.loads(jData))
+			data = json.loads(jData)
+			if npArray:
+				data = np.array(data)
 			return data
 	except:
 		print("ERROR: could not find file: " + str(fileName))
 		return []
-
