@@ -31,8 +31,7 @@ def genBoard(m, n):
 	return board
 
 def extendToMxN(m, n):
-	#workbook = xlsxw.Workbook(r'C:\Users\hbshr\documents\programming\chompy\chompy\extensionTimesAndLengths.xlsx')
-	workbook = xlsxw.Workbook(r'./extensionTimesAndLengthsTy'+str(m)+'X'+str(n)+'.xlsx')
+	workbook = xlsxw.Workbook(r'./extensionTimesAndLengths'+str(m)+'X'+str(n)+'.xlsx')
 	worksheet = workbook.add_worksheet()
 	row = 2
 	col = 2
