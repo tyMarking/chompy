@@ -2,6 +2,7 @@ import random
 import json
 import numpy as np
 import extendBoardStates as ebs
+import heritage
 from datetime import datetime
 import xlsxwriter as xlsxw
 
@@ -30,7 +31,7 @@ def genBoard(m, n):
 	return board
 
 def extendToMxN(m, n):
-	workbook = xlsxw.Workbook(r'C:\Users\hbshr\documents\programming\chompy\chompy\extensionTimesAndLengths.xlsx')
+	workbook = xlsxw.Workbook('extensionTimesAndLengths.xlsx')
 	worksheet = workbook.add_worksheet()
 	row = 2
 	col = 2
@@ -52,6 +53,8 @@ def extendToMxN(m, n):
 	 [-1,1]]
 	]
 
+	heritage2x2 = heritage.getHeritage(states2x2)
+
 	worksheet.write(1, 0, 2)
 	worksheet.write(1, 1, 2)
 	worksheet.write(1, col, len(states2x2))
@@ -62,7 +65,9 @@ def extendToMxN(m, n):
 	elif m == 2 and n == 2:
 		return states2x2
 
-	currBoards = np.copy(states2x2)
+	currBoardsAndHeritage = [np.copy(states2x2), heritage2x2]
+
+	# print(heritage2x2)
 
 	# print(m)
 	# print(n)
@@ -73,14 +78,14 @@ def extendToMxN(m, n):
 	startDateTime = 0
 	endDateTime = 0
 	while (currM < n and currN < n):
-		print(str(currM) + "x" + str(currN))
 		startDateTime = datetime.now()
 		if (currM < m):
-			currBoards = ebs.appendRowToBoardStates(currBoards)
-			print(len(currBoards))
+			currBoardsAndHeritage = ebs.appendRowToBoardStates(currBoardsAndHeritage[0], currBoardsAndHeritage[1])
+			print(len(currBoardsAndHeritage[0]))
 		if (currN < n):
-			currBoards = ebs.appendColToBoardStates(currBoards)
-			print(len(currBoards))
+			currBoardsAndHeritage = ebs.appendColToBoardStates(currBoardsAndHeritage[0], currBoardsAndHeritage[1])
+			print(len(currBoardsAndHeritage[0]))
+		print(str(currM) + "x" + str(currN))
 		currM = len(currBoards[0])
 		currN = len(currBoards[0][0])
 
@@ -89,7 +94,7 @@ def extendToMxN(m, n):
 		print(addedTime)
 
 		currRow = row + currN - 3
-		worksheet.write(currRow, 0, 2)
+		worksheet.write(currRow, 0, currM)
 		worksheet.write(currRow, 1, currN)
 		worksheet.write(currRow, col, len(currBoards))
 		worksheet.write(currRow, col + 1, addedTime)

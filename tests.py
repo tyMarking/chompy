@@ -38,11 +38,12 @@ print(data[0][2])
 # print(util.isDecendent(b2,b1))
 
 
-extendedBoardStates = util.extendToMxN(2, 200)
-print(len(extendedBoardStates[0]))
+extendedBoardStatesAndHeritage = util.extendToMxN(3, 3)
 print(len(extendedBoardStates[0][0]))
-# for i in range(len(extendedBoardStates)):
-	# print(extendedBoardStates[i])
-	# print("\n")
-	# if i > 50:
-		# break
+print(len(extendedBoardStates[0][0][0]))
+for i in range(len(extendedBoardStates)):
+	print(extendedBoardStates[0][i])
+	print(extendedBoardStates[1])
+	print("\n")
+	if i > 50:
+		break

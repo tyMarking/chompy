@@ -19,7 +19,8 @@ def getHeritage(states):
 		bites = util.gamma(state)
 		for bite in bites:
 
-			if not (bite[0] == len(state)-1 or bite[1] == 0 or (state[bite[0]+1][bite[1]-1] == 0 and not (state[bite[0]][bite[1]-1] == 1 and state[bite[0]+1][bite[1]] == 1)) ):
+			if not (bite[0] == len(state)-1 or bite[1] == 0 or (state[bite[0]+1][bite[1]-1] == 0 
+			and not (state[bite[0]][bite[1]-1] == 1 and state[bite[0]+1][bite[1]] == 1)) ):
 				newRow = bite[0] + 1
 				newCol = bite[1] - 1
 
