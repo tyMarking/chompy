@@ -31,7 +31,7 @@ def genBoard(m, n):
 	return board
 
 def extendToMxN(m, n):
-	workbook = xlsxw.Workbook(r'./extensionTimesAndLengths'+str(m)+'X'+str(n)+'.xlsx')
+	workbook = xlsxw.Workbook(r'./data/extensionTimesAndLengths'+str(m)+'X'+str(n)+'.xlsx')
 	worksheet = workbook.add_worksheet()
 	row = 2
 	col = 2
@@ -67,11 +67,6 @@ def extendToMxN(m, n):
 
 	currBoardsAndHeritage = [np.copy(states2x2), heritage2x2]
 
-	# print(heritage2x2)
-
-	# print(m)
-	# print(n)
-
 	currM = 2
 	currN = 2
 	beginningDateTime = datetime.now()
@@ -86,8 +81,8 @@ def extendToMxN(m, n):
 			currBoardsAndHeritage = ebs.appendColToBoardStates(currBoardsAndHeritage[0], currBoardsAndHeritage[1])
 			print(len(currBoardsAndHeritage[0]))
 		print(str(currM) + "x" + str(currN))
-		currM = len(currBoards[0])
-		currN = len(currBoards[0][0])
+		currM = len(currBoardsAndHeritage[0])
+		currN = len(currBoardsAndHeritage[0][0])
 
 		endDateTime = datetime.now()
 		addedTime = endDateTime - startDateTime
@@ -96,14 +91,14 @@ def extendToMxN(m, n):
 		currRow = row + currN - 3
 		worksheet.write(currRow, 0, currM)
 		worksheet.write(currRow, 1, currN)
-		worksheet.write(currRow, col, len(currBoards))
+		worksheet.write(currRow, col, len(currBoardsAndHeritage[0]))
 		worksheet.write(currRow, col + 1, addedTime)
 
 		startDateTime = endDateTime
 
 	print("Total time: " + str(datetime.now() - beginningDateTime))
 	workbook.close()
-	return currBoards
+	return currBoardsAndHeritage
 
 def genEndBoard(m, n):
 	board = np.ones((m, n))

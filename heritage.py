@@ -14,7 +14,8 @@ def getHeritage(states):
 	stateXparents = {}
 	
 	for state in states:
-		stateXparents[util.dKey(state)] = []
+		dKey = util.dKey(state)
+		stateXparents[dKey] = []
 
 		bites = util.gamma(state)
 		for bite in bites:
@@ -35,5 +36,5 @@ def getHeritage(states):
 
 			parent = np.copy(state)
 			util.unBite(parent, bite)
-			stateXparents[util.dKey(state)].append(parent)
+			stateXparents[dKey].append(parent)
 	return stateXparents
