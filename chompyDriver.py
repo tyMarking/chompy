@@ -2,7 +2,7 @@ import numpy as np
 import multiprocessing as mp
 import time
 import os
-
+import queue
 import utility as util
 import extendBoardStates as ebs
 
@@ -14,6 +14,7 @@ solved/mXn - [(board,[parents,],num),] for m x n board
 firstMoves.txt - list of first moves for mxn boards. JSON or CSV?
 """
 DATA_FOLDER = "./data/epoc1/"
+STATES_FOLDER = DATA_FOLDER + "states/"
 SOLVED_FOLDER = DATA_FOLDER + "solved/"
 SOLVE_THREADS = 16
 
@@ -45,7 +46,7 @@ def main():
 
 #gets the list of solved sizes and gens the list of current nodes to be worked on
 def genIndexData():
-	files = os.listdir(SOLVED_FOLDER)
+	files = os.listdir(STATES_FOLDER)
 	if ".DS_Store" in files:
 		files.remove(".DS_Store")
 
@@ -68,6 +69,7 @@ def genIndexData():
 	return (solved, nodes)
 	
 
+
 def solveThread(q):
 	while True:
 			size = q.get()
@@ -78,43 +80,33 @@ def solveThread(q):
 			# process your item here
 			print("Processing "  +str(size[0])+"X"+str(size[1]) + " in " + str(os.getpid()))
 			
-			states = []
+			#data = [[states],hertitigeDict]
+			data = []
 			#square node, start of new column
 			if size[0] == size[1]:
-				"""
-				#data = util.load(DATA_FOLDER + "solved/" + str(size[0]-1)+"X"+str(size[1]) + ".json")
 				#expand vert
 				#get states of root size - this case m-1Xn since square
-				#data = [(board,[parents,]),]
-				oldData = np.array(util.load(SOLVED_FOLDER+str(size[0])+"X"+str(size[1]-1)+".json"))
-				oldStates = oldData[:,0] 
-				states = appendRowToBoardStates(oldStates)
-				"""
+				
+				oldData = util.load(STATES_FOLDER+str(size[0]-1)+"X"+str(size[1])+".json")
+				states = ebs.appendRowToBoardStates(oldData[0], oldData[1])
+				
 				pass
 			#not square
 			else:
-
-				#data = util.load(DATA_FOLDER + "solved/" + str(size[0])+"X"+str(size[1]-1) + ".json")
 				#extend horiz
 				#get states of root size - this case mXn-1
-				#data = [(board,[parents,]),]
-				"""
-				oldData = np.array(util.load(SOLVED_FOLDER+str(size[0])+"X"+str(size[1]-1)+".json"))
-				#print("Old Data: " )
-				#print(oldData)
-				oldStates = oldData[:,0] 
-				states = appendColToBoardStates(oldStates)
-				"""
+				oldData = util.load(STATES_FOLDER+str(size[0])+"X"+str(size[1]-1)+".json")
+				print("\n\n\nOld Data: " + str(oldData) + "\n\n\n")
+				states = ebs.appendColToBoardStates(oldData[0], oldData[1])
+				
 				pass
-			#extend heritage
-			#calc state nums
-			#find best first move(s)
+
 			#save data
 
 			#MAKE SURE TO REMOVE THIS LOL
-			time.sleep( (float(size[0]*size[1]) ** 0.5) / 2 )
+			#time.sleep( (float(size[0]*size[1]) ** 0.5) / 2 )
 
-			util.store(["FILLER"], DATA_FOLDER + "solved/" + str(size[0]) + "X" + str(size[1]) + ".json")
+			util.store(data.tolist(), STATES_FOLDER + str(size[0]) + "X" + str(size[1]) + ".json")
 			
 
 
@@ -129,6 +121,70 @@ def solveThread(q):
 			
 			q.task_done()
 
+
+
+
+def gen_path_numbers(perms, bXparents):
+	#dictionary of board permutations with their playable options
+	#build perms as it goes?
+	#start with fully bitten board
+
+	endBoard = util.genEndBoard(len(perms[0]), len(perms[0][0]))
+
+	bXnum = {util.dKey(endBoard) : 0}
+	#sorted by least number of choices
+	evalQ = queue.PriorityQueue()
+	for b in perms:
+		evalQ.put((len(util.get_choices(b)), b))
+
+	evalQ.put((-1, endBoard))
+
+	checked = []
+
+	while evalQ.qsize() > 0:
+		#print("Q size: " + str(evalQ.qsize()))
+		cB = evalQ.get()[1]
+		#print("cB:")
+		#display(cB)
+		num = bXnum[util.dKey(cB)]
+		#print("cB's num: " + str(num))
+
+		for parent in bXparents[util.dKey(cB)]:
+			#print("parent:")
+			#display(parent)
+			#print(bXnum.keys())
+			#print("parent key: " + str(dKey(parent)))
+			pKey = util.dKey(parent)
+
+			if not (pKey in bXnum.keys()):
+				#print("condition 1")
+				bXnum[pKey] = num + 1
+			elif (num + 1) % 2 == 1 and (bXnum[pKey] % 2 == 0 or (num+1) < bXnum[pKey]):
+				#print("condition 2")
+				bXnum[pKey] = num + 1
+			elif (num + 1) < bXnum[pKey] and bXnum[pKey] % 2 == 0:
+				#print("condition 3")
+				bXnum[pKey] = num + 1
+			
+	return bXnum
+
+def getFirstMove(perms, bXparent):
+	
+	bXchild = {}
+	for b in perms:
+		bXchild[dKey(b)] = []
+	for b in perms:
+		for parent in bXparent[dKey(b)]:
+			if not b in bXchild[dKey(parent)]:
+				bXchild[dKey(parent)].append(b)
+
+	moves = []
+	for c in bXchild[dKey(board)]:
+		if bXnum[dKey(c)] % 2 == 0:
+			moves.append(c)
+	return moves
+
+
 def cleanup():
 	#read files names from folder
 	#find all redundent files (not going to be used for inheriting by any nodes)
@@ -137,7 +193,7 @@ def cleanup():
 	#write to storage file
 	#delet redundent files
 	while True:
-		files = os.listdir(SOLVED_FOLDER)
+		files = os.listdir(STATES_FOLDER)
 		if ".DS_Store" in files:
 			files.remove(".DS_Store")
 
@@ -185,9 +241,11 @@ def cleanup():
 		#print(data)
 		#print("Type: " + str(type(data)))
 		for file in redundent:
-			fileName = SOLVED_FOLDER + file
+			fileName = STATES_FOLDER + file
 
 			fData = util.load(fileName, False)
+
+
 			#if fData == []:
 				#util.store("THIS WAS DONE THROUGH CLEANUP", fileName)
 			data[file] = fData
@@ -197,7 +255,7 @@ def cleanup():
 
 		#remove old files
 		for file in redundent:
-			fileName = SOLVED_FOLDER + file
+			fileName = STATES_FOLDER + file
 			os.remove(fileName)
 
 		time.sleep(5)
@@ -235,7 +293,9 @@ class ProccesHandler:
 #Creates the 2x2 solved case to act as seed for the expansion cycles
 def seed():
 	#Replace filler with actual data
-	util.store(["FILLER"], DATA_FOLDER + "solved/2X2.json")
+	dataTwo = np.array(util.extendToMxN(2,2)).tolist()
+	print("2data: " + str(dataTwo))
+	util.store(dataTwo, DATA_FOLDER + "solved/2X2.json")
 	util.store({}, DATA_FOLDER + "index.json")
 
 

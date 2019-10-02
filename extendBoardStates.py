@@ -131,14 +131,16 @@ def addNewBittenRowsInRange(newStates, blankNewState, rMin, rMax, extendedHerita
 def addNewBittenColsInRange(newStates, blankNewState, rowMax, extendedHeritage, hertiages, oldState):
 	newStates.append(blankNewState)
 
+	length = len(blankNewState[0])
+
 	newHeritages = hertiages[util.dKey(oldState)]
 	dKeyState = util.dKey(blankNewState)
 	#add the heritage for the current state
 	for newHeritage in newHeritages:
 		if dKeyState in extendedHeritage.keys():
-			extendedHeritage[dKeyState].append(prependColToBoardState(newHeritage))
+			extendedHeritage[dKeyState].append(prependColToBoardState(newHeritage, length))
 		else:
-			extendedHeritage[dKeyState] = [appendRowToBoardState(newHeritage)]
+			extendedHeritage[dKeyState] = [addNewRowToBoardState(newHeritage, length)]
 
 	for i in range(0, rowMax):
 		newState = np.copy(blankNewState)

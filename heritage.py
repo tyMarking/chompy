@@ -33,7 +33,7 @@ def getHeritage(states):
 					if (state[bite[0]][newCol] == 1 or state[newRow][bite[1]] == 1):
 						continue		
 
-			parent = np.copy(state)
+			parent = np.copy(state).tolist()
 			util.unBite(parent, bite)
 			stateXparents[util.dKey(state)].append(parent)
 	return stateXparents
