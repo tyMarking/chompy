@@ -21,5 +21,11 @@ util.display(b)
 util.unBite(b, (0,1))
 util.display(b)
 """
-cd.seed()
-cd.cleanup()
+#cd.seed()
+#cd.cleanup()
+
+b = util.genBoard(3,4)
+util.bite(b, (0,1))
+util.bite(b, (2,2))
+util.display(b)
+print(heritage.getHeritage([b]))
