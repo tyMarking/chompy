@@ -136,7 +136,7 @@ def addNewBittenColsInRange(newStates, blankNewState, rowMax, extendedHeritage, 
 	extendedHeritage[dKeyState] = heritage.getHeritage([blankNewState])[dKeyState]
 	# /\
 	# |
-	# naive method of getting heritage, just generating from scratch every time 
+	# naive method of getting heritage, just generating from scratch every time
 
 	for i in range(0, rowMax):
 		newState = np.copy(blankNewState)

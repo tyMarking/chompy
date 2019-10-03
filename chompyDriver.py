@@ -21,12 +21,12 @@ SOLVED_FOLDER = DATA_FOLDER + "solved/"
 SOLVE_THREADS = 4
 GRAPH_THREADS = 4
 
-#have to seed 2x2 
+#have to seed 2x2
 
 def main():
 	"""
 	1. read index
-		a. get list of current working nodes 
+		a. get list of current working nodes
 			(unsolved nodes for which we have mXn-1 solved or the next square)
 	2. for each working node create new thread (up to thread max)
 	3. In thread:
@@ -61,7 +61,7 @@ class ProccesHandler:
 		self.cleanupProcesses = mp.Process(target=cleanup)
 		#state reader process
 		self.rProcess = mp.Process(target=stateReader, args=(self.graphQueue,), daemon=False)
-		
+
 		self.cleanupProcesses.start()
 		self.rProcess.start()
 		for p in self.processes:
@@ -73,7 +73,7 @@ class ProccesHandler:
 		self.permQueue.put(item)
 
 
-	
+
 
 	def terminate(self):
 		""" wait until queue is empty and terminate processes """ #-except don't cause queue will never empty
@@ -109,7 +109,7 @@ def genIndexData():
 			nodes.append( (size[0]+1, size[1]) )
 
 	return (solved, nodes)
-	
+
 
 
 def statesThread(q):
@@ -121,8 +121,8 @@ def statesThread(q):
 
 		# process your item here
 		#print("Processing "  +str(size[0])+"X"+str(size[1]) + " in " + str(os.getpid()))
-		
-		
+
+
 		#square node, start of new column
 		if size[0] == size[1]:
 			#expand vert
@@ -130,16 +130,16 @@ def statesThread(q):
 			#data = [[board],[children]
 			oldData = util.load(STATES_FOLDER+str(size[0]-1)+"X"+str(size[1])+".json", False)
 			newData = ebs.appendRowToBoardStates(oldData[0], oldData[1])
-			
+
 		#not square
 		else:
 			#extend horiz
 			#get states of root size - this case mXn-1
 			#data = [[board],[children]
-			
+
 			oldData = util.load(STATES_FOLDER+str(size[0])+"X"+str(size[1]-1)+".json", False)
 			newData = ebs.appendColToBoardStates(oldData[0], oldData[1])
-			
+
 		newData[0] = (np.array(newData[0])).tolist()
 
 		#MAKE SURE TO REMOVE THIS LOL
@@ -151,12 +151,12 @@ def statesThread(q):
 		#put mXn+1
 		q.put( (size[0], size[1]+1) )
 		#print("Added " + str(size[0]) + "X" + str(size[1]+1) + " to queue")
-		
+
 		#if m+1Xn is square (root of new column)
 		if size[0]+1 == size[1]:
 			q.put( (size[0]+1, size[1]) )
 			#print("Added " + str(size[0]+1) + "X" + str(size[1]) + " to queue")
-		
+
 		q.task_done()
 
 
@@ -190,7 +190,7 @@ def graphThread(q):
 			firstMoves = graph.getFirstMoves(states, bXchild, bXnum)
 
 			data = [states, bXchild, bXparent, bXnum, firstMoves]
-			
+
 			#data = "filler + graph"
 
 			util.store(data, SOLVED_FOLDER + file)
@@ -249,7 +249,7 @@ def stateReader(q):
 
 				redundent.append( solvedFiles[i] )
 
-		
+
 		for file in redundent:
 			os.rename(STATES_FOLDER + file, TRANSFER_FOLDER + file)
 			#data = util.load(STATES_FOLDER + file, False)
@@ -348,11 +348,11 @@ def cleanup():
 		time.sleep(5)
 
 
-	
 
 
 
-	
+
+
 
 #Creates the 2x2 solved case to act as seed for the expansion cycles
 def seed():
@@ -366,8 +366,5 @@ def seed():
 
 if __name__ == "__main__":
 	mp.set_start_method('spawn')
-	seed()
+	#seed()
 	main()
-
-
-	
