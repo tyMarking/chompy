@@ -6,6 +6,7 @@ import os
 import utility as util
 import extendBoardStates as ebs
 import graph
+from pathlib import Path
 
 """
 Data structure:
@@ -14,10 +15,11 @@ index.txt - contains current state data
 solved/mXn - [(board,[parents,],num),] for m x n board
 firstMoves.txt - list of first moves for mxn boards. JSON or CSV?
 """
-DATA_FOLDER = "./data/epoc1/"
-STATES_FOLDER = DATA_FOLDER + "states/"
-TRANSFER_FOLDER = DATA_FOLDER + "transfer/"
-SOLVED_FOLDER = DATA_FOLDER + "solved/"
+THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+DATA_FOLDER = Path(THIS_FOLDER, "./data/epoc1/")
+STATES_FOLDER = DATA_FOLDER / "states/"
+TRANSFER_FOLDER = DATA_FOLDER / "transfer/"
+SOLVED_FOLDER = DATA_FOLDER / "solved/"
 SOLVE_THREADS = 4
 GRAPH_THREADS = 4
 
@@ -128,7 +130,8 @@ def statesThread(q):
 			#expand vert
 			#get states of root size - this case m-1Xn since square
 			#data = [[board],[children]
-			oldData = util.load(STATES_FOLDER+str(size[0]-1)+"X"+str(size[1])+".json", False)
+			fileName = str(size[0]-1)+"X"+str(size[1])+".json"
+			oldData = util.load(STATES_FOLDER/ fileName, False)
 			newData = ebs.appendRowToBoardStates(oldData[0], oldData[1])
 
 		#not square
@@ -136,8 +139,8 @@ def statesThread(q):
 			#extend horiz
 			#get states of root size - this case mXn-1
 			#data = [[board],[children]
-
-			oldData = util.load(STATES_FOLDER+str(size[0])+"X"+str(size[1]-1)+".json", False)
+			fileName = str(size[0])+"X"+str(size[1]-1)+".json"
+			oldData = util.load(STATES_FOLDER / fileName, False)
 			newData = ebs.appendColToBoardStates(oldData[0], oldData[1])
 
 		newData[0] = (np.array(newData[0])).tolist()
@@ -145,8 +148,8 @@ def statesThread(q):
 		#MAKE SURE TO REMOVE THIS LOL
 		#time.sleep( (float(size[0]*size[1]) ** 0.5) / 2 )
 		#time.sleep(1)
-
-		util.store(newData, STATES_FOLDER + str(size[0]) + "X" + str(size[1]) + ".json")
+		fileName = str(size[0]) + "X" + str(size[1]) + ".json"
+		util.store(newData, STATES_FOLDER / fileName)
 
 		#put mXn+1
 		q.put( (size[0], size[1]+1) )
@@ -168,7 +171,7 @@ def graphThread(q):
 		else:
 			file = q.get()
 			print("Graph Solving " + str(file))
-			fileName = TRANSFER_FOLDER + file
+			fileName = TRANSFER_FOLDER / file
 			#[[states],{stateXchild}]
 			fData = util.load(fileName, False)
 			if fData == "Failed":
@@ -193,7 +196,7 @@ def graphThread(q):
 
 			#data = "filler + graph"
 
-			util.store(data, SOLVED_FOLDER + file)
+			util.store(data, SOLVED_FOLDER / file)
 			os.remove(fileName)
 			q.task_done()
 
@@ -251,10 +254,10 @@ def stateReader(q):
 
 
 		for file in redundent:
-			os.rename(STATES_FOLDER + file, TRANSFER_FOLDER + file)
-			#data = util.load(STATES_FOLDER + file, False)
-			#util.store(data, TRANSFER_FOLDER + file)
-			#os.remove(STATES_FOLDER + file)
+			os.rename(STATES_FOLDER / file, TRANSFER_FOLDER / file)
+			#data = util.load(STATES_FOLDER / file, False)
+			#util.store(data, TRANSFER_FOLDER / file)
+			#os.remove(STATES_FOLDER / file)
 
 
 		"""
@@ -318,7 +321,7 @@ def cleanup():
 				redundent.append( solvedFiles[i] )
 
 		#print("redundent: " + str(redundent))
-		data = util.load(DATA_FOLDER + "index.json", False)
+		data = util.load(DATA_FOLDER / "index.json", False)
 
 		#means could not find file
 		if type(data) == type([]):
@@ -328,7 +331,7 @@ def cleanup():
 		#print(data)
 		#print("Type: " + str(type(data)))
 		for file in redundent:
-			fileName = SOLVED_FOLDER + file
+			fileName = SOLVED_FOLDER / file
 
 			fData = util.load(fileName, False)
 
@@ -338,11 +341,11 @@ def cleanup():
 			data[file] = fData
 		#print("Storing")
 		#print(data)
-		util.store(data, DATA_FOLDER + "index.json")
+		util.store(data, DATA_FOLDER / "index.json")
 
 		#remove old files
 		for file in redundent:
-			fileName = SOLVED_FOLDER + file
+			fileName = SOLVED_FOLDER / file
 			os.remove(fileName)
 
 		time.sleep(5)
@@ -359,12 +362,12 @@ def seed():
 	#Replace filler with actual data
 	dataTwo = np.array(util.extendToMxN(2,2)).tolist()
 	print("2data: " + str(dataTwo))
-	util.store(dataTwo, STATES_FOLDER + "2X2.json")
-	util.store(dataTwo, TRANSFER_FOLDER + "2X2.json")
-	util.store({}, DATA_FOLDER + "index.json")
+	util.store(dataTwo, STATES_FOLDER / "2X2.json")
+	util.store(dataTwo, TRANSFER_FOLDER / "2X2.json")
+	util.store({}, DATA_FOLDER / "index.json")
 
 
 if __name__ == "__main__":
 	mp.set_start_method('spawn')
-	#seed()
+	seed()
 	main()
