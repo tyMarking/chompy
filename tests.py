@@ -43,10 +43,12 @@ extendedBoardStates = util.extendToMxN(3, 3)
 # print(len(extendedBoardStates[0][0][0]))
 for i in range(len(extendedBoardStates[0])):
 	print(extendedBoardStates[0][i])
-	
-	parents = extendedBoardStates[1][util.dKey(extendedBoardStates[0][i])]
-	for parent in parents:
-		print("\t" + str(parent).replace('\n', '\n\t'))
+	print("\n")
+	children = extendedBoardStates[1][util.dKey(extendedBoardStates[0][i])]
+	# print(children)
+	for child in children:
+		# print(child)
+		print("\t" + str(np.array(child)).replace('\n', '\n \t'))
 		print("\n")
 
 	# print(extendedBoardStates[1])
