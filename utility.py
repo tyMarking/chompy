@@ -26,7 +26,7 @@ def display(board):
 		print(rowStr)
 
 def genBoard(m, n):
-	board = np.zeros((m, n))
+	board = np.zeros((m, n)).astype(int)
 	board[-1][0] = -1
 	return board
 
@@ -101,7 +101,7 @@ def extendToMxN(m, n):
 	return currBoardsAndHeritage
 
 def genEndBoard(m, n):
-	board = np.ones((m, n))
+	board = np.ones((m, n)).astype(int)
 	board[-1][0] = -1
 	return board
 
@@ -110,7 +110,7 @@ def dKey(board):
 	for row in board:
 		key += "/"
 		for s in row:
-			key += str(s)
+			key += str(int(s))
 	return key
 
 """
@@ -293,4 +293,4 @@ def load(fileName, npArray = True):
 			return data
 	except:
 		print("ERROR: could not find file: " + str(fileName))
-		return []
+		return "Failed"
