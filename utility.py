@@ -63,7 +63,7 @@ def extendToMxN(m, n):
 	if m < 2 or n < 2:
 		print("Board must be at least 2x2")
 	elif m == 2 and n == 2:
-		return states2x2
+		return [states2x2, heritage2x2]
 
 	currBoardsAndHeritage = [np.copy(states2x2), heritage2x2]
 
@@ -266,6 +266,12 @@ def isDecendent(board1, board2):
 #data = [(board,[parents,]),]
 def store(data, fileName):
 
+	#print(data)
+	with open(fileName, "w") as file:
+			jData = json.dumps(data)
+			file.write(jData)
+			return 1
+	"""
 	try:
 		with open(fileName, "w") as file:
 			jData = json.dumps(data)
@@ -274,7 +280,7 @@ def store(data, fileName):
 	except:
 		print("Failed to store to " + str(fileName))
 		return -1
-
+	"""
 
 def load(fileName, npArray = True):
 	#print("LOAD FUNCTION LOADING: " + fileName)

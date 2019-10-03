@@ -78,43 +78,34 @@ def solveThread(q):
 			# process your item here
 			print("Processing "  +str(size[0])+"X"+str(size[1]) + " in " + str(os.getpid()))
 			
-			states = []
+			
 			#square node, start of new column
 			if size[0] == size[1]:
-				"""
-				#data = util.load(DATA_FOLDER + "solved/" + str(size[0]-1)+"X"+str(size[1]) + ".json")
 				#expand vert
 				#get states of root size - this case m-1Xn since square
-				#data = [(board,[parents,]),]
-				oldData = np.array(util.load(SOLVED_FOLDER+str(size[0])+"X"+str(size[1]-1)+".json"))
-				oldStates = oldData[:,0] 
-				states = appendRowToBoardStates(oldStates)
-				"""
-				pass
+				#data = [[board],[children]
+				oldData = util.load(SOLVED_FOLDER+str(size[0]-1)+"X"+str(size[1])+".json", False)
+				newData = ebs.appendRowToBoardStates(oldData[0], oldData[1])
+				
+				
 			#not square
 			else:
-
-				#data = util.load(DATA_FOLDER + "solved/" + str(size[0])+"X"+str(size[1]-1) + ".json")
 				#extend horiz
 				#get states of root size - this case mXn-1
 				#data = [(board,[parents,]),]
-				"""
-				oldData = np.array(util.load(SOLVED_FOLDER+str(size[0])+"X"+str(size[1]-1)+".json"))
-				#print("Old Data: " )
-				#print(oldData)
-				oldStates = oldData[:,0] 
-				states = appendColToBoardStates(oldStates)
-				"""
-				pass
-			#extend heritage
-			#calc state nums
-			#find best first move(s)
-			#save data
+				
+				oldData = util.load(SOLVED_FOLDER+str(size[0])+"X"+str(size[1]-1)+".json", False)
+				newData = ebs.appendColToBoardStates(oldData[0], oldData[1])
+				
+				
+
+			newData[0] = (np.array(newData[0])).tolist()
 
 			#MAKE SURE TO REMOVE THIS LOL
-			time.sleep( (float(size[0]*size[1]) ** 0.5) / 2 )
+			#time.sleep( (float(size[0]*size[1]) ** 0.5) / 2 )
+			#time.sleep(1)
 
-			util.store(["FILLER"], DATA_FOLDER + "solved/" + str(size[0]) + "X" + str(size[1]) + ".json")
+			util.store(newData, DATA_FOLDER + "solved/" + str(size[0]) + "X" + str(size[1]) + ".json")
 			
 
 
@@ -235,13 +226,14 @@ class ProccesHandler:
 #Creates the 2x2 solved case to act as seed for the expansion cycles
 def seed():
 	#Replace filler with actual data
-	util.store(["FILLER"], DATA_FOLDER + "solved/2X2.json")
+
+	util.store(util.extendToMxN(2,2), DATA_FOLDER + "solved/2X2.json")
 	util.store({}, DATA_FOLDER + "index.json")
 
 
 if __name__ == "__main__":
 	mp.set_start_method('spawn')
-	seed()
+	#seed()
 	main()
 
 
