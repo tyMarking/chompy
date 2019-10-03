@@ -7,8 +7,52 @@ I won't know.
 I don't know.
 It's a mess but it covers all cases (I think)
 """
+"""
+def getPBites(board):
+	rowFiles = [0]*len(board)
+	colRanks = [0]*len(board[0])
+	for i in range(len(board)):
+		for j in range(len(board[i])):
+			if board[i][j] == 1:
+				rowFiles[i] = (len(board[i])-j)
+				break 
+
+	for i in range(len(board[0])):
+		for j in reversed(range(len(rowFiles))):
+			if rowFiles[j] >= len(board[0])-i:
+				colRanks[i] = j+1
+				break
+	print("rowFiles: " + str(rowFiles))
+	print("colRanks: " + str(colRanks))
+	ret = []
+	for bite in util.getBitten(board):
+		if colRanks[bite[1]] > bite[0]+1:
+			continue
+		if rowFiles[bite[0]] > len(board[0])-(bite[1]):
+			continue
+		print(bite)
+		ret.append(bite)
+
+	return ret
+"""
+
+def getHeritage(states):
+	stateXchildren = {}
+
+	for state in states:
+		key = util.dKey(state)
+		stateXchildren[key] = []
+		bites = util.getChoices(state)
+
+		for bite in bites:
+
+			parent = np.copy(state)
+			util.bite(parent, bite)
+			stateXchildren[key].append(parent.tolist())
+	return stateXchildren
 
 
+"""
 def getHeritage(states):
 	
 	stateXparents = {}
@@ -37,3 +81,4 @@ def getHeritage(states):
 			util.unBite(parent, bite)
 			stateXparents[util.dKey(state)].append(parent)
 	return stateXparents
+"""
