@@ -2,9 +2,10 @@ import numpy as np
 import multiprocessing as mp
 import time
 import os
-import queue
+#import queue
 import utility as util
 import extendBoardStates as ebs
+import graph
 
 """
 Data structure:
@@ -15,9 +16,10 @@ firstMoves.txt - list of first moves for mxn boards. JSON or CSV?
 """
 DATA_FOLDER = "./data/epoc1/"
 STATES_FOLDER = DATA_FOLDER + "states/"
+TRANSFER_FOLDER = DATA_FOLDER + "transfer/"
 SOLVED_FOLDER = DATA_FOLDER + "solved/"
-SOLVE_THREADS = 8
-GRAPH_THREADS = 8
+SOLVE_THREADS = 4
+GRAPH_THREADS = 4
 
 #have to seed 2x2 
 
@@ -51,10 +53,17 @@ class ProccesHandler:
 
 	def __init__(self, perm_workers=6, graph_workers=6):
 		self.permQueue = mp.JoinableQueue()
+		self.graphQueue = mp.JoinableQueue()
+		#states processes
 		self.processes = [mp.Process(target=statesThread, args=(self.permQueue,), daemon=False) for i in range(perm_workers)]
+		#graph processes
 		self.gProcesses = [mp.Process(target=graphThread, args=(self.graphQueue,), daemon=False) for i in range(graph_workers)]
 		self.cleanupProcesses = mp.Process(target=cleanup)
+		#state reader process
+		self.rProcess = mp.Process(target=stateReader, args=(self.graphQueue,), daemon=False)
+		
 		self.cleanupProcesses.start()
+		self.rProcess.start()
 		for p in self.processes:
 			p.start()
 		for p in self.gProcesses:
@@ -111,142 +120,84 @@ def statesThread(q):
 			continue
 
 		# process your item here
-		print("Processing "  +str(size[0])+"X"+str(size[1]) + " in " + str(os.getpid()))
+		#print("Processing "  +str(size[0])+"X"+str(size[1]) + " in " + str(os.getpid()))
 		
-		#data = [[states],hertitigeDict]
-		data = []
+		
 		#square node, start of new column
 		if size[0] == size[1]:
 			#expand vert
 			#get states of root size - this case m-1Xn since square
+			#data = [[board],[children]
+			oldData = util.load(STATES_FOLDER+str(size[0]-1)+"X"+str(size[1])+".json", False)
+			newData = ebs.appendRowToBoardStates(oldData[0], oldData[1])
 			
-			oldData = util.load(STATES_FOLDER+str(size[0]-1)+"X"+str(size[1])+".json")
-			states = ebs.appendRowToBoardStates(oldData[0], oldData[1])
-			
-			pass
 		#not square
 		else:
 			#extend horiz
 			#get states of root size - this case mXn-1
-			oldData = util.load(STATES_FOLDER+str(size[0])+"X"+str(size[1]-1)+".json")
-			print("\n\n\nOld Data: " + str(oldData) + "\n\n\n")
-			states = ebs.appendColToBoardStates(oldData[0], oldData[1])
+			#data = [[board],[children]
 			
-			pass
-
-		#save data
+			oldData = util.load(STATES_FOLDER+str(size[0])+"X"+str(size[1]-1)+".json", False)
+			newData = ebs.appendColToBoardStates(oldData[0], oldData[1])
+			
+		newData[0] = (np.array(newData[0])).tolist()
 
 		#MAKE SURE TO REMOVE THIS LOL
 		#time.sleep( (float(size[0]*size[1]) ** 0.5) / 2 )
+		#time.sleep(1)
 
-		util.store(data.tolist(), STATES_FOLDER + str(size[0]) + "X" + str(size[1]) + ".json")
-		
-
+		util.store(newData, STATES_FOLDER + str(size[0]) + "X" + str(size[1]) + ".json")
 
 		#put mXn+1
 		q.put( (size[0], size[1]+1) )
-		print("Added " + str(size[0]) + "X" + str(size[1]+1) + " to queue")
+		#print("Added " + str(size[0]) + "X" + str(size[1]+1) + " to queue")
 		
 		#if m+1Xn is square (root of new column)
 		if size[0]+1 == size[1]:
 			q.put( (size[0]+1, size[1]) )
-			print("Added " + str(size[0]+1) + "X" + str(size[1]) + " to queue")
+			#print("Added " + str(size[0]+1) + "X" + str(size[1]) + " to queue")
 		
 		q.task_done()
 
+
 def graphThread(q):
 	while True:
-		while q.empty():
+		if q.empty():
 			time.sleep(1)
-		file = q.get()
-		fileName = STATES_FOLDER + file
-		#[[states],{stateXchild}]
-		fData = util.load(fileName, False)
-		"""
-		states = fData[0]
-		bXchild = fData[1]
+			#print("sleeping")
+		else:
+			file = q.get()
+			print("Graph Solving " + str(file))
+			fileName = TRANSFER_FOLDER + file
+			#[[states],{stateXchild}]
+			fData = util.load(fileName, False)
+			if fData == "Failed":
+				q.task_done()
+				continue
+			states = fData[0]
+			bXchild = fData[1]
 
-		#Gen parent dict
-		bXparent = {}
-		for b in states:
-			bXparent[dKey(b)] = []
-		for b in states:
-			for child in bXchild[dKey(b)]:
-				if not b in bXparent[dKey(parent)]:
-					bXparent[dKey(child)].append(b)
+			#Gen parent dict
+			bXparent = {}
+			for b in states:
+				bXparent[util.dKey(np.array(b).astype(int).tolist())] = []
+			for b in states:
+				for child in bXchild[util.dKey(np.array(b).astype(int).tolist())]:
+					if not b in bXparent[util.dKey(child)]:
+						bXparent[util.dKey(child)].append(b)
 
-		bXnum = gen_path_numbers(states, bXparents)
+			bXnum = graph.gen_path_numbers(states, bXparent)
+			firstMoves = graph.getFirstMoves(states, bXchild, bXnum)
 
-		data = [states, bXchild, bXparents, bXnum]
-		"""
-		data = "filler + graph"
-
-		util.store(data, SOLVED_FOLDER + file)
-		os.remove(fileName)
-		q.task_done()
-
-
-def gen_path_numbers(perms, bXparents):
-	#dictionary of board permutations with their playable options
-	#build perms as it goes?
-	#start with fully bitten board
-
-	endBoard = util.genEndBoard(len(perms[0]), len(perms[0][0]))
-
-	bXnum = {util.dKey(endBoard) : 0}
-	#sorted by least number of choices
-	evalQ = queue.PriorityQueue()
-	for b in perms:
-		evalQ.put((len(util.get_choices(b)), b))
-
-	evalQ.put((-1, endBoard))
-
-	checked = []
-
-	while evalQ.qsize() > 0:
-		#print("Q size: " + str(evalQ.qsize()))
-		cB = evalQ.get()[1]
-		#print("cB:")
-		#display(cB)
-		num = bXnum[util.dKey(cB)]
-		#print("cB's num: " + str(num))
-
-		for parent in bXparents[util.dKey(cB)]:
-			#print("parent:")
-			#display(parent)
-			#print(bXnum.keys())
-			#print("parent key: " + str(dKey(parent)))
-			pKey = util.dKey(parent)
-
-			if not (pKey in bXnum.keys()):
-				#print("condition 1")
-				bXnum[pKey] = num + 1
-			elif (num + 1) % 2 == 1 and (bXnum[pKey] % 2 == 0 or (num+1) < bXnum[pKey]):
-				#print("condition 2")
-				bXnum[pKey] = num + 1
-			elif (num + 1) < bXnum[pKey] and bXnum[pKey] % 2 == 0:
-				#print("condition 3")
-				bXnum[pKey] = num + 1
+			data = [states, bXchild, bXparent, bXnum, firstMoves]
 			
-	return bXnum
+			#data = "filler + graph"
+
+			util.store(data, SOLVED_FOLDER + file)
+			os.remove(fileName)
+			q.task_done()
 
 
-
-def getFirstMove(perms, bXparent):
-	
-	bXchild = {}
-	for b in perms:
-		bXchild[dKey(b)] = []
-	for b in perms:
-		for parent in bXparent[dKey(b)]:
-			if not b in bXchild[dKey(parent)]:
-				bXchild[dKey(parent)].append(b)
-
-	moves = []
-	for c in bXchild[dKey(board)]:
-		if bXnum[dKey(c)] % 2 == 0:
-			moves.append(c)
-	return moves
 
 
 def stateReader(q):
@@ -256,6 +207,8 @@ def stateReader(q):
 	#add new data to old data from storage file
 	#write to storage file
 	#delet redundent files
+	addedStates = set([])
+
 	while True:
 		files = os.listdir(STATES_FOLDER)
 		if ".DS_Store" in files:
@@ -286,27 +239,38 @@ def stateReader(q):
 		redundent = []
 		for i in range(len(solvedFiles)):
 			size = solvedSizeOnly[i]
-			print(size)
+
+			#print(size)
 			#if the next one in form mXn+1 is solved then redundent
 			if ((size[0], size[1]+1) in solvedSizeOnly):
 				#if needed for the m+1 square node
 				if size[0] + 1 == size[1] and not ((size[0]+1, size[1]) in solvedSizeOnly):
 					continue
+
 				redundent.append( solvedFiles[i] )
 
 		
 		for file in redundent:
-			q.put(file)
+			os.rename(STATES_FOLDER + file, TRANSFER_FOLDER + file)
+			#data = util.load(STATES_FOLDER + file, False)
+			#util.store(data, TRANSFER_FOLDER + file)
+			#os.remove(STATES_FOLDER + file)
 
-		
-		"""
-		#remove old files
-		for file in redundent:
-			fileName = STATES_FOLDER + file
-			os.remove(fileName)
-		"""
 
-		time.sleep(5)
+		"""
+		break
+		"""
+		files = os.listdir(TRANSFER_FOLDER)
+		if ".DS_Store" in files:
+			files.remove(".DS_Store")
+
+		for file in files:
+			if file not in addedStates:
+				addedStates.add(file)
+				q.put(file)
+
+
+		time.sleep(3)
 
 def cleanup():
 	#read files names from folder
@@ -316,12 +280,12 @@ def cleanup():
 	#write to storage file
 	#delet redundent files
 	while True:
-		files = os.listdir(STATES_FOLDER)
+		files = os.listdir(SOLVED_FOLDER)
 		if ".DS_Store" in files:
 			files.remove(".DS_Store")
 
 		#Keep the seed to replant if neccessary
-		files.remove("2X2.json")
+		#files.remove("2X2.json")
 		#indexes should corresponnd
 		solvedFiles = []
 		solvedSizeOnly = []
@@ -364,7 +328,7 @@ def cleanup():
 		#print(data)
 		#print("Type: " + str(type(data)))
 		for file in redundent:
-			fileName = STATES_FOLDER + file
+			fileName = SOLVED_FOLDER + file
 
 			fData = util.load(fileName, False)
 
@@ -378,7 +342,7 @@ def cleanup():
 
 		#remove old files
 		for file in redundent:
-			fileName = STATES_FOLDER + file
+			fileName = SOLVED_FOLDER + file
 			os.remove(fileName)
 
 		time.sleep(5)
@@ -395,7 +359,8 @@ def seed():
 	#Replace filler with actual data
 	dataTwo = np.array(util.extendToMxN(2,2)).tolist()
 	print("2data: " + str(dataTwo))
-	util.store(dataTwo, DATA_FOLDER + "solved/2X2.json")
+	util.store(dataTwo, STATES_FOLDER + "2X2.json")
+	util.store(dataTwo, TRANSFER_FOLDER + "2X2.json")
 	util.store({}, DATA_FOLDER + "index.json")
 
 

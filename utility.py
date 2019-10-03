@@ -26,7 +26,7 @@ def display(board):
 		print(rowStr)
 
 def genBoard(m, n):
-	board = np.zeros((m, n))
+	board = np.zeros((m, n)).astype(int)
 	board[-1][0] = -1
 	return board
 
@@ -106,7 +106,7 @@ def extendToMxN(m, n):
 	return currBoards
 
 def genEndBoard(m, n):
-	board = np.ones((m, n))
+	board = np.ones((m, n)).astype(int)
 	board[-1][0] = -1
 	return board
 
@@ -115,7 +115,7 @@ def dKey(board):
 	for row in board:
 		key += "/"
 		for s in row:
-			key += str(s)
+			key += str(int(s))
 	return key
 
 """
@@ -271,12 +271,12 @@ def isDecendent(board1, board2):
 #data = [(board,[parents,]),]
 def store(data, fileName):
 
-	#try:
+	try:
 		with open(fileName, "w") as file:
 			jData = json.dumps(data)
 			file.write(jData)
 			return 1
-	#except:
+	except:
 		print("Failed to store to " + str(fileName))
 		return -1
 
@@ -292,4 +292,4 @@ def load(fileName, npArray = True):
 			return data
 	except:
 		print("ERROR: could not find file: " + str(fileName))
-		return []
+		return "Failed"
