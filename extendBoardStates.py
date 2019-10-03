@@ -17,19 +17,17 @@ def appendRowToBoardStates(oldStates, heritages):
 		#then move the poison into the bottom row
 		blankNewState = addNewRowToBoardState(oldState, n)
 
-		#if the second to last row does not have any bites, only add the blank state
+		#if the second to last row does not have any bites, only add the unmodified state
 		if lastFile == 0:
 			newStates.append(blankNewState)
 
 			#add the heritage based off of the unmodified state
 			newHeritages = heritages[util.dKey(oldState)]
 			dKeyState = util.dKey(blankNewState)
+			extendedHeritage[dKeyState] = []
 			for newHeritage in newHeritages:
-				if dKeyState in extendedHeritage.keys():
-					extendedHeritage[dKeyState].append(addNewRowToBoardState(newHeritage, n))
-				else:
-					extendedHeritage[dKeyState] = [addNewRowToBoardState(newHeritage, n)]
-
+				extendedHeritage[dKeyState].append(addNewRowToBoardState(newHeritage, n))
+			# extendedHeritage[dKeyState] = heritage.getHeritage([blankNewState])[dKeyState]
 			continue
 
 		if firstCol == 1 and blankNewState[-3][0] == 1:
@@ -41,11 +39,9 @@ def appendRowToBoardStates(oldStates, heritages):
 
 	return [newStates, extendedHeritage]
 
-def appendColToBoardStates(oldStates, hertiages):
+def appendColToBoardStates(oldStates, heritages):
 	newStates = []
 	extendedHeritage = {}
-
-	print(hertiages)
 
 	for oldState in oldStates:
 		lastColRank = util.lastColRank(oldState)
@@ -64,13 +60,12 @@ def appendColToBoardStates(oldStates, hertiages):
 		if lastColRank == 0:
 			newStates.append(blankNewState)
 
-			newHeritages = hertiages[util.dKey(oldState)]
+			newHeritages = heritages[util.dKey(oldState)]
 			dKeyState = util.dKey(blankNewState)
+			extendedHeritage[dKeyState] = []
 			for newHeritage in newHeritages:
-				if dKeyState in extendedHeritage.keys():
-					extendedHeritage[dKeyState].append(prependColToBoardState(newHeritage))
-				else:
-					extendedHeritage[dKeyState] = [prependColToBoardState(newHeritage)]
+				extendedHeritage[dKeyState].append(prependColToBoardState(newHeritage))
+			# extendedHeritage[dKeyState] = heritage.getHeritage([blankNewState])[dKeyState]
 			continue
 
 		#if it is valid for a bite to be there, add a new state where there is a bite
@@ -81,7 +76,7 @@ def appendColToBoardStates(oldStates, hertiages):
 			moddedNewState[-1][1] = 1
 			addNewBittenColsInRange(newStates, moddedNewState, lastRow, extendedHeritage, heritages, oldState)
 
-		addNewBittenColsInRange(newStates, blankNewState, lastRow, extendedHeritage, hertiages, oldState)
+		addNewBittenColsInRange(newStates, blankNewState, lastRow, extendedHeritage, heritages, oldState)
 	return [newStates, extendedHeritage]
 
 def prependColToBoardState(state):
@@ -109,11 +104,10 @@ def addNewBittenRowsInRange(newStates, blankNewState, rMin, rMax, extendedHerita
 	#this adds the heritage based off the unmodified state
 	newHeritages = hertiages[util.dKey(oldState)]
 	dKeyState = util.dKey(blankNewState)
+	extendedHeritage[dKeyState] = []
 	for newHeritage in newHeritages:
-		if dKeyState in extendedHeritage.keys():
-			extendedHeritage[dKeyState].append(addNewRowToBoardState(newHeritage, length))
-		else:
-			extendedHeritage[dKeyState] = [addNewRowToBoardState(newHeritage, length)]
+		extendedHeritage[dKeyState].append(addNewRowToBoardState(newHeritage, length))
+	# extendedHeritage[dKeyState] = heritage.getHeritage([blankNewState])[dKeyState]
 
 	for i in range(rMin, rMax):
 		newState = np.copy(blankNewState)
@@ -124,7 +118,7 @@ def addNewBittenRowsInRange(newStates, blankNewState, rMin, rMax, extendedHerita
 		if dKeyStateBitten in extendedHeritage.keys():
 			extendedHeritage[dKeyStateBitten].append(heritance[dKeyStateBitten])
 		else:
-			extendedHeritage[dKeyStateBitten] = [heritance[dKeyStateBitten]]
+			extendedHeritage[dKeyStateBitten] = heritance[dKeyStateBitten]
 
 #same as addNewBittenRow, but col is replaced with row
 #row is the row that the bite is taken from
@@ -133,19 +127,20 @@ def addNewBittenColsInRange(newStates, blankNewState, rowMax, extendedHeritage, 
 
 	newHeritages = hertiages[util.dKey(oldState)]
 	dKeyState = util.dKey(blankNewState)
+	extendedHeritage[dKeyState] = []
 	#add the heritage for the current state
 	for newHeritage in newHeritages:
-		if dKeyState in extendedHeritage.keys():
-			extendedHeritage[dKeyState].append(prependColToBoardState(newHeritage))
-		else:
-			extendedHeritage[dKeyState] = [appendRowToBoardState(newHeritage)]
+		extendedHeritage[dKeyState].append(prependColToBoardState(newHeritage))
+	# extendedHeritage[dKeyState] = heritage.getHeritage([blankNewState])[dKeyState]
+
 
 	for i in range(0, rowMax):
 		newState = np.copy(blankNewState)
 		util.bite(newState, [i, 0])
 		newStates.append(newState)
 		heritance = heritage.getHeritage([newState])
+		dKeyStateBitten = util.dKey(newState)
 		if dKeyStateBitten in extendedHeritage.keys():
 			extendedHeritage[dKeyStateBitten].append(heritance[dKeyStateBitten])
 		else:
-			extendedHeritage[dKeyStateBitten] = [heritance[dKeyStateBitten]]
+			extendedHeritage[dKeyStateBitten] = heritance[dKeyStateBitten]

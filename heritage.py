@@ -15,7 +15,7 @@ def getPBites(board):
 		for j in range(len(board[i])):
 			if board[i][j] == 1:
 				rowFiles[i] = (len(board[i])-j)
-				break 
+				break
 	for i in range(len(board[0])):
 		for j in reversed(range(len(rowFiles))):
 			if rowFiles[j] >= len(board[0])-i:
@@ -52,14 +52,16 @@ def getHeritage(states):
 
 """
 def getHeritage(states):
-	
+
 	stateXparents = {}
-	
+
 	for state in states:
-		stateXparents[util.dKey(state)] = []
+		dKey = util.dKey(state)
+		stateXparents[dKey] = []
+
 		bites = util.gamma(state)
 		for bite in bites:
-			if not (bite[0] == len(state)-1 or bite[1] == 0 or (state[bite[0]+1][bite[1]-1] == 0 
+			if not (bite[0] == len(state)-1 or bite[1] == 0 or (state[bite[0]+1][bite[1]-1] == 0
 			and not (state[bite[0]][bite[1]-1] == 1 and state[bite[0]+1][bite[1]] == 1)) ):
 				newRow = bite[0] + 1
 				newCol = bite[1] - 1
@@ -68,9 +70,9 @@ def getHeritage(states):
 					newCol -= 1
 				if newRow != len(state) and newCol != 0:
 					if (state[bite[0]][newCol] == 1 or state[newRow][bite[1]] == 1):
-						continue		
+						continue
 			parent = np.copy(state).tolist()
 			util.unBite(parent, bite)
-			stateXparents[util.dKey(state)].append(parent)
+			stateXparents[dKey].append(parent)
 	return stateXparents
 """
