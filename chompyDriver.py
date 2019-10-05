@@ -60,11 +60,11 @@ class ProccesHandler:
 		self.processes = [mp.Process(target=statesThread, args=(self.permQueue,), daemon=False) for i in range(perm_workers)]
 		#graph processes
 		self.gProcesses = [mp.Process(target=graphThread, args=(self.graphQueue,), daemon=False) for i in range(graph_workers)]
-		self.cleanupProcesses = mp.Process(target=cleanup)
+		#self.cleanupProcesses = mp.Process(target=cleanup)
 		#state reader process
 		self.rProcess = mp.Process(target=stateReader, args=(self.graphQueue,), daemon=False)
 
-		self.cleanupProcesses.start()
+		#self.cleanupProcesses.start()
 		self.rProcess.start()
 		for p in self.processes:
 			p.start()
@@ -85,7 +85,8 @@ class ProccesHandler:
 			p.terminate()
 		for p in self.gProcesses:
 			p.terminate
-		self.cleanupProcesses.terminate()
+		#self.cleanupProcesses.terminate()
+		self.rProcess.terminate()
 
 
 #gets the list of solved sizes and gens the list of current nodes to be worked on
@@ -131,8 +132,10 @@ def statesThread(q):
 			#get states of root size - this case m-1Xn since square
 			#data = [[board],[children]
 			fileName = str(size[0]-1)+"X"+str(size[1])+".json"
-			oldData = util.load(STATES_FOLDER/ fileName, False)
-			newData = ebs.appendRowToBoardStates(oldData[0], oldData[1])
+			oldData = util.loadStates(STATES_FOLDER/ fileName)
+			states = util.getStatesFromDict(oldData)
+			newData = ebs.appendRowToBoardStates(states, oldData)
+
 
 		#not square
 		else:
@@ -140,16 +143,17 @@ def statesThread(q):
 			#get states of root size - this case mXn-1
 			#data = [[board],[children]
 			fileName = str(size[0])+"X"+str(size[1]-1)+".json"
-			oldData = util.load(STATES_FOLDER / fileName, False)
-			newData = ebs.appendColToBoardStates(oldData[0], oldData[1])
+			oldData = util.loadStates(STATES_FOLDER / fileName)
+			states = util.getStatesFromDict(oldData)
+			newData = ebs.appendColToBoardStates(states, oldData)
 
-		newData[0] = (np.array(newData[0])).tolist()
+		#newData[0] = (np.array(newData[0])).tolist()
 
 		#MAKE SURE TO REMOVE THIS LOL
 		#time.sleep( (float(size[0]*size[1]) ** 0.5) / 2 )
 		#time.sleep(1)
 		fileName = str(size[0]) + "X" + str(size[1]) + ".json"
-		util.store(newData, STATES_FOLDER / fileName)
+		util.storeStates(newData[1], size, STATES_FOLDER / fileName)
 
 		#put mXn+1
 		q.put( (size[0], size[1]+1) )
@@ -173,30 +177,36 @@ def graphThread(q):
 			print("Graph Solving " + str(file))
 			fileName = TRANSFER_FOLDER / file
 			#[[states],{stateXchild}]
-			fData = util.load(fileName, False)
-			if fData == "Failed":
+			bXchild = util.loadStates(fileName)
+			if bXchild == "Failed":
 				q.task_done()
 				continue
-			states = fData[0]
-			bXchild = fData[1]
+			states = util.getStatesFromDict(bXchild)
+			
 
 			#Gen parent dict
 			bXparent = {}
 			for b in states:
-				bXparent[util.dKey(np.array(b).astype(int).tolist())] = []
+				bXparent[util.dKey(b)] = []
 			for b in states:
-				for child in bXchild[util.dKey(np.array(b).astype(int).tolist())]:
+				for child in bXchild[util.dKey(b)]:
 					if not b in bXparent[util.dKey(child)]:
 						bXparent[util.dKey(child)].append(b)
 
 			bXnum = graph.gen_path_numbers(states, bXparent)
+
+			bXchild_num = {}
+			for key in bXchild.keys():
+				bXchild_num[key] = [bXchild[key], bXnum[key]]
+
 			firstMoves = graph.getFirstMoves(states, bXchild, bXnum)
 
-			data = [states, bXchild, bXparent, bXnum, firstMoves]
+
+			#data = [states, bXchild, bXparent, bXnum, firstMoves]
 
 			#data = "filler + graph"
 
-			util.store(data, SOLVED_FOLDER / file)
+			util.storeSolved(bXchild_num, firstMoves, size, SOLVED_FOLDER / file)
 			os.remove(fileName)
 			q.task_done()
 
@@ -275,6 +285,7 @@ def stateReader(q):
 
 		time.sleep(3)
 
+"""
 def cleanup():
 	#read files names from folder
 	#find all redundent files (not going to be used for inheriting by any nodes)
@@ -349,7 +360,7 @@ def cleanup():
 			os.remove(fileName)
 
 		time.sleep(5)
-
+"""
 
 
 
@@ -360,14 +371,14 @@ def cleanup():
 #Creates the 2x2 solved case to act as seed for the expansion cycles
 def seed():
 	#Replace filler with actual data
-	dataTwo = np.array(util.extendToMxN(2,2)).tolist()
-	print("2data: " + str(dataTwo))
-	util.store(dataTwo, STATES_FOLDER / "2X2.json")
-	util.store(dataTwo, TRANSFER_FOLDER / "2X2.json")
-	util.store({}, DATA_FOLDER / "index.json")
+	dataTwo = util.get2X2()
+	#print("2data: " + str(dataTwo))
+	util.storeStates(dataTwo, (2,2), STATES_FOLDER / "2X2.json")
+	util.storeStates(dataTwo, (2,2), TRANSFER_FOLDER / "2X2.json")
+	#util.store({}, DATA_FOLDER / "index.json")
 
 
 if __name__ == "__main__":
 	mp.set_start_method('spawn')
-	seed()
+	#seed()
 	main()
