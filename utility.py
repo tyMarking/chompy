@@ -97,7 +97,11 @@ def getChoices(board):
 	for i in range(len(board)):
 		for j in range(len(board[0])):
 			if not board[i][j]:
+				#the poison square
+				if i == len(board)-1 and j == 0:
+					continue
 				options.append((i,j))
+
 	return options
 
 #previously called getInverseChoices
@@ -261,9 +265,13 @@ def loadStates(fileName):
 #stores as [size, bXchild_num, [firstMoves]]
 def storeSolved(bXchild_num, firstMoves, size, fileName):
 	n_bXchild_num = {}
+	#print("bXchild_num: " + str(bXchild_num))
 	for key in bXchild_num.keys():
-		for child in bXchild_num[key]:
-			n_bXchild[key].append[reduceToRF(child[0]), child[1]]
+		n_bXchild_num[key] = [[],bXchild_num[key][1]]
+		for child in bXchild_num[key][0]:
+			#print("child: " + str(child))
+			#print("\\child")
+			n_bXchild_num[key][0].append(reduceToRF(child))
 	return store([size, n_bXchild_num, firstMoves], fileName)
 
 def loadSolved(fileName):
@@ -273,9 +281,10 @@ def loadSolved(fileName):
 	bXchild_num = data[1]
 	n_bXchild_num = {}
 	for key in bXchild_num.keys():
-		n_bXchild_num[key] = []
-		for child in bXchild_num[key]:
-			n_bXchild_num[key][i].append([reconstructFromRF(child[0], data[0][1]), child[1]])
+		n_children = []
+		for child in bXchild_num[key][0]:
+			n_children.append(reconstructFromRF(child, data[0][1]))
+		n_bXchild_num[key] = (n_children, bXchild_num[key][1])
 	return [n_bXchild_num, data[2]]
 
 #data = [(board,[parents,]),]
@@ -323,7 +332,9 @@ def get2X2():
 	[[False,True],
 	 [False,True]],
 	[[True,True],
-	 [False,True]]
+	 [False,True]]#,
+	#[[True,True],
+	 #[True, True]]
 	]
 	heritage2x2 = heritage.getHeritage(states2x2)
 	return heritage2x2

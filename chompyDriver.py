@@ -21,7 +21,7 @@ STATES_FOLDER = DATA_FOLDER / "states/"
 TRANSFER_FOLDER = DATA_FOLDER / "transfer/"
 SOLVED_FOLDER = DATA_FOLDER / "solved/"
 SOLVE_THREADS = 4
-GRAPH_THREADS = 4
+GRAPH_THREADS = 5
 
 #have to seed 2x2
 
@@ -46,7 +46,8 @@ def main():
 
 	for node in nodes:
 		pHandler.run( node )
-	time.sleep(100)
+	time.sleep(1000)
+	print("terminateing")
 	pHandler.terminate()
 
 class ProccesHandler:
@@ -57,12 +58,12 @@ class ProccesHandler:
 		self.permQueue = mp.JoinableQueue()
 		self.graphQueue = mp.JoinableQueue()
 		#states processes
-		self.processes = [mp.Process(target=statesThread, args=(self.permQueue,), daemon=False) for i in range(perm_workers)]
+		self.processes = [mp.Process(target=statesThread, args=(self.permQueue,), daemon=True) for i in range(perm_workers)]
 		#graph processes
-		self.gProcesses = [mp.Process(target=graphThread, args=(self.graphQueue,), daemon=False) for i in range(graph_workers)]
+		self.gProcesses = [mp.Process(target=graphThread, args=(self.graphQueue,), daemon=True) for i in range(graph_workers)]
 		#self.cleanupProcesses = mp.Process(target=cleanup)
 		#state reader process
-		self.rProcess = mp.Process(target=stateReader, args=(self.graphQueue,), daemon=False)
+		self.rProcess = mp.Process(target=stateReader, args=(self.graphQueue,), daemon=True)
 
 		#self.cleanupProcesses.start()
 		self.rProcess.start()
@@ -98,9 +99,19 @@ def genIndexData():
 	solved = []
 	#each file shoud be in form of mXn.json 0 - not fully checking yet
 	for file in files:
-		#rudementry check for format
-		if file[1] == "X" and file[3] == ".":
-			solved.append( (int(file[0]), int(file[2])) )
+			#rudementry check for format
+			#if file[1] == "X" and file[3] == ".":
+			#print(file)
+			charI = 0
+			while file[charI] != "X":
+				charI += 1
+			m = int(file[:charI])
+			charI2 = charI
+			while file[charI2] != ".":
+				charI2 += 1
+			n = int(file[charI+1:charI2])
+
+			solved.append( (m, n) )
 
 	nodes = []
 	for size in solved:
@@ -123,7 +134,7 @@ def statesThread(q):
 			continue
 
 		# process your item here
-		#print("Processing "  +str(size[0])+"X"+str(size[1]) + " in " + str(os.getpid()))
+		print("Processing "  +str(size[0])+"X"+str(size[1]) + " in " + str(os.getpid()))
 
 
 		#square node, start of new column
@@ -133,6 +144,10 @@ def statesThread(q):
 			#data = [[board],[children]
 			fileName = str(size[0]-1)+"X"+str(size[1])+".json"
 			oldData = util.loadStates(STATES_FOLDER/ fileName)
+			if oldData == "Failed":
+				print("LOADING FAILED")
+				q.task_done()
+				continue
 			states = util.getStatesFromDict(oldData)
 			newData = ebs.appendRowToBoardStates(states, oldData)
 
@@ -144,6 +159,11 @@ def statesThread(q):
 			#data = [[board],[children]
 			fileName = str(size[0])+"X"+str(size[1]-1)+".json"
 			oldData = util.loadStates(STATES_FOLDER / fileName)
+			if oldData == "Failed":
+				print("LOADING FAILED")
+				q.task_done()
+				continue
+			#print("OLD DATA: " + str(oldData))
 			states = util.getStatesFromDict(oldData)
 			newData = ebs.appendColToBoardStates(states, oldData)
 
@@ -197,10 +217,10 @@ def graphThread(q):
 
 			bXchild_num = {}
 			for key in bXchild.keys():
-				bXchild_num[key] = [bXchild[key], bXnum[key]]
+				bXchild_num[key] = (bXchild[key], bXnum[key])
 
 			firstMoves = graph.getFirstMoves(states, bXchild, bXnum)
-
+			size = (len(states[0]), len(states[0][0]))
 
 			#data = [states, bXchild, bXparent, bXnum, firstMoves]
 
@@ -228,7 +248,7 @@ def stateReader(q):
 			files.remove(".DS_Store")
 
 		#Keep the seed to replant if neccessary
-		files.remove("2X2.json")
+		#files.remove("2X2.json")
 		#indexes should corresponnd
 		solvedFiles = []
 		solvedSizeOnly = []
@@ -374,7 +394,7 @@ def seed():
 	dataTwo = util.get2X2()
 	#print("2data: " + str(dataTwo))
 	util.storeStates(dataTwo, (2,2), STATES_FOLDER / "2X2.json")
-	util.storeStates(dataTwo, (2,2), TRANSFER_FOLDER / "2X2.json")
+	#util.storeStates(dataTwo, (2,2), TRANSFER_FOLDER / "2X2.json")
 	#util.store({}, DATA_FOLDER / "index.json")
 
 

@@ -2,7 +2,9 @@ import utility as util
 import heritage
 import chompyDriver as cd
 
-b = util.genBoard(3,4)
+b = util.genBoard(2,2)
+
+print(util.getChoices(b))
 """
 b = util.genBoard(3,4)
 util.bite(b, (0,1))
@@ -53,6 +55,6 @@ for state in states2x2:
 	util.display(state)
 """
 
-x = util.reduceToRF(b)
-print(x)
-print(util.reconstructFromRF(x, 4))
+#x = util.reduceToRF(b)
+#print(x)
+#print(util.reconstructFromRF(x, 4))

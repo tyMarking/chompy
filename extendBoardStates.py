@@ -83,13 +83,13 @@ def appendColToBoardStates(oldStates, heritages):
 def prependColToBoardState(state):
 	newState = np.insert(state, 0, 0, axis=1)
 	newState[-1][1] = 0
-	newState[-1][0] = -1
+	#newState[-1][0] = -1
 	return newState
 
 def addNewRowToBoardState(state, length):
 	newState = np.append(state, np.zeros((1, length)), axis=0)
 	newState[-2][0] = 0
-	newState[-1][0] = -1
+	#newState[-1][0] = -1
 	return newState
 
 
