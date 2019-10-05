@@ -321,7 +321,7 @@ def load(fileName):
 		return "Failed"
 
 
-def get2X2():
+def get2X2(states=False):
 	states2x2 = [
 	[[False,False],
 	 [False,False]],
@@ -337,7 +337,11 @@ def get2X2():
 	 #[True, True]]
 	]
 	heritage2x2 = heritage.getHeritage(states2x2)
+	if states:
+		return (states2x2, heritage2x2)
 	return heritage2x2
+
+
 
 def extendToMxN(m, n):
 	workbook = xlsxw.Workbook(r'./data/extensionTimesAndLengths'+str(m)+'X'+str(n)+'.xlsx')

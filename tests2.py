@@ -2,6 +2,7 @@ import utility as util
 import heritage
 import chompyDriver as cd
 import profile, cProfile 
+import graph 
 #pstats, StringIO
 """
 pr = cProfile.Profile()
@@ -14,12 +15,28 @@ ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
 ps.print_stats()
 print(s.getvalue())
 """
-profile.run("chompyDriver.py")
+#profile.run("chompyDriver.py")
+
+
 
 
 #b = util.genBoard(2,2)
+data = util.get2X2(True)
+#print(data)
+states = data[0]
+bXchild = data[1]
+#print(states)
+bXparent = {}
+for b in states:
+	bXparent[util.dKey(b)] = []
+for b in states:
+	for child in bXchild[util.dKey(b)]:
+		if not b in bXparent[util.dKey(child)]:
+			bXparent[util.dKey(child)].append(b)
 
-#print(util.getChoices(b))
+bXnum = graph.gen_path_numbers(states, bXparent)
+
+print(bXnum)
 """
 b = util.genBoard(3,4)
 util.bite(b, (0,1))
