@@ -1,7 +1,4 @@
 
-__pycache__/extendBoardStates.cpython-37.pyc
-__pycache__/extendBoardStates.cpython-37.pyc
-__pycache__/extendBoardStates.cpython-37.pyc
-*.pyc
-*.pyc
-__pycache__/utility.cpython-37.pyc
+**/*.pyc
+**/*X*.json
+**/*.zip
