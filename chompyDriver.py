@@ -60,11 +60,11 @@ class ProccesHandler:
 		self.processes = [mp.Process(target=statesThread, args=(self.permQueue,), daemon=False) for i in range(perm_workers)]
 		#graph processes
 		self.gProcesses = [mp.Process(target=graphThread, args=(self.graphQueue,), daemon=False) for i in range(graph_workers)]
-		self.cleanupProcesses = mp.Process(target=cleanup)
+		# self.cleanupProcesses = mp.Process(target=cleanup)
 		#state reader process
 		self.rProcess = mp.Process(target=stateReader, args=(self.graphQueue,), daemon=False)
 
-		self.cleanupProcesses.start()
+		# self.cleanupProcesses.start()
 		self.rProcess.start()
 		for p in self.processes:
 			p.start()
@@ -85,7 +85,7 @@ class ProccesHandler:
 			p.terminate()
 		for p in self.gProcesses:
 			p.terminate
-		self.cleanupProcesses.terminate()
+		# self.cleanupProcesses.terminate()
 
 
 #gets the list of solved sizes and gens the list of current nodes to be worked on
