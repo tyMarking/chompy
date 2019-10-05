@@ -44,5 +44,8 @@ def getFirstMoves(perms, bXchild, bXnum):
 	moves = []
 	for c in bXchild[util.dKey(util.genBoard(len(perms[0]), len(perms[0][0])).astype(int).tolist())]:
 		if bXnum[util.dKey(c)] % 2 == 0:
-			moves.append(c)
+			rank = util.rank(c)
+			file = util.rank(c)
+			fmPos = (rank-1, len(c[0])-file)
+			moves.append(fmPos)
 	return moves

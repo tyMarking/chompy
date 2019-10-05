@@ -20,12 +20,13 @@ DATA_FOLDER = Path(THIS_FOLDER, "./data/epoc1/")
 STATES_FOLDER = DATA_FOLDER / "states/"
 TRANSFER_FOLDER = DATA_FOLDER / "transfer/"
 SOLVED_FOLDER = DATA_FOLDER / "solved/"
-SOLVE_THREADS = 4
-GRAPH_THREADS = 5
+SOLVE_THREADS = 0
+GRAPH_THREADS = 6
 
 #have to seed 2x2
 
 def main():
+	mp.set_start_method('spawn')
 	"""
 	1. read index
 		a. get list of current working nodes
@@ -46,7 +47,7 @@ def main():
 
 	for node in nodes:
 		pHandler.run( node )
-	time.sleep(1000)
+	time.sleep(600)
 	print("terminateing")
 	pHandler.terminate()
 
@@ -247,16 +248,11 @@ def stateReader(q):
 		if ".DS_Store" in files:
 			files.remove(".DS_Store")
 
-		#Keep the seed to replant if neccessary
-		#files.remove("2X2.json")
 		#indexes should corresponnd
 		solvedFiles = []
 		solvedSizeOnly = []
 		#each file shoud be in form of mXn.json 0 - not fully checking yet
 		for file in files:
-			#rudementry check for format
-			#if file[1] == "X" and file[3] == ".":
-			#print(file)
 			charI = 0
 			while file[charI] != "X":
 				charI += 1
@@ -272,8 +268,6 @@ def stateReader(q):
 		redundent = []
 		for i in range(len(solvedFiles)):
 			size = solvedSizeOnly[i]
-
-			#print(size)
 			#if the next one in form mXn+1 is solved then redundent
 			if ((size[0], size[1]+1) in solvedSizeOnly):
 				#if needed for the m+1 square node
@@ -285,14 +279,7 @@ def stateReader(q):
 
 		for file in redundent:
 			os.rename(STATES_FOLDER / file, TRANSFER_FOLDER / file)
-			#data = util.load(STATES_FOLDER / file, False)
-			#util.store(data, TRANSFER_FOLDER / file)
-			#os.remove(STATES_FOLDER / file)
 
-
-		"""
-		break
-		"""
 		files = os.listdir(TRANSFER_FOLDER)
 		if ".DS_Store" in files:
 			files.remove(".DS_Store")
@@ -399,6 +386,6 @@ def seed():
 
 
 if __name__ == "__main__":
-	mp.set_start_method('spawn')
+	
 	#seed()
 	main()

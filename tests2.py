@@ -1,10 +1,25 @@
 import utility as util 
 import heritage
 import chompyDriver as cd
+import profile, cProfile 
+#pstats, StringIO
+"""
+pr = cProfile.Profile()
+pr.enable()
+cd.main()
+pr.disable()
+s = StringIO.StringIO()
+sortby = 'cumulative'
+ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+ps.print_stats()
+print(s.getvalue())
+"""
+profile.run("chompyDriver.py")
 
-b = util.genBoard(2,2)
 
-print(util.getChoices(b))
+#b = util.genBoard(2,2)
+
+#print(util.getChoices(b))
 """
 b = util.genBoard(3,4)
 util.bite(b, (0,1))
