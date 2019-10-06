@@ -16,15 +16,15 @@ index.txt - contains current state data
 solved/mXn - [(board,[parents,],num),] for m x n board
 firstMoves.txt - list of first moves for mxn boards. JSON or CSV?
 """
-#THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
-THIS_FOLDER = "D:/Mass Storage/Math/chompy"
+THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+#THIS_FOLDER = "D:/Mass Storage/Math/chompy"
 DATA_FOLDER = Path(THIS_FOLDER, "./data/epoc1/")
 STATES_FOLDER = DATA_FOLDER / "states/"
 TRANSFER_FOLDER = DATA_FOLDER / "transfer/"
 SOLVED_FOLDER = DATA_FOLDER / "solved/"
 TEST_FOLDER = DATA_FOLDER / "test/"
-SOLVE_THREADS = 1
-GRAPH_THREADS = 1
+SOLVE_THREADS = 4
+GRAPH_THREADS = 4
 
 #have to seed 2x2
 
@@ -50,7 +50,7 @@ def main():
 
 	for node in nodes:
 		pHandler.run( node )
-	time.sleep(60)
+	time.sleep(7200)
 	print("terminateing")
 	pHandler.terminate()
 
@@ -453,6 +453,6 @@ def graphTest():
 
 if __name__ == "__main__":
 	
-	#seed()
+	seed()
 	main()
 	#graphTest()
