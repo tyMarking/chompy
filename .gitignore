@@ -8,3 +8,5 @@ __pycache__/utility.cpython-37.pyc
 
 **/*X*.json
 **/*.zip
+
+__pycache__/**
