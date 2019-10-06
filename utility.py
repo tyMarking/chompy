@@ -30,8 +30,6 @@ def genBoard(m, n):
 	#board[-1][0] = -1
 	return board
 
-
-
 def genEndBoard(m, n):
 	board = np.ones((m, n), dtype=bool)
 	board[-1][0] = False
@@ -67,7 +65,7 @@ def copy(board):
 def bite(board,pos):
 	m = pos[0]
 	n = pos[1]
-	if abs(m) > len(board)-1 or abs(n) > len(board[0])-1:
+	if abs(m) > len(board) or abs(n) > len(board[0]):
 		print("Error: Bite taken out of range")
 		return
 
@@ -292,7 +290,7 @@ def loadSolved(fileName):
 def store(data, fileName):
 
 	#print(data)
-	
+
 	with open(fileName, "w") as file:
 			jData = json.dumps(data)
 			file.write(jData)
@@ -381,7 +379,7 @@ def extendToMxN(m, n):
 	beginningDateTime = datetime.now()
 	startDateTime = 0
 	endDateTime = 0
-	while (currM < n and currN < n):
+	while (not (currM == m and currN == n)):
 		startDateTime = datetime.now()
 		if (currM < m):
 			currBoardsAndHeritage = ebs.appendRowToBoardStates(currBoardsAndHeritage[0], currBoardsAndHeritage[1])
@@ -389,9 +387,9 @@ def extendToMxN(m, n):
 		if (currN < n):
 			currBoardsAndHeritage = ebs.appendColToBoardStates(currBoardsAndHeritage[0], currBoardsAndHeritage[1])
 			print(len(currBoardsAndHeritage[0]))
+		currM = len(currBoardsAndHeritage[0][0])
+		currN = len(currBoardsAndHeritage[0][0][0])
 		print(str(currM) + "x" + str(currN))
-		currM = len(currBoardsAndHeritage[0])
-		currN = len(currBoardsAndHeritage[0][0])
 
 		endDateTime = datetime.now()
 		addedTime = endDateTime - startDateTime

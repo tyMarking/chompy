@@ -16,12 +16,12 @@ def appendRowToBoardStates(oldStates, heritages):
 		#create a copy of the oldState with a new row of 0s at the bottom,
 		#then move the poison into the bottom row
 		blankNewState = addNewRowToBoardState(oldState, n)
+		oldHeritage = heritages[util.dKey(oldState)]
 
 		#if the second to last row does not have any bites, only add the unmodified state
 		if lastFile == 0:
 			newStates.append(blankNewState)
-			oldHeritages = heritages[util.dKey(oldState)]
-			extendedHeritage[util.dKey(blankNewState)] = extendHeritageUnmodded(oldHeritages, blankNewState, False, 0)
+			extendedHeritage[util.dKey(blankNewState)] = extendHeritageUnmodded(oldHeritage, blankNewState, False, 0)
 			continue
 
 		#if the 2 squares directly next to the poison have been bitten, add an additional new state
@@ -29,9 +29,9 @@ def appendRowToBoardStates(oldStates, heritages):
 		if oldState[-1][1] and oldState[-2][0]:
 			moddedNewState = np.copy(blankNewState)
 			moddedNewState[-2][0] = 1
-			addNewBittenRowsInRange(newStates, moddedNewState, firstCol, n, extendedHeritage, heritages, True)
+			addNewBittenRowsInRange(newStates, moddedNewState, firstCol, n, extendedHeritage, oldHeritage, True)
 
-		addNewBittenRowsInRange(newStates, blankNewState, firstCol, n, extendedHeritage, heritages, False)
+		addNewBittenRowsInRange(newStates, blankNewState, firstCol, n, extendedHeritage, oldHeritage, False)
 
 	return [newStates, extendedHeritage]
 
@@ -50,7 +50,7 @@ def appendColToBoardStates(oldStates, heritages):
 		lastRow = lastColRank
 
 		#insert a new column at the beginning, then shif the poison over
-		blankNewState = addNewToBoardState(oldState)
+		blankNewState = addNewColToBoardState(oldState)
 		oldHeritage = heritages[util.dKey(oldState)]
 
 		#if there are no bites next to the new column, add only the blank state
@@ -74,7 +74,8 @@ def appendColToBoardStates(oldStates, heritages):
 #filled poison is a bool that states if the old position of the poison is 0 or 1
 def extendHeritageUnmodded(oldHeritage, newState, filledPoison, axis):
 	stop = len(newState[0]) if axis == 0 else len(newState)-1
-	return extendHeritage(oldHeritage, newState, filledPoison, axis, stop, 0)
+	start = 1 if axis == 0 else 0
+	return extendHeritage(oldHeritage, newState, filledPoison, axis, stop, start)
 
 
 def extendHeritage(oldHeritage, newState, filledPoison, axis, stop, start):
@@ -82,32 +83,47 @@ def extendHeritage(oldHeritage, newState, filledPoison, axis, stop, start):
 	length = len(newState[0])
 
 	#add the old modified heritage
-	for oldChild in oldHeritage:
+	for child in oldHeritage:
+
 		#extend the child
 		#add newChild to newHeritage
 		if axis == 0:
-			newHeritage.append(addNewRowToBoardState(child, length))
+			newChild = addNewRowToBoardState(child, length)
+			#copy over the new row from newState
+			newChild[-1] = newState[-1][:]
+			newHeritage.append(newChild)
 		elif axis == 1:
-			newHeritage.appen(addNewColToBoardState(child, length))
+			newChild = addNewColToBoardState(child)
+			#copy over the new column from newState
+			newChild[:, 0] = newState[:, 0]
+			newHeritage.append(newChild)
+
 
 	#add/create the new heritage
 	#if the old poison wasn't filled, take a bite at that position
 	if not filledPoison:
+		child = np.copy(newState)
 		if axis == 0:
-			newHeritage.append(bite(np.copy(newState), (-2, 0)))
+			util.bite(child, (-2, 0))
+			newHeritage.append(child)
 		elif axis == 1:
-			newHeritage.append(bite(np.copy(newState), (-1, 1)))
+			util.bite(child, (-1, 1))
+			newHeritage.append(child)
 
-	#loop through the new row/col, adding the bite at each point be as child
+	#loop through the new row/col, adding the bite at each point as child
 	if axis == 0:
 		#adding row
 		#start at 1 so the poison isn't bitten
 		for i in range(start, stop):
-			newHeritage.append(bite(np.copy(newState), (-1, i)))
+			child = np.copy(newState)
+			util.bite(child, (-1, i))
+			newHeritage.append(child)
 	elif axis == 1:
 		#adding col
 		for i in range(start, stop):
-			newHeritage.append(bite(np.copy(newState), (0, i)))
+			child = np.copy(newState)
+			util.bite(child, (i, 0))
+			newHeritage.append(child)
 
 	return newHeritage
 
@@ -128,14 +144,14 @@ def addNewRowToBoardState(state, length):
 #blankNewState is the unbitten state based off of the state from a smaller board
 #col is the column that the bite is taken from
 #the bite is taken at [0, col]
-def addNewBittenRowsInRange(newStates, blankNewState, rMin, rMax, extendedHeritage, hertiage, filledPoison):
+def addNewBittenRowsInRange(newStates, blankNewState, rMin, rMax, extendedHeritage, oldHeritage, filledPoison):
 	#add the state based off of the old, unmodified state
 	newStates.append(blankNewState)
 
 	length = len(blankNewState[0])
 
 	#this adds the heritage based off the unmodified state
-	extendedHeritage[util.dKey(blankNewState)] = extendHeritageUnmodded(heritage, blankNewState, filledPoison, 0)
+	extendedHeritage[util.dKey(blankNewState)] = extendHeritageUnmodded(oldHeritage, blankNewState, filledPoison, 0)
 
 	#adds states that are modified from the base state
 	for i in range(rMin, rMax):
@@ -143,7 +159,7 @@ def addNewBittenRowsInRange(newStates, blankNewState, rMin, rMax, extendedHerita
 		util.bite(newState, [-1, i])
 		newStates.append(newState)
 
-		extendedHeritage[util.dKey(newState)] = extendHeritage(heritage, newState, filledPoison, 0, i, 1)
+		extendedHeritage[util.dKey(newState)] = extendHeritage(oldHeritage, newState, filledPoison, 0, i, 1)
 
 		"""
 		#old method, included in case this gets screwed up
@@ -155,11 +171,11 @@ def addNewBittenRowsInRange(newStates, blankNewState, rMin, rMax, extendedHerita
 		"""
 #same as addNewBittenRow, but col is replaced with row
 #row is the row that the bite is taken from
-def addNewBittenColsInRange(newStates, blankNewState, rowMax, extendedHeritage, hertiage, filledPoison):
+def addNewBittenColsInRange(newStates, blankNewState, rowMax, extendedHeritage, oldHeritage, filledPoison):
 	newStates.append(blankNewState)
 
 	#add the heritage for the current unmodified state
-	extendedHeritage[util.dKey(blankNewState)] = extendHeritageUnmodded(heritage, blankNewState, filledPoison, 1)
+	extendedHeritage[util.dKey(blankNewState)] = extendHeritageUnmodded(oldHeritage, blankNewState, filledPoison, 1)
 
 	stop = len(blankNewState) - 1
 
@@ -168,7 +184,7 @@ def addNewBittenColsInRange(newStates, blankNewState, rowMax, extendedHeritage, 
 		util.bite(newState, [i, 0])
 		newStates.append(newState)
 
-		extendedHeritage[util.dKey(newState)] = extendHeritage(heritage, newState, filledPoison, 0, stop, i)
+		extendedHeritage[util.dKey(newState)] = extendHeritage(oldHeritage, newState, filledPoison, 1, stop, i+1)
 
 		"""
 		heritance = heritage.getHeritage([newState])
