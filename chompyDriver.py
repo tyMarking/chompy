@@ -7,6 +7,7 @@ import utility as util
 import extendBoardStates as ebs
 import graph
 from pathlib import Path
+from memory_profiler import profile
 
 """
 Data structure:
@@ -15,13 +16,15 @@ index.txt - contains current state data
 solved/mXn - [(board,[parents,],num),] for m x n board
 firstMoves.txt - list of first moves for mxn boards. JSON or CSV?
 """
-THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+#THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+THIS_FOLDER = "D:/Mass Storage/Math/chompy"
 DATA_FOLDER = Path(THIS_FOLDER, "./data/epoc1/")
 STATES_FOLDER = DATA_FOLDER / "states/"
 TRANSFER_FOLDER = DATA_FOLDER / "transfer/"
 SOLVED_FOLDER = DATA_FOLDER / "solved/"
-SOLVE_THREADS = 0
-GRAPH_THREADS = 6
+TEST_FOLDER = DATA_FOLDER / "test/"
+SOLVE_THREADS = 1
+GRAPH_THREADS = 1
 
 #have to seed 2x2
 
@@ -47,7 +50,7 @@ def main():
 
 	for node in nodes:
 		pHandler.run( node )
-	time.sleep(600)
+	time.sleep(60)
 	print("terminateing")
 	pHandler.terminate()
 
@@ -92,6 +95,7 @@ class ProccesHandler:
 
 
 #gets the list of solved sizes and gens the list of current nodes to be worked on
+
 def genIndexData():
 	files = os.listdir(STATES_FOLDER)
 	if ".DS_Store" in files:
@@ -126,7 +130,7 @@ def genIndexData():
 	return (solved, nodes)
 
 
-
+@profile
 def statesThread(q):
 	while True:
 		size = q.get()
@@ -185,9 +189,13 @@ def statesThread(q):
 			q.put( (size[0]+1, size[1]) )
 			#print("Added " + str(size[0]+1) + "X" + str(size[1]) + " to queue")
 
+		del oldData
+		del states
+		del newData
+			
 		q.task_done()
 
-
+@profile
 def graphThread(q):
 	while True:
 		if q.empty():
@@ -211,8 +219,8 @@ def graphThread(q):
 				bXparent[util.dKey(b)] = []
 			for b in states:
 				for child in bXchild[util.dKey(b)]:
-					if not b in bXparent[util.dKey(child)]:
-						bXparent[util.dKey(child)].append(b)
+					#if not b in bXparent[util.dKey(child)]:
+					bXparent[util.dKey(child)].append(b)
 
 			bXnum = graph.gen_path_numbers(states, bXparent)
 
@@ -229,11 +237,18 @@ def graphThread(q):
 
 			util.storeSolved(bXchild_num, firstMoves, size, SOLVED_FOLDER / file)
 			os.remove(fileName)
+
+			del bXchild
+			del bXparent
+			del bXnum
+			del bXchild_num
+			del states
+
 			q.task_done()
 
 
 
-
+@profile	
 def stateReader(q):
 	#read files names from folder
 	#find all redundent files (not going to be used for inheriting by any nodes)
@@ -372,7 +387,51 @@ def cleanup():
 
 
 
+def graphManual(file):
+	start = time.time()
 
+	print("Graph Solving " + str(file))
+	fileName = TRANSFER_FOLDER / file
+	#[[states],{stateXchild}]
+	bXchild = util.loadStates(fileName)
+	if bXchild == "Failed":
+		print("FAILED")
+		return
+	print("loaded: " + str(time.time()-start))
+
+	states = util.getStatesFromDict(bXchild)
+	print("Generated states: " + str(time.time()-start))
+
+	#Gen parent dict
+	bXparent = {}
+	for b in states:
+		bXparent[util.dKey(b)] = []
+	for b in states:
+		for child in bXchild[util.dKey(b)]:
+			#if not b in bXparent[util.dKey(child)]:
+			bXparent[util.dKey(child)].append(b)
+	print("Generated parent dict: " + str(time.time()-start))
+	bXnum = graph.gen_path_numbers(states, bXparent)
+	print("Generated graph numbers: " + str(time.time()-start))
+	bXchild_num = {}
+	for key in bXchild.keys():
+		bXchild_num[key] = (bXchild[key], bXnum[key])
+	print("Combined Dicts: " + str(time.time()-start))
+	firstMoves = graph.getFirstMoves(states, bXchild, bXnum)
+	print("Gened first moves: " + str(time.time()-start))
+	size = (len(states[0]), len(states[0][0]))
+
+	
+	#data = [states, bXchild, bXparent, bXnum, firstMoves]
+
+	#data = "filler + graph"
+
+	util.storeSolved(bXchild_num, firstMoves, size, TEST_FOLDER / file)
+	print("Stored: " + str(time.time()-start))
+	os.remove(fileName)
+	print("Removed old: " + str(time.time()-start))
+	end = time.time()
+	print("Elapsed time: " + str(end-start))
 
 
 #Creates the 2x2 solved case to act as seed for the expansion cycles
@@ -385,7 +444,15 @@ def seed():
 	#util.store({}, DATA_FOLDER / "index.json")
 
 
+
+def graphTest():
+
+	file = "2X2.json"
+
+	graphManual(file)
+
 if __name__ == "__main__":
 	
 	#seed()
 	main()
+	#graphTest()
