@@ -192,7 +192,7 @@ def statesThread(q):
 		del oldData
 		del states
 		del newData
-			
+
 		q.task_done()
 
 @profile
@@ -211,7 +211,7 @@ def graphThread(q):
 				q.task_done()
 				continue
 			states = util.getStatesFromDict(bXchild)
-			
+
 
 			#Gen parent dict
 			bXparent = {}
@@ -248,7 +248,7 @@ def graphThread(q):
 
 
 
-@profile	
+@profile
 def stateReader(q):
 	#read files names from folder
 	#find all redundent files (not going to be used for inheriting by any nodes)
@@ -421,7 +421,7 @@ def graphManual(file):
 	print("Gened first moves: " + str(time.time()-start))
 	size = (len(states[0]), len(states[0][0]))
 
-	
+
 	#data = [states, bXchild, bXparent, bXnum, firstMoves]
 
 	#data = "filler + graph"
@@ -452,7 +452,7 @@ def graphTest():
 	graphManual(file)
 
 if __name__ == "__main__":
-	
+
 	seed()
 	main()
 	#graphTest()
