@@ -106,7 +106,13 @@ def dKey(board):
 		key += "/" + str(int(row))
 	return key[1:]#remove the first "/"
 
+def genEndBoard():
+	return [1]
 
+def genBoard(m, n):
+	return [n] * m
+
+# TODO: add getChoices
 
 """
 TEST STUFF
