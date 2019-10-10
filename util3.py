@@ -1,3 +1,4 @@
+import numpy as np
 """
 A mXn board is an array of ints with length m.
 The fist value must be exactly n.
@@ -68,7 +69,48 @@ def addCol(boardStates, newN):
 			newStates.append(newBoard)
 	boardStates.extend(newStates)
 
+def getM(board):
+	return len(board)
 
+def getN(board):
+	return board[0]
+
+#returns a 2d array corresponding to the board state
+def toArrayNotation(board):
+	#true (1) is bitten
+	n = board[0]
+	boardAsArr = [[0] * n for i in range(len(board))]#generate an MxN array
+	for i in range(len(board)):
+		print(board[i])
+		for j in range(board[i], n):
+			boardAsArr[i][j] = 1
+	boardAsArr[0][0] = -1
+	return boardAsArr
+
+#the first col that has a bite taken out of it, if there are no bites, 0
+def file(board):
+	return board[0] - board[-1]
+
+#the first row that has a bite taken out of it, if there are no bites, 0
+def rank(board):
+	m = board[0]
+	for i in range(1, len(board)):
+		if i < m:
+			return i
+	return 0
+
+#generates a unique key to be used in the dict.
+def dKey(board):
+	key = ""
+	for row in board:
+		key += "/" + str(int(row))
+	return key[1:]#remove the first "/"
+
+
+
+"""
+TEST STUFF
+"""
 states = [
 [1], [2], [1,1], [2,1], [2,2]
 ]
@@ -78,3 +120,8 @@ addCol(states, 3)
 
 print("\nNew States")
 print(states)
+print("\n")
+board = states[14]
+
+arrNotation = toArrayNotation(board)
+print(np.array(arrNotation))
