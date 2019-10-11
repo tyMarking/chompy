@@ -183,7 +183,7 @@ def mirror(board):
 	for i in range(board[0]):
 		mirrored[i] = 0
 		for j in range(len(board)):
-			if board[j] >= i:
+			if board[j] > i:
 				mirrored[i] += 1
 	return mirrored
 
@@ -196,15 +196,12 @@ def main():
 	[1], [2], [1,1], [2,1], [2,2]
 	]
 
-	# board = [5, 5, 2, 2]
-	# mirrored = mirror(board)
-	# print(mirrored)
-	board = [2, 2]
-	print(rank(board))
-	print(inverseRank(board))
-	print(file(board))
-	print(inverseFile(board))
-	print(getL(board, 3))
+	# board = [2, 2]
+	# print(rank(board))
+	# print(file(board))
+	# print(inverseRank(board))
+	# print(inverseFile(board))
+	# print(getL(board, 3))
 
 
 if __name__ == "__main__":
