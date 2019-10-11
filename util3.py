@@ -9,7 +9,7 @@ The poison is at coordinate 0, 0 (in the top left).
 The poison is counted in the number of squares in the first row.
 """
 
-#bite the matrix based board at the coordinates x, y
+#bite the matrix based board at the coordinates (x, y)
 #x, y are 0 indexed. X is the row, Y is the col
 #returns the bitten board
 def bite(board, pos):
@@ -130,7 +130,9 @@ def getL(board, newSize):
 		#min m is file(board) + 1
 		#min n is rank(board) + 1
 		#max of both is newSize-1
-		L = [(i, j) for i in range(file(board) + 1, newSize + 1) for j in range(rank(board) + 1, newSize)]
+		L = [(i, j) for i in range(file(board)+1, newSize + 1) for j in range(rank(board) + 1, newSize)]
+		if file(board) == 0 and rank(board) == 0:
+			L.append((0, 0))
 	elif getM(board) == newSize-1:
 		#getN(board) is less than newSize-1
 		#n will be newSize
@@ -152,6 +154,26 @@ def getL(board, newSize):
 
 def getLPrime(board):
 	return [i for i in range(rank(board), getM(board))]
+
+def combineG_L(g, l):
+	node = g.copy()
+	n = g[0] + 1
+	newRow = n - l[0]
+	node.append(newRow)
+	for i in range(len(node)):
+		if i+1 <= len(node) - l[1]:
+			node[i] = n
+	if node[-1] == 0:
+		node = node[:-1]
+	return node
+
+def combineGP_LP(gP, lP):
+	node = gP.copy()
+	n = gP[0] + 1
+	for i in range(len(node)):
+		if i+1 <= len(node) - lP:
+			node[i] = n
+	return node
 
 def getChoices(board):
 	choices = [(i, j) for i in range(getM(board)) for j in range(board[i])]
@@ -199,12 +221,19 @@ def main():
 	[1], [2], [1,1], [2,1], [2,2]
 	]
 
-	# board = [2, 2]
+	board = [2, 2]
+	l = (3, 2)
 	# print(rank(board))
 	# print(file(board))
 	# print(inverseRank(board))
 	# print(inverseFile(board))
-	# print(getL(board, 3))
+	L = getLPrime(board)
+	print(L)
+	newBoards = []
+	for l in L:
+		newBoards.append(combineGP_LP(board, l))
+
+	print(newBoards)
 
 
 if __name__ == "__main__":

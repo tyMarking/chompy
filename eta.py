@@ -37,11 +37,11 @@ def etaPrime(gP, lP, etaGP, NXn):
 
 def etaGraph(node, NXn):
 	"""
-	get children of node, 
+	get children of node,
 	init num = 0
 	for child:
 		if childNum + 1 is odd:
-			if childNum > num: 
+			if childNum > num:
 				num = childNum
 		elif childNum + 1 is even and num is even and childNum > num:
 			num = childNum
@@ -60,6 +60,7 @@ def etaGraph(node, NXn):
 		elif cNum > num:
 			num = cNum
 	return num
+<<<<<<< HEAD
 
 def combineG_L(g, l):
 	print("Combine input g: " + str(g) + " l: " + str(l))
@@ -78,3 +79,5 @@ def combineGP_LP(gP, lP):
 		if i+1 <= len(gP)-lP:
 			node[i] = gP[i] + 1
 	return node
+=======
+>>>>>>> c521d223af65179b806d6936e4336c6882b45dfd
