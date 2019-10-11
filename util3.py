@@ -55,7 +55,6 @@ def addRow(boardStates, newM):
 			for i in range(1, board[-1] + 1):
 				newBoard = board[:]
 				newBoard.append(i)
-				print(newBoard)
 				newStates.append(newBoard)
 	boardStates.extend(newStates)
 
@@ -84,7 +83,6 @@ def toArrayNotation(board):
 	n = board[0]
 	boardAsArr = [[0] * n for i in range(len(board))]#generate an MxN array
 	for i in range(len(board)):
-		print(board[i])
 		for j in range(board[i], n):
 			boardAsArr[i][j] = 1
 	boardAsArr[0][0] = -1
@@ -220,20 +218,6 @@ def main():
 	states = [
 	[1], [2], [1,1], [2,1], [2,2]
 	]
-
-	board = [2, 2]
-	l = (3, 2)
-	# print(rank(board))
-	# print(file(board))
-	# print(inverseRank(board))
-	# print(inverseFile(board))
-	L = getLPrime(board)
-	print(L)
-	newBoards = []
-	for l in L:
-		newBoards.append(combineGP_LP(board, l))
-
-	print(newBoards)
 
 
 if __name__ == "__main__":
