@@ -37,7 +37,7 @@ print(data[0][2])
 # print(util.isRelated(b1,b2))
 # print(util.isDecendent(b2,b1))
 
-
+"""
 extendedBoardStates = util.extendToMxN(3, 3)
 # print(len(extendedBoardStates[0][0]))
 # print(len(extendedBoardStates[0][0][0]))
@@ -55,3 +55,4 @@ for i in range(len(extendedBoardStates[0])):
 	print("\n")
 	if i > 50:
 		break
+"""
