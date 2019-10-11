@@ -148,6 +148,12 @@ def lastColRank(board):
 			return i+1
 	return 0
 
+def colRank(board, col):
+	for i in reversed(range(len(board))):
+		if board[i][col]:
+			return i+1
+	return 0
+
 def file(board):
 	for i in range(len(board[0])):
 		if board[0][i]:
@@ -157,6 +163,12 @@ def file(board):
 def lastRowFile(board):
 	for i in range(len(board[-1])):
 		if board[-1][i]:
+			return len(board[0])-i
+	return 0
+
+def rowFile(board, row):
+	for i in range(len(board[row])):
+		if board[row][i]:
 			return len(board[0])-i
 	return 0
 
@@ -172,6 +184,36 @@ def gamma(board):
 
 def phi(board):
 	return len(gamma(board))
+
+def g(board):
+	b = [[board[i][j] for j in range(len(board[0]) - 1)] for i in range(len(board) - 1)]
+	b[-1][0] = False;
+	# b = b[:-1]
+	return b
+
+def gPrime(board):
+	b = [[board[i][j] for j in range(len(board[0]) - 1)] for i in range(len(board))]
+	b[-1][0] = False;
+	return b
+
+def l(board):
+	#number of trues
+	n = 0
+	m = 0
+	for i in range(len(board)):
+		if board[i][-1]:
+			n += 1
+	for j in range(len(board[0])):
+		if board[0][j]:
+			m += 1
+	return (m,n)
+
+def lPrime(board):
+	n = 0
+	for i in range(len(board)):
+		if board[i][-1]:
+			n += 1
+	return 0
 
 #s1-s2
 def setSubtract(s1, s2):
