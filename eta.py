@@ -49,10 +49,7 @@ def etaGraph(node, NXn):
 
 	children = heritage3.getChildren(node)
 	num = 0
-
-	print(node)
-	print(NXn)
-
+	#print(NXn)
 	for child in children:
 		print(child)
 		cNum = NXn[util.dKey(child)]

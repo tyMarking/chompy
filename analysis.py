@@ -39,8 +39,8 @@ def getFirstMoves():
 	util.store(firstMoves, ANALYSIS_FOLDER / "firstMoves.json")
 
 def genGLPrimeData(m, n):
-	mXnData = util.loadSolved(SOLVED_FOLDER / util.getMxNFileName(m, n))
-	mXnMinus1Data = util.loadSolved(SOLVED_FOLDER / util.getMxNFileName(m, n-1))
+	mXnData = util.loadSolved(SOLVED_FOLDER / (str(m)+"X"+str(n)+".json"))
+	mXnMinus1Data = util.loadSolved(SOLVED_FOLDER / (str(m)+"X"+str(n-1)+".json"))
 
 	mXnEtaData = {}
 
@@ -62,7 +62,8 @@ def genGLPrimeData(m, n):
 		mXnEtaData[key] = [gPrime, lPrime, etaGPrime, eta, rankGPrime, fileGPrime]
 
 	data = [(m, n), mXnEtaData]
-	util.store(data, PRIME_FOLDER / util.getMxNFileName(m, n))
+	#util.store(data, PRIME_FOLDER / (str(m)+"X"+str(n)+".json"))
+	return mXnEtaData
 
 def genPrimeDataToBoardSize(m, n):
 	if (m < 3):
@@ -92,4 +93,15 @@ def genPrimeDataToBoardSize(m, n):
 		else:
 			break;
 
-genPrimeDataToBoardSize(9, 10)
+#genPrimeDataToBoardSize(9, 10)
+data = genGLPrimeData(4,5)
+oddDeltas = []
+for key in data.keys():
+	item = data[key]
+	if (item[3]-item[2]) % 2 == 1:
+		oddDeltas.append( (key, item[2], item[3]) )
+print(oddDeltas)
+
+
+
+
