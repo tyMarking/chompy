@@ -147,8 +147,24 @@ def getLPrime(board):
 	return [i for i in range(rank(board), getM(board))]
 
 def getChoices(board):
-	choices = [(i, j) for i in range()]
+	choices = [(i, j) for i in range(getM(board)) for j in range(board[i])]
+	choices = choices[1:]
+	return choices
 
+def getMxNFileName(m, n):
+	return str(m) + "x" + str(n) + ".json"
+
+def load(fileName):
+	with open(fileName, "r") as file:
+		jData = file.read()
+		data = json.loads(jData)
+		return data
+
+def store(data, fileName):
+	with open(fileName, "w") as file:
+		jData = json.dumps(data)
+		file.write(jData)
+		return 1
 
 
 """
@@ -159,15 +175,14 @@ def main():
 	[1], [2], [1,1], [2,1], [2,2]
 	]
 
-	board = [5, 5, 5, 3, 1]
-	LPrime = getLPrime(board)
+	board = [9,7,4,4,3,2]
 	print(file(board))
 	print(rank(board))
 	print(inverseRank(board))
 	# print(board[1])
 	print("\n")
 
-	print(LPrime)
+	print(getChoices(board))
 
 if __name__ == "__main__":
 	main()
