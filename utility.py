@@ -148,6 +148,12 @@ def lastColRank(board):
 			return i+1
 	return 0
 
+def colRank(board, col):
+	for i in reversed(range(len(board))):
+		if board[i][col]:
+			return i+1
+	return 0
+
 def file(board):
 	for i in range(len(board[0])):
 		if board[0][i]:
@@ -157,6 +163,12 @@ def file(board):
 def lastRowFile(board):
 	for i in range(len(board[-1])):
 		if board[-1][i]:
+			return len(board[0])-i
+	return 0
+
+def rowFile(board, row):
+	for i in range(len(board[row])):
+		if board[row][i]:
 			return len(board[0])-i
 	return 0
 
@@ -172,6 +184,36 @@ def gamma(board):
 
 def phi(board):
 	return len(gamma(board))
+
+def g(board):
+	b = [[board[i][j] for j in range(len(board[0]) - 1)] for i in range(len(board) - 1)]
+	b[-1][0] = False;
+	# b = b[:-1]
+	return b
+
+def gPrime(board):
+	b = [[board[i][j] for j in range(len(board[0]) - 1)] for i in range(len(board))]
+	b[-1][0] = False;
+	return b
+
+def l(board):
+	#number of trues
+	n = 0
+	m = 0
+	for i in range(len(board)):
+		if board[i][-1]:
+			n += 1
+	for j in range(len(board[0])):
+		if board[0][j]:
+			m += 1
+	return (m,n)
+
+def lPrime(board):
+	n = 0
+	for row in board:
+		if row[-1]:
+			n += 1
+	return n
 
 #s1-s2
 def setSubtract(s1, s2):
@@ -248,6 +290,9 @@ def storeStates(bXchild, size, fileName):
 			n_bXchild[key].append(reduceToRF(child))
 	return store([size, n_bXchild],fileName)
 
+def getMxNFileName(m, n):
+	return str(m) + "x" + str(n) + ".json"
+
 def loadStates(fileName):
 	data = load(fileName)
 	if data == "Failed":
@@ -272,7 +317,7 @@ def storeSolved(bXchild_num, firstMoves, size, fileName):
 			n_bXchild_num[key][0].append(reduceToRF(child))
 	return store([size, n_bXchild_num, firstMoves], fileName)
 
-def loadSolved(fileName):
+def loadSolved(fileName, size=False):
 	data = load(fileName)
 	if data == "Failed":
 		return data
@@ -283,7 +328,10 @@ def loadSolved(fileName):
 		for child in bXchild_num[key][0]:
 			n_children.append(reconstructFromRF(child, data[0][1]))
 		n_bXchild_num[key] = (n_children, bXchild_num[key][1])
+	if size:
+		return [data[0], n_bXchild_num, data[2]]
 	return [n_bXchild_num, data[2]]
+
 
 #data = [(board,[parents,]),]
 
@@ -308,6 +356,12 @@ def store(data, fileName):
 
 def load(fileName):
 	#print("LOAD FUNCTION LOADING: " + fileName)
+	with open(fileName, "r") as file:
+			jData = file.read()
+			data = json.loads(jData)
+
+			return data
+	"""
 	try:
 		with open(fileName, "r") as file:
 			jData = file.read()
@@ -317,7 +371,7 @@ def load(fileName):
 	except:
 		print("ERROR: could not find file: " + str(fileName))
 		return "Failed"
-
+	"""
 
 def get2X2(states=False):
 	states2x2 = [
@@ -338,8 +392,6 @@ def get2X2(states=False):
 	if states:
 		return (states2x2, heritage2x2)
 	return heritage2x2
-
-
 
 def extendToMxN(m, n):
 	workbook = xlsxw.Workbook(r'./data/extensionTimesAndLengths'+str(m)+'X'+str(n)+'.xlsx')
