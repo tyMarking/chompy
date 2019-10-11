@@ -314,7 +314,7 @@ def storeSolved(bXchild_num, firstMoves, size, fileName):
 			n_bXchild_num[key][0].append(reduceToRF(child))
 	return store([size, n_bXchild_num, firstMoves], fileName)
 
-def loadSolved(fileName):
+def loadSolved(fileName, size=False):
 	data = load(fileName)
 	if data == "Failed":
 		return data
@@ -325,7 +325,10 @@ def loadSolved(fileName):
 		for child in bXchild_num[key][0]:
 			n_children.append(reconstructFromRF(child, data[0][1]))
 		n_bXchild_num[key] = (n_children, bXchild_num[key][1])
+	if size:
+		return [data[0], n_bXchild_num, data[2]]
 	return [n_bXchild_num, data[2]]
+
 
 #data = [(board,[parents,]),]
 
@@ -350,6 +353,12 @@ def store(data, fileName):
 
 def load(fileName):
 	#print("LOAD FUNCTION LOADING: " + fileName)
+	with open(fileName, "r") as file:
+			jData = file.read()
+			data = json.loads(jData)
+
+			return data
+	"""
 	try:
 		with open(fileName, "r") as file:
 			jData = file.read()
@@ -359,7 +368,7 @@ def load(fileName):
 	except:
 		print("ERROR: could not find file: " + str(fileName))
 		return "Failed"
-
+	"""
 
 def get2X2(states=False):
 	states2x2 = [
