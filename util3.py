@@ -166,6 +166,12 @@ def store(data, fileName):
 		file.write(jData)
 		return 1
 
+def seed():
+	#{key:eta}
+	#[(node,eta)]
+	etaData = {dKey([1]):0, dKey([2]):1, dKey([2,1]):2, dKey([2,2]):3}#don't seed [1,1] b/c rows > cols
+	workingData = [([1], 0), ([2], 1), ([2,1], 2), ([2,2], 3)]
+	return etaData, workingData
 
 """
 TEST STUFF
@@ -175,14 +181,6 @@ def main():
 	[1], [2], [1,1], [2,1], [2,2]
 	]
 
-	board = [9,7,4,4,3,2]
-	print(file(board))
-	print(rank(board))
-	print(inverseRank(board))
-	# print(board[1])
-	print("\n")
-
-	print(getChoices(board))
 
 if __name__ == "__main__":
 	main()
