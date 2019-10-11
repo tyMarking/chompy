@@ -1,5 +1,5 @@
 import util3 as util
-
+import eta
 
 THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 #THIS_FOLDER = "D:/Mass Storage/Math/chompy"
@@ -17,15 +17,36 @@ continue
 """
 
 
+"""
+Files: 
+etaData = {N : eta(N)}
+workingNodes = [n-1,[(g,eta(g)), ]]
+
+"""
+
 
 def main():
 	index = getIndex()
 	#data of form {node : eta}
-	data = util.load(DATA_FOLDER / "graph.json")
+	etaData = util.load(DATA_FOLDER / "etaData.json")
+
+	workingNodesData = util.load(DATA_FOLDER / "workingNodes.jsopn")
+	n = workingNodesData[0] + 1
+	#working nodes [(g,eta(g)),]
+	G = workingNodesData[1]
 
 
-def getIndex():
-	pass
+
+def expand(n, G, etaData):
+	newData = {}
+	nextWorkingNodes = []
+	for g in G:
+		L = util.possibleLs(g[0])
+		for l in L:
+			num = eta.eta(g[0], l, g[1], etaData)
+			newData[util.dKey(g[0])] = num
+			nextWorkingNodes.append( (g[0], num) )
+
 
 def seed():
 	pass
