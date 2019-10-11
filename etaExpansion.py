@@ -60,7 +60,9 @@ def expand(n, G, etaData):
 	return etaData, [n, nextWorkingNodes] 
 
 def seed():
-	pass
+	etaData, workingNodes = util.seed2x2Data()
+	util.store([2, workingNodes], DATA_FOLDER / "workingNodes.jsopn")
+	util.store(etaData, DATA_FOLDER / "etaData.json")
 
 
 
