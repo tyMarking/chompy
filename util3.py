@@ -100,7 +100,7 @@ def inverseRank(board):
 	for i in range(1, len(board)):
 		if board[i] < n:
 			return i
-	return 0
+	return len(board)
 
 def rank(board):
 	return len(board) - inverseRank(board)
@@ -127,7 +127,7 @@ def getL(board, newSize):
 		#min m is file(board) + 1
 		#min n is rank(board) + 1
 		#max of both is newSize-1
-		L = [(i, j) for i in range(file(board) + 1, newSize) for j in range(rank(board) + 1, newSize)]
+		L = [(i, j) for i in range(file(board) + 1, newSize + 1) for j in range(rank(board) + 1, newSize)]
 	elif getM(board) == newSize-1:
 		#getN(board) is less than newSize-1
 		#n will be newSize
@@ -138,9 +138,13 @@ def getL(board, newSize):
 		#m will be newSize
 		#n will have min rank(board)+2 and max newSize-1
 		L = [(newSize, j) for j in range(rank(board)+2, newSize)]
-	for l in L:
-		if l[0] < l[1]:
-			l = (l[1], l[0])
+	toRemove = []
+	for i in range(len(L)):
+		if L[i][0] < L[i][1]:
+		# 	l = (l[1], l[0])
+			toRemove.append(i)
+	for index in toRemove:
+		L.remove(L[index])
 	return L
 
 def getLPrime(board):
@@ -175,7 +179,7 @@ def seed():
 
 def mirror(board):
 	# [ for i in range(len(board))]
-	mirrored = [] * board[0] #initialize the mirrored rectangular board
+	mirrored = [0] * board[0] #initialize the mirrored rectangular board
 	for i in range(board[0]):
 		mirrored[i] = 0
 		for j in range(len(board)):
@@ -192,9 +196,15 @@ def main():
 	[1], [2], [1,1], [2,1], [2,2]
 	]
 
-	board = [5, 5, 2]
-	mirrored = mirror(board)
-	print(mirrored)
+	# board = [5, 5, 2, 2]
+	# mirrored = mirror(board)
+	# print(mirrored)
+	board = [2, 2]
+	print(rank(board))
+	print(inverseRank(board))
+	print(file(board))
+	print(inverseFile(board))
+	print(getL(board, 3))
 
 
 if __name__ == "__main__":
