@@ -10,7 +10,7 @@ DATA_FOLDER = Path(THIS_FOLDER, "./data/epoc2/")
 
 """
 start with 2x2 seed - have some way of tracking progress
-for each g in G get L (don't need to do l max,max) 
+for each g in G get L (don't need to do l max,max)
 go through square cases and establish eta
 go through non-square cases
 do any manual eta if necessary
@@ -20,7 +20,7 @@ continue
 
 
 """
-Files: 
+Files:
 etaData = {N : eta(N)}
 workingNodes = [n-1,[(g,eta(g)), ]]
 
@@ -55,7 +55,7 @@ def expand(n, G, etaData):
 		L = util.getL(g[0],n)
 		print("L: " + str(L))
 		for l in L:
-			N = eta.combineG_L(g[0] ,l)
+			N = util.combineG_L(g[0] ,l)
 			num = eta.eta(g[0], l, g[1], n, etaData)
 			etaData[util.dKey(N)] = num
 			nextWorkingNodes.append( (N, num) )
@@ -65,7 +65,7 @@ def expand(n, G, etaData):
 	util.store(etaData, DATA_FOLDER / "etaData.json")
 	print("Stored")
 
-	return etaData, [n, nextWorkingNodes] 
+	return etaData, [n, nextWorkingNodes]
 
 def seed():
 	print("Seeding")
