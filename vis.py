@@ -12,7 +12,7 @@ PRIME_DATA_FOLDER = Path(THIS_FOLDER, "./data/analysis/primeData")
 #[size, {util.bkey(N) : [g', l', n(g'), n(N), rank(g'), file(g')]}]
 
 
-files = os.listdir(SOLVED_FOLDER)
+files = os.listdir(PRIME_DATA_FOLDER)
 for file in files:
 	data = util.load(PRIME_DATA_FOLDER / file)
 
@@ -24,9 +24,9 @@ for file in files:
 
 	lXdelta = {}
 
-	for key in data.keys():
+	for key in data[1].keys():
 		N = util.revDKey(key)
-		Ndata = data[key]
+		Ndata = data[1][key]
 		g = Ndata[0]
 		l = Ndata[1]
 		etaG = Ndata[2]
@@ -34,7 +34,7 @@ for file in files:
 		rankG = Ndata[4]
 		fileG = Ndata[5]
 
-		delta = etaN-etaG
+		delta = abs(etaN-etaG)
 
 		if l not in lXdelta:
 			lXdelta[l] = [delta]
@@ -43,14 +43,21 @@ for file in files:
 
 	print(lXdelta)
 
+	fig = plt.figure()
+
 	for l in lXdelta.keys():
 		maxDelta = max(lXdelta[l])
-		counts = [0]*maxDelta
+		counts = [0]*(maxDelta+1)
+		print(counts)
 		for delta in lXdelta[l]:
 			counts[delta] += 1
 
 
-		plt.rcdefaults()
-		fig, ax = plt.subplots()
-		ax.barh(np.arange(len(people)), counts)
-		plt.show()
+		print(l+101)
+		ax = fig.add_subplot((l+551	))
+		ax.title.set_text("l: " + str(l))
+		ax.bar(np.arange(len(counts)), counts)
+		#ax.suptitle('L: ' + str(l))
+		#print("l: " + str(l))
+	plt.title(file)
+	plt.show()

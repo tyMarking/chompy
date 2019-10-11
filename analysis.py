@@ -92,4 +92,4 @@ def genPrimeDataToBoardSize(m, n):
 		else:
 			break;
 
-genPrimeDataToBoardSize(5, 10)
+genPrimeDataToBoardSize(9, 10)
