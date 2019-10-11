@@ -5,7 +5,7 @@ import heritage3
 
 #for square
 #G MUST BE SQUARE OR IT BREAK
-def eta(g, l, etaG, n, Nxn):
+def eta(g, l, etaG, n, NXn):
 
 	#rank(g) < n-1 and file(g) < n-1
 	if util.rank(g) < n-1 and util.file(g) < n-1:
@@ -28,7 +28,8 @@ def eta(g, l, etaG, n, Nxn):
 			else:
 				#getLPrime is adding a col to the right
 				#getLPrime shouldn't return a full L
-				return etaPrime(g, util.getLPrime(g), etaG, NXn)
+				#l[1] was util.getLPrime(g)
+				return etaPrime(g, l[1], etaG, NXn)
 
 #for not square, only called by eta
 def etaPrime(gP, lP, etaGP, NXn):
