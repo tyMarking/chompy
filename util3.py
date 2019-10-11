@@ -87,17 +87,23 @@ def toArrayNotation(board):
 	boardAsArr[0][0] = -1
 	return boardAsArr
 
-#the first col that has a bite taken out of it, if there are no bites, 0
+#the number of cols that have a bite taken out of it, if there are no bites, 0
 def file(board):
 	return board[0] - board[-1]
 
+def inverseFile(board):
+	return board[-1]
+
 #the first row that has a bite taken out of it, if there are no bites, 0
-def rank(board):
-	m = board[0]
+def inverseRank(board):
+	n = board[0]
 	for i in range(1, len(board)):
-		if i < m:
+		if i < n:
 			return i
 	return 0
+
+def rank(board):
+	return len(board) - inverseRank(board)
 
 #generates a unique key to be used in the dict.
 def dKey(board):
@@ -111,6 +117,23 @@ def genEndBoard():
 
 def genBoard(m, n):
 	return [n] * m
+
+def possibleLs(board, newSize):
+	L = []
+	#l is a tuple (m, n)
+	#m is across the row
+	#n is down the col
+	if getM(board) == newSize-1 or getN(board) == newSize-1:
+		#by default l starts as a tuple (newSize, newSize)
+		#for each row with lenghth newSize-1, decrement l[1]
+		#at the first row that isnt newSize-1, break the loop
+		#subtact file(graph) from newSize
+
+	return L
+
+def possibleLPrimes(board):
+
+
 
 # TODO: add getChoices
 
