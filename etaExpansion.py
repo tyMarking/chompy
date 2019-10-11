@@ -26,27 +26,38 @@ workingNodes = [n-1,[(g,eta(g)), ]]
 
 
 def main():
-	index = getIndex()
-	#data of form {node : eta}
+	print("Loading Initial Data")
 	etaData = util.load(DATA_FOLDER / "etaData.json")
-
 	workingNodesData = util.load(DATA_FOLDER / "workingNodes.jsopn")
-	n = workingNodesData[0] + 1
-	#working nodes [(g,eta(g)),]
-	G = workingNodesData[1]
+	print("Loaded")
+
+	while True:
+		#data of form {node : eta}
+		n = workingNodesData[0] + 1
+		print("Expanding to " + str(n)+"X"+str(n))
+		#working nodes [(g,eta(g)),]
+		G = workingNodesData[1]
+
+		etaData, workingNodesData = expand(n, G, etaData)
 
 
-
+#G = [(g, eta(g))]
 def expand(n, G, etaData):
-	newData = {}
 	nextWorkingNodes = []
+	#for each g + l combo find eta and add to data
 	for g in G:
-		L = util.possibleLs(g[0])
+		L = util.getL(g[0],n)
 		for l in L:
 			num = eta.eta(g[0], l, g[1], etaData)
-			newData[util.dKey(g[0])] = num
+			etaData[util.dKey(g[0])] = num
 			nextWorkingNodes.append( (g[0], num) )
 
+	print("Storing...")
+	util.store([n, nextWorkingNodes], DATA_FOLDER / "workingNodes.jsopn")
+	util.store(etaData, DATA_FOLDER / "etaData.json")
+	print("Stored")
+
+	return etaData, [n, nextWorkingNodes] 
 
 def seed():
 	pass
