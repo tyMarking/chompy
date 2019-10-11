@@ -114,20 +114,25 @@ def genBoard(m, n):
 
 # TODO: add getChoices
 
-"""
-TEST STUFF
-"""
-states = [
-[1], [2], [1,1], [2,1], [2,2]
-]
 
-addRow(states, 3)
-addCol(states, 3)
+def main():
+	"""
+	TEST STUFF
+	"""
+	states = [
+	[1], [2], [1,1], [2,1], [2,2]
+	]
 
-print("\nNew States")
-print(states)
-print("\n")
-board = states[14]
+	addRow(states, 3)
+	addCol(states, 3)
 
-arrNotation = toArrayNotation(board)
-print(np.array(arrNotation))
+	print("\nNew States")
+	print(states)
+	print("\n")
+	board = states[14]
+
+	arrNotation = toArrayNotation(board)
+	print(np.array(arrNotation))
+
+if __name__ == "__main__":
+	main()
