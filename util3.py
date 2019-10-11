@@ -98,7 +98,7 @@ def inverseFile(board):
 def inverseRank(board):
 	n = board[0]
 	for i in range(1, len(board)):
-		if i < n:
+		if board[i] < n:
 			return i
 	return 0
 
@@ -118,44 +118,56 @@ def genEndBoard():
 def genBoard(m, n):
 	return [n] * m
 
-def possibleLs(board, newSize):
+def getL(board, newSize):
 	L = []
 	#l is a tuple (m, n)
 	#m is across the row
 	#n is down the col
-	if getM(board) == newSize-1 or getN(board) == newSize-1:
-		#by default l starts as a tuple (newSize, newSize)
-		#for each row with lenghth newSize-1, decrement l[1]
-		#at the first row that isnt newSize-1, break the loop
-		#subtact file(graph) from newSize
-
+	if getM(board) == newSize-1 and getN(board) == newSize-1:
+		#min m is file(board) + 1
+		#min n is rank(board) + 1
+		#max of both is newSize-1
+		L = [(i, j) for i in range(file(board) + 1, newSize) for j in range(rank(board) + 1, newSize)]
+	elif getM(board) == newSize-1:
+		#getN(board) is less than newSize-1
+		#n will be newSize
+		#m will have min file(board)+2 and max newSize-1
+		L = [(i, newSize) for i in range(file(board)+2, newSize)]
+	elif getN(board) == newSize-1:
+		#getM(board) is less than newSize-1
+		#m will be newSize
+		#n will have min rank(board)+2 and max newSize-1
+		L = [(newSize, j) for j in range(rank(board)+2, newSize)]
+	for l in L:
+		if l[0] < l[1]:
+			l = (l[1], l[0])
 	return L
 
-def possibleLPrimes(board):
+def getLPrime(board):
+	return [i for i in range(rank(board), getM(board))]
+
+def getChoices(board):
+	choices = [(i, j) for i in range()]
 
 
 
-# TODO: add getChoices
-
-
+"""
+TEST STUFF
+"""
 def main():
-	"""
-	TEST STUFF
-	"""
 	states = [
 	[1], [2], [1,1], [2,1], [2,2]
 	]
 
-	addRow(states, 3)
-	addCol(states, 3)
-
-	print("\nNew States")
-	print(states)
+	board = [5, 5, 5, 3, 1]
+	LPrime = getLPrime(board)
+	print(file(board))
+	print(rank(board))
+	print(inverseRank(board))
+	# print(board[1])
 	print("\n")
-	board = states[14]
 
-	arrNotation = toArrayNotation(board)
-	print(np.array(arrNotation))
+	print(LPrime)
 
 if __name__ == "__main__":
 	main()
