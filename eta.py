@@ -32,7 +32,7 @@ def eta(g, l, etaG, n, Nxn):
 
 #for not square, only called by eta
 def etaPrime(gP, lP, etaGP, NXn):
-	return etaGraph(combineG_L(gP, lP), NXn)
+	return etaGraph(combineGP_LP(gP, lP), NXn)
 
 def etaGraph(node, NXn):
 	"""
@@ -60,8 +60,15 @@ def etaGraph(node, NXn):
 			num = cNum
 	return num
 
+def combineG_L(g, l):
+	node = g.copy()
+	for i in range(len(g)):
+		if i+1 <= len(g)-l[0]:
+			node[i] = g[i] + 1
+	node.append(g[0]-1-l[1])
+	return node
 
-def combineG_L(gP, lP):
+def combineGP_LP(gP, lP):
 	node = gP.copy()
 	for i in range(len(gP)):
 		if i+1 <= len(gP)-lP:

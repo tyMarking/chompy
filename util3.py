@@ -1,4 +1,5 @@
 import numpy as np
+import json
 """
 A mXn board is an array of ints with length m.
 The fist value must be exactly n.
