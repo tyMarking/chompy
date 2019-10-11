@@ -51,6 +51,7 @@ def etaGraph(node, NXn):
 	num = 0
 	#print(NXn)
 	for child in children:
+		print(child)
 		cNum = NXn[util.dKey(child)]
 		#odd
 		if (cNum + 1) % 2 == 1:
@@ -60,5 +61,3 @@ def etaGraph(node, NXn):
 		elif cNum > num:
 			num = cNum
 	return num
-
-
