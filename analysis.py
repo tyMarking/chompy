@@ -18,6 +18,7 @@ TRANSFER_FOLDER = DATA_FOLDER / "transfer/"
 SOLVED_FOLDER = DATA_FOLDER / "solved/"
 TEST_FOLDER = DATA_FOLDER / "test/"
 ANALYSIS_FOLDER = Path(THIS_FOLDER, "./data/analysis/")
+PRIME_FOLDER = ANALYSIS_FOLDER / "primeData/"
 
 
 def getSolvedFiles():
@@ -37,75 +38,58 @@ def getFirstMoves():
 		del data
 	util.store(firstMoves, ANALYSIS_FOLDER / "firstMoves.json")
 
-"""
-#we are only doing squares right now
-m = 3
-n = 4
-filePath = "./data/epoc1/solved/" + str(m) + "x" + str(n) + ".json"
-solvedData = util.loadSolved(filePath)
+def genGLPrimeData(m, n):
+	mXnData = util.loadSolved(SOLVED_FOLDER / util.getMxNFileName(m, n))
+	mXnMinus1Data = util.loadSolved(SOLVED_FOLDER / util.getMxNFileName(m, n-1))
 
-m1 = m
-n1 = n-1
-gDataPath = "./data/epoc1/solved/" + str(m1) + "x" + str(n1) + ".json"
-gData = util.loadSolved(gDataPath)
-# state = [[0,0,0],[0,0,0]]
-# key = util.dKey(state)
-# node = solvedData[0][key]
-# eta = node[1]
-# print(eta)
-# print("First move:")
-# print(solvedData[1])
-#print("\n")
+	mXnEtaData = {}
 
-flag = True
-
-# print(len(solvedData[0].keys()))
-for key in solvedData[0].keys():
-	node = solvedData[0][key]
-	state = util.revDKey(key)
-
-	n = len(state[0])
-
-	eta = node[1]
-	# print(key + ": " + str(eta))
-
-	gPrime = util.gPrime(state)
-	dKeyGPrime = util.dKey(gPrime)
-
-	etaGPrime = gData[0][dKeyGPrime][1]
-	# print(dKeyGPrime + ": " + str(etaGPrime))
-
-	lPrime = util.lPrime(state)
-	if lPrime == 1:
-		if not eta - etaGPrime % 2 == 0:
-			flag = False
-
-"""
-	g = util.g(state)
-
-	l = util.l(state)
-
-	rankG = util.rank(g)
-	fileG = util.file(g)
-
-	# print("rankG: " + str(rankG))
-	# print("fileG: " + str(fileG))
-
-	# if rankG < n-1 and fileG == n-1 or rankG == n-1 and fileG < n-1:
-	# if rankG < n - 1 and fileG < n - 1 and ( ( (l[0] == n) and (not l[1] == n) )): #or ( (not l[0] == n) and (l[1] == n) ) ):
-	# if (l[0] == n and (not l[1] == n) ) or ( (not l[0] == n) and l[1] == n):
-		print(l)
-
+	for key in mXnData[0].keys():
+		node = mXnData[0][key]
 		eta = node[1]
-		print(key + ": " + str(eta))
 
+		state = util.revDKey(key)
+		gPrime = util.gPrime(state)
+		lPrime = util.lPrime(state)
+		dKeyGPrime = util.dKey(gPrime)
+		etaGPrime = mXnMinus1Data[0][dKeyGPrime][1]
+		rankGPrime = util.rank(gPrime)
+		fileGPrime = util.rank(gPrime)
 
-		dKeyG = util.dKey(g);
-		etaG = gData[0][dKeyG][1]
-		print(dKeyG + ": " + str(etaG))
-		# print(util.display(state))
-		# print("\n")
-		if eta % 2 == 0:
-			flag = False
-"""
-print(flag)
+		#list order
+		#m, n, gPrime, lPrime, etaGPrime, eta, rankGPrime, fileGPrime
+
+		mXnEtaData[key] = [gPrime, lPrime, etaGPrime, eta, rankGPrime, fileGPrime]
+
+	data = [(m, n), mXnEtaData]
+	util.store(data, PRIME_FOLDER / util.getMxNFileName(m, n))
+
+def genPrimeDataToBoardSize(m, n):
+	if (m < 3):
+		print("m is too small")
+		return
+	currM = 3
+	currN = currM + 1
+	path = SOLVED_FOLDER / util.getMxNFileName(currM, currN)
+	while(True):
+		genGLPrimeData(currM, currN)
+
+		currN += 1
+		if (currN > n):
+			currM += 1
+			currN = currM + 1
+			if currM > m:
+				break
+		path = SOLVED_FOLDER / util.getMxNFileName(currM, currN)
+		if (os.path.exists(path)):
+			continue
+
+		currM += 1
+		currN = currM + 1
+		path = SOLVED_FOLDER / util.getMxNFileName(currM, currN)
+		if (os.path.exists(path)):
+			continue
+		else:
+			break;
+
+genPrimeDataToBoardSize(5, 10)
