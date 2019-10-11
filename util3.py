@@ -10,9 +10,11 @@ The poison is counted in the number of squares in the first row.
 """
 
 #bite the matrix based board at the coordinates x, y
-#x, y are 0 indexed. X is the column, Y is the row
+#x, y are 0 indexed. X is the row, Y is the col
 #returns the bitten board
-def bite(board, x, y):
+def bite(board, (pos))):
+	x = pos[1]
+	y = pos[0]
 	#check x and y in bounds
 	if abs(x) > board[0] or abs(y) > len(board):
 		print("Error: Bite taken out of range")
