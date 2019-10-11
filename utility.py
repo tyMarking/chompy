@@ -210,10 +210,10 @@ def l(board):
 
 def lPrime(board):
 	n = 0
-	for i in range(len(board)):
-		if board[i][-1]:
+	for row in board:
+		if row[-1]:
 			n += 1
-	return 0
+	return n
 
 #s1-s2
 def setSubtract(s1, s2):
@@ -289,6 +289,9 @@ def storeStates(bXchild, size, fileName):
 			#print(child)
 			n_bXchild[key].append(reduceToRF(child))
 	return store([size, n_bXchild],fileName)
+
+def getMxNFileName(m, n):
+	return str(m) + "x" + str(n) + ".json"
 
 def loadStates(fileName):
 	data = load(fileName)
@@ -389,8 +392,6 @@ def get2X2(states=False):
 	if states:
 		return (states2x2, heritage2x2)
 	return heritage2x2
-
-
 
 def extendToMxN(m, n):
 	workbook = xlsxw.Workbook(r'./data/extensionTimesAndLengths'+str(m)+'X'+str(n)+'.xlsx')
