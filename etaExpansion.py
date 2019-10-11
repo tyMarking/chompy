@@ -34,15 +34,15 @@ def main():
 	print("Loaded")
 
 	count = 0
-	while count < 1:
+	while count >= 0:
 		count += 1
 		#data of form {node : eta}
 		n = workingNodesData[0] + 1
 		print("Expanding to " + str(n)+"X"+str(n))
 		#working nodes [(g,eta(g)),]
 		G = workingNodesData[1]
-		print("G: " + str(G))
-		print("etaData: " + str(etaData))
+		#print("G: " + str(G))
+		#print("etaData: " + str(etaData))
 		etaData, workingNodesData = expand(n, G, etaData)
 
 
@@ -50,18 +50,34 @@ def main():
 def expand(n, G, etaData):
 	nextWorkingNodes = []
 	#for each g + l combo find eta and add to data
+
+	#[N, g[0], l, g[1]]
+	newNodes = [] 
+
 	for g in G:
-		print("\n\ng: " + str(g))
+		#print("\n\ng: " + str(g))
 		L = util.getL(g[0],n)
-		print("L: " + str(L))
+		#print("L: " + str(L))
 		for l in L:
 			N = util.combineG_L(g[0] ,l)
-			print(N)
-			num = eta.eta(g[0], l, g[1], n, etaData)
-			print("N: " + str(N) + "\tnum: " + str(num))
-			etaData[util.dKey(N)] = num
-			nextWorkingNodes.append( (N, num) )
-	print("finished expand, etaData: " + str(etaData) + "\tnextWorkingNodes: " + str(nextWorkingNodes))
+			#print(N)
+			newNodes.append([N, g[0], l, g[1]])
+			
+
+	newNodes.sort(key = lambda x: sum(x[0]))
+
+	for node in newNodes:
+		N = node[0]
+		g0 = node[1]
+		l = node[2]
+		g1 = node[3]
+		num = eta.eta(g0, l, g1, n, etaData)
+		#print("N: " + str(N) + "\tnum: " + str(num))
+		etaData[util.dKey(N)] = num
+		nextWorkingNodes.append( (N, num) )
+
+
+	#print("finished expand, etaData: " + str(etaData) + "\tnextWorkingNodes: " + str(nextWorkingNodes))
 	print("Storing...")
 	util.store([n, nextWorkingNodes], DATA_FOLDER / "workingNodes.json")
 	util.store(etaData, DATA_FOLDER / "etaData.json")
