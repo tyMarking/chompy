@@ -151,6 +151,21 @@ def getChoices(board):
 	choices = choices[1:]
 	return choices
 
+def getMxNFileName(m, n):
+	return str(m) + "x" + str(n) + ".json"
+
+def load(fileName):
+	with open(fileName, "r") as file:
+		jData = file.read()
+		data = json.loads(jData)
+		return data
+
+def store(data, fileName):
+	with open(fileName, "w") as file:
+		jData = json.dumps(data)
+		file.write(jData)
+		return 1
+
 
 """
 TEST STUFF
