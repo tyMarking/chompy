@@ -33,7 +33,7 @@ def eta(g, l, etaG, n, NXn):
 
 #for not square, only called by eta
 def etaPrime(gP, lP, etaGP, NXn):
-	return etaGraph(combineGP_LP(gP, lP), NXn)
+	return etaGraph(util.combineGP_LP(gP, lP), NXn)
 
 def etaGraph(node, NXn):
 	"""
@@ -49,7 +49,7 @@ def etaGraph(node, NXn):
 
 	children = heritage3.getChildren(node)
 	num = 0
-	print(NXn)
+	#print(NXn)
 	for child in children:
 		cNum = NXn[util.dKey(child)]
 		#odd
@@ -60,24 +60,5 @@ def etaGraph(node, NXn):
 		elif cNum > num:
 			num = cNum
 	return num
-<<<<<<< HEAD
 
-def combineG_L(g, l):
-	print("Combine input g: " + str(g) + " l: " + str(l))
-	node = g.copy()
-	for i in range(len(g)):
-		if i+1 <= len(g)-l[0]:
-			node[i] = g[i] + 1
-	if g[0]-l[1] > 0:
-		node.append(g[0]-1-l[1])
-	print("Combine return: " + str(node))
-	return node
 
-def combineGP_LP(gP, lP):
-	node = gP.copy()
-	for i in range(len(gP)):
-		if i+1 <= len(gP)-lP:
-			node[i] = gP[i] + 1
-	return node
-=======
->>>>>>> c521d223af65179b806d6936e4336c6882b45dfd

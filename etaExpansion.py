@@ -55,11 +55,13 @@ def expand(n, G, etaData):
 		L = util.getL(g[0],n)
 		print("L: " + str(L))
 		for l in L:
-			N = eta.combineG_L(g[0] ,l)
+			N = util.combineG_L(g[0] ,l)
+			print(N)
 			num = eta.eta(g[0], l, g[1], n, etaData)
+			print("N: " + str(N) + "\tnum: " + str(num))
 			etaData[util.dKey(N)] = num
 			nextWorkingNodes.append( (N, num) )
-
+	print("finished expand, etaData: " + str(etaData) + "\tnextWorkingNodes: " + str(nextWorkingNodes))
 	print("Storing...")
 	util.store([n, nextWorkingNodes], DATA_FOLDER / "workingNodes.json")
 	util.store(etaData, DATA_FOLDER / "etaData.json")
