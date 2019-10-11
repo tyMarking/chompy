@@ -170,8 +170,19 @@ def seed():
 	#{key:eta}
 	#[(node,eta)]
 	etaData = {dKey([1]):0, dKey([2]):1, dKey([2,1]):2, dKey([2,2]):3}#don't seed [1,1] b/c rows > cols
-	workingData = [([1], 0), ([2], 1), ([2,1], 2), ([2,2], 3)]
+	workingData = [([2], 1), ([2,1], 2), ([2,2], 3)]
 	return etaData, workingData
+
+def mirror(board):
+	# [ for i in range(len(board))]
+	mirrored = [] * board[0] #initialize the mirrored rectangular board
+	for i in range(board[0]):
+		mirrored[i] = 0
+		for j in range(len(board)):
+			if board[j] >= i:
+				mirrored[i] += 1
+	return mirrored
+
 
 """
 TEST STUFF
@@ -180,6 +191,10 @@ def main():
 	states = [
 	[1], [2], [1,1], [2,1], [2,2]
 	]
+
+	board = [5, 5, 2]
+	mirrored = mirror(board)
+	print(mirrored)
 
 
 if __name__ == "__main__":
