@@ -55,7 +55,6 @@ def addRow(boardStates, newM):
 			for i in range(1, board[-1] + 1):
 				newBoard = board[:]
 				newBoard.append(i)
-				print(newBoard)
 				newStates.append(newBoard)
 	boardStates.extend(newStates)
 
@@ -84,7 +83,6 @@ def toArrayNotation(board):
 	n = board[0]
 	boardAsArr = [[0] * n for i in range(len(board))]#generate an MxN array
 	for i in range(len(board)):
-		print(board[i])
 		for j in range(board[i], n):
 			boardAsArr[i][j] = 1
 	boardAsArr[0][0] = -1
@@ -121,6 +119,7 @@ def genEndBoard():
 def genBoard(m, n):
 	return [n] * m
 
+"""
 def getL(board, newSize):
 	L = []
 	#l is a tuple (m, n)
@@ -151,6 +150,28 @@ def getL(board, newSize):
 	for index in toRemove:
 		L.remove(L[index])
 	return L
+"""
+
+def getL(board, n):
+	L = []
+	b = board.copy()
+	#l is a tuple (m, n)
+	#m is across the row
+	#n is down the col
+	#print("pre L expansion: "+str(b))
+	for i in range(len(b), n-1):
+		b.append(0)
+	#print("post L expansion: " + str(b))
+
+	#min m is file(board) + 1
+	#min n is rank(board) + 1
+	#max of both is newSize-1
+
+	L = [(i, j) for i in range(max(n-b[-1], file(b)+1), n+1) for j in range(rank(b)+1, min(i, n-1)+1)]
+	if file(b) == 0 and rank(b) == 0:
+		L.append((0, 0))
+
+	return L
 
 def getLPrime(board):
 	return [i for i in range(rank(board), getM(board))]
@@ -158,6 +179,10 @@ def getLPrime(board):
 def combineG_L(g, l):
 	node = g.copy()
 	n = g[0] + 1
+
+	for i in range(len(node), n):
+		node.append(0)
+
 	newRow = n - l[0]
 	node.append(newRow)
 	for i in range(len(node)):
@@ -220,20 +245,6 @@ def main():
 	states = [
 	[1], [2], [1,1], [2,1], [2,2]
 	]
-
-	board = [2, 2]
-	l = (3, 2)
-	# print(rank(board))
-	# print(file(board))
-	# print(inverseRank(board))
-	# print(inverseFile(board))
-	L = getLPrime(board)
-	print(L)
-	newBoards = []
-	for l in L:
-		newBoards.append(combineGP_LP(board, l))
-
-	print(newBoards)
 
 
 if __name__ == "__main__":

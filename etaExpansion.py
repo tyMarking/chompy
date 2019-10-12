@@ -42,7 +42,11 @@ def main():
 		#working nodes [(g,eta(g)),]
 		G = workingNodesData[1]
 		#print("G: " + str(G))
+<<<<<<< HEAD
 		#print("etaData: " + str(etaData))
+=======
+		print("etaData: " + str(etaData))
+>>>>>>> bdfb253408926222cc8f783cda7e13e2bf4e3493
 		etaData, workingNodesData = expand(n, G, etaData)
 
 
