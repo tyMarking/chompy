@@ -6,7 +6,7 @@ import heritage3
 #for square
 #G MUST BE SQUARE OR IT BREAK
 def eta(g, l, etaG, n, NXn):
-	print("eta for g: "+str(g)+" l: "+str(l))
+	#print("eta for g: "+str(g)+" l: "+str(l))
 	#rank(g) < n-1 and file(g) < n-1
 	if util.rank(g) < n-1 and util.file(g) < n-1:
 		#if g = correct first move for a bite
@@ -33,9 +33,9 @@ def eta(g, l, etaG, n, NXn):
 
 #for not square, only called by eta
 def etaPrime(gP, lP, etaGP, NXn):
-	print("etaPrime gP: " + str(gP)+"\tlP: " + str(lP))
+	#print("etaPrime gP: " + str(gP)+"\tlP: " + str(lP))
 	N = util.combineGP_LP(gP, lP)
-	print("etaPrime N: "+str(N))
+	#print("etaPrime N: "+str(N))
 	return etaGraph(N, NXn)
 
 def etaGraph(node, NXn):
@@ -51,7 +51,7 @@ def etaGraph(node, NXn):
 	"""
 
 	children = heritage3.getChildren(node)
-	print("children: " + str(children))
+	#print("children: " + str(children))
 
 	num = 0
 	#print(NXn)

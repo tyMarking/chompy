@@ -38,7 +38,7 @@ def main():
 		count += 1
 		#data of form {node : eta}
 		n = workingNodesData[0] + 1
-		print("Expanding to " + str(n)+"X"+str(n))
+		print("\n\n\nExpanding to " + str(n)+"X"+str(n)+"\n\n\n")
 		#working nodes [(g,eta(g)),]
 		G = workingNodesData[1]
 		#print("G: " + str(G))
@@ -57,11 +57,14 @@ def expand(n, G, etaData):
 
 	#[N, g[0], l, g[1]]
 	newNodes = [] 
-
+	newGs = []
 	for g in G:
-		#print("\n\ng: " + str(g))
+		newGs.append(g)
+		newGs.append((util.mirror(g[0]), g[1]))
+	for g in newGs:
+		print("\n\ng: " + str(g))
 		L = util.getL(g[0],n)
-		#print("L: " + str(L))
+		print("L: " + str(L))
 		for l in L:
 			N = util.combineG_L(g[0] ,l)
 			#print(N)
