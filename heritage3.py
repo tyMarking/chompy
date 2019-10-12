@@ -10,6 +10,6 @@ def getChildren(state):
 	#print("Choices: " + str(bites))
 	for bite in bites:
 		child = util.bite(state, bite)
-		if util.getN(child) >= util.getM(child):
-			children.append(child)
+		#if util.getN(child) >= util.getM(child):
+		children.append(child)
 	return children

@@ -73,7 +73,9 @@ def expand(n, G, etaData):
 			#print("g: " + str(g)+"\tl: "+str(l) +" => " + str(N))
 			#print("N: " + str(n))
 			#print(N)
-			newNodes.append([N, g[0], l, g[1]])
+			dat = [N, g[0], l, g[1]]
+			if dat not in newNodes:
+				newNodes.append(dat)
 			
 
 	newNodes.sort(key = lambda x: sum(x[0]))
