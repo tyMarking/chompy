@@ -55,12 +55,12 @@ def expand(n, G, etaData):
 	newNodes = [] 
 
 	for g in G:
-		#print("\n\ng: " + str(g))
+		print("\n\ng: " + str(g))
 		L = util.getL(g[0],n)
-		#print("L: " + str(L))
+		print("L: " + str(L))
 		for l in L:
 			N = util.combineG_L(g[0] ,l)
-			#print(N)
+			print(N)
 			newNodes.append([N, g[0], l, g[1]])
 			
 
@@ -71,8 +71,10 @@ def expand(n, G, etaData):
 		g0 = node[1]
 		l = node[2]
 		g1 = node[3]
+		print(etaData)
+		print("Getting eta for " + str(N))
 		num = eta.eta(g0, l, g1, n, etaData)
-		#print("N: " + str(N) + "\tnum: " + str(num))
+		print("N: " + str(N) + "\tnum: " + str(num))
 		etaData[util.dKey(N)] = num
 		nextWorkingNodes.append( (N, num) )
 
