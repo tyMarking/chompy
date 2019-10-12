@@ -119,6 +119,7 @@ def genEndBoard():
 def genBoard(m, n):
 	return [n] * m
 
+"""
 def getL(board, newSize):
 	L = []
 	#l is a tuple (m, n)
@@ -149,6 +150,28 @@ def getL(board, newSize):
 	for index in toRemove:
 		L.remove(L[index])
 	return L
+"""
+
+def getL(board, n):
+	L = []
+	b = board.copy()
+	#l is a tuple (m, n)
+	#m is across the row
+	#n is down the col
+	#print("pre L expansion: "+str(b))
+	for i in range(len(b), n-1):
+		b.append(0)
+	#print("post L expansion: " + str(b))
+
+	#min m is file(board) + 1
+	#min n is rank(board) + 1
+	#max of both is newSize-1
+
+	L = [(i, j) for i in range(max(n-b[-1], file(b)+1), n+1) for j in range(rank(b)+1, min(i, n-1)+1)]
+	if file(b) == 0 and rank(b) == 0:
+		L.append((0, 0))
+
+	return L
 
 def getLPrime(board):
 	return [i for i in range(rank(board), getM(board))]
@@ -156,6 +179,10 @@ def getLPrime(board):
 def combineG_L(g, l):
 	node = g.copy()
 	n = g[0] + 1
+
+	for i in range(len(node), n):
+		node.append(0)
+
 	newRow = n - l[0]
 	node.append(newRow)
 	for i in range(len(node)):

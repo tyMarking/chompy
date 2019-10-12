@@ -41,7 +41,7 @@ def main():
 		print("Expanding to " + str(n)+"X"+str(n))
 		#working nodes [(g,eta(g)),]
 		G = workingNodesData[1]
-		print("G: " + str(G))
+		#print("G: " + str(G))
 		print("etaData: " + str(etaData))
 		etaData, workingNodesData = expand(n, G, etaData)
 
