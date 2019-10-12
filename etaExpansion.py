@@ -42,11 +42,11 @@ def main():
 		#working nodes [(g,eta(g)),]
 		G = workingNodesData[1]
 		#print("G: " + str(G))
-<<<<<<< HEAD
+
 		#print("etaData: " + str(etaData))
-=======
+
 		print("etaData: " + str(etaData))
->>>>>>> bdfb253408926222cc8f783cda7e13e2bf4e3493
+
 		etaData, workingNodesData = expand(n, G, etaData)
 
 
@@ -59,23 +59,24 @@ def expand(n, G, etaData):
 	newNodes = [] 
 
 	for g in G:
-		print("\n\ng: " + str(g))
+		#print("\n\ng: " + str(g))
 		L = util.getL(g[0],n)
-		print("L: " + str(L))
+		#print("L: " + str(L))
 		for l in L:
 			N = util.combineG_L(g[0] ,l)
-			print(N)
+			#print(N)
 			newNodes.append([N, g[0], l, g[1]])
 			
 
 	newNodes.sort(key = lambda x: sum(x[0]))
 
 	for node in newNodes:
+
 		N = node[0]
 		g0 = node[1]
 		l = node[2]
 		g1 = node[3]
-		print(etaData)
+		print("\n\netaData: " + str(etaData))
 		print("Getting eta for " + str(N))
 		num = eta.eta(g0, l, g1, n, etaData)
 		print("N: " + str(N) + "\tnum: " + str(num))

@@ -177,31 +177,39 @@ def getLPrime(board):
 	return [i for i in range(rank(board), getM(board))]
 
 def combineG_L(g, l):
+	#print("Combining g: " + str(g) + " and l: " + str(l))
 	node = g.copy()
 	n = g[0] + 1
 
-	for i in range(len(node), n):
+	#print("g pre expansion: " + str(node))
+	for i in range(len(node), n-1):
 		node.append(0)
+	#print("g post expansion: " + str(node))
 
 	newRow = n - l[0]
 	node.append(newRow)
 	for i in range(len(node)):
 		if i+1 <= len(node) - l[1]:
 			node[i] = n
-	if node[-1] == 0:
-		node = node[:-1]
+
+	#if node[-1] == 0:
+		#node = node[:-1]
+	while node[-1] == 0:
+		del node[-1]
+
 	return node
 
+#not checking to see if lP is > inverseRank (means it's assuming l is an allowable l)
 def combineGP_LP(gP, lP):
 	node = gP.copy()
 	n = gP[0] + 1
-	for i in range(len(node)):
-		if i+1 <= len(node) - lP:
-			node[i] = n
+
+	for i in range(len(node)-lP):
+		node[i] += 1
 	return node
 
 def getChoices(board):
-	choices = [(i, j) for i in range(getM(board)) for j in range(board[i])]
+	choices = [(i, j) for i in range(len(board)) for j in range(board[i])]
 	choices = choices[1:]
 	return choices
 
