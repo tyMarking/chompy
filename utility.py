@@ -69,7 +69,7 @@ def bite(board,pos):
 		print("Error: Bite taken out of range")
 		return
 
-	#convert the values of m and n to positives, so the for loop works
+	#convert the values of m and n to positives so the for loop works
 	if m < 0:
 		m = len(board) + m
 	if n < 0:
