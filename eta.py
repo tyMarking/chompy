@@ -40,6 +40,8 @@ def eta(g, l, etaG, n, NXn):
 #for not square, only called by eta
 def etaPrime(gP, lP, etaGP, NXn):
 	#print("etaPrime gP: " + str(gP)+"\tlP: " + str(lP))
+	if etaGP % 2 == 0:
+		return etaGP + 1
 	N = util.combineGP_LP(gP, lP)
 	#print("etaPrime N: "+str(N))
 	return etaGraph(N, NXn)
