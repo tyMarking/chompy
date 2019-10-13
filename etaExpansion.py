@@ -25,7 +25,7 @@ etaData = {N : eta(N)}
 workingNodes = [n-1,[(g,eta(g)), ]]
 
 """
-MAX_SIZE = 12
+MAX_SIZE = 9
 
 def main():
 	print("Loading Initial Data")
@@ -56,14 +56,35 @@ def expand(n, G, etaData):
 	#for each g + l combo find eta and add to data
 
 	#[N, g[0], l, g[1]]
-	newNodes = []
+	newGs = gInGs(G, etaData)
+	newNodes = gInNewGs(newGs, etaData, n)
+
+	sortNodes(newNodes)
+
+	nodeInNodes(newNodes, etaData, nextWorkingNodes, n)
+
+
+	#print("finished expand, etaData: " + str(etaData) + "\tnextWorkingNodes: " + str(nextWorkingNodes))
+	print("Storing...")
+	util.store([n, nextWorkingNodes], DATA_FOLDER / "workingNodes.json")
+	util.store(etaData, DATA_FOLDER / "etaData.json")
+	print("Stored")
+
+	return etaData, [n, nextWorkingNodes]
+
+def gInGs(G, etaData):
 	newGs = []
 	for g in G:
 		newGs.append(g)
 		if len(g[0]) == g[0][0]:
 			mir = util.mirror(g[0])
-			newGs.append((mir, g[1]))
-			etaData[util.dKey(mir)] = g[1]
+			if mir not in newGs:
+				newGs.append((mir, g[1]))
+				etaData[util.dKey(mir)] = g[1]
+	return newGs
+
+def gInNewGs(newGs, etaData, n):
+	newNodes = []
 	for g in newGs:
 		#print("\n\ng: " + str(g))
 		L = util.getL(g[0],n)
@@ -76,10 +97,14 @@ def expand(n, G, etaData):
 			dat = [N, g[0], l, g[1]]
 			if dat not in newNodes:
 				newNodes.append(dat)
+			# else:
+				# print("DUPLICATE!!!!!!!")
+	return newNodes
 
-
+def sortNodes(newNodes):
 	newNodes.sort(key = lambda x: sum(x[0]))
 
+def nodeInNodes(newNodes, etaData, nextWorkingNodes, n):
 	for node in newNodes:
 
 		N = node[0]
@@ -93,15 +118,6 @@ def expand(n, G, etaData):
 		etaData[util.dKey(N)] = num
 		nextWorkingNodes.append( (N, num) )
 
-
-	#print("finished expand, etaData: " + str(etaData) + "\tnextWorkingNodes: " + str(nextWorkingNodes))
-	print("Storing...")
-	util.store([n, nextWorkingNodes], DATA_FOLDER / "workingNodes.json")
-	util.store(etaData, DATA_FOLDER / "etaData.json")
-	print("Stored")
-
-	return etaData, [n, nextWorkingNodes]
-
 def seed():
 	print("Seeding")
 	etaData, workingNodes = util.seed()
@@ -110,7 +126,9 @@ def seed():
 	util.store(etaData, DATA_FOLDER / "etaData.json")
 	print("Seeded")
 
-
+def profileIt():
+	seed()
+	main()
 
 if __name__ == "__main__":
 	seed()

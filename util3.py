@@ -108,10 +108,13 @@ def rank(board):
 
 #generates a unique key to be used in the dict.
 def dKey(board):
+	# keyList = []
 	key = ""
 	for row in board:
+		# keyList.append("/" + str(int(row)))
 		key += "/" + str(int(row))
-	return key[1:]#remove the first "/"
+	# return ''.join(keyList[1:])
+	return key[1:]
 
 def genEndBoard():
 	return [1]
