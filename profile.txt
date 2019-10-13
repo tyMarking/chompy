@@ -1,182 +1,181 @@
-Sun Oct 13 17:26:04 2019    etaStats
+Sun Oct 13 17:49:41 2019    etaStats
 
-         33104325 function calls (33104323 primitive calls) in 34.350 seconds
+         32997742 function calls (32997740 primitive calls) in 26.085 seconds
 
    Ordered by: cumulative time
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-      3/1    0.000    0.000   34.350   34.350 {built-in method builtins.exec}
-        1    0.000    0.000   34.350   34.350 <string>:1(<module>)
-        1    0.027    0.027   34.350   34.350 C:\Users\hbshr\Documents\programming\chompy\chompy\etaExpansion.py:139(profileIt)
-        1    0.015    0.015   34.298   34.298 C:\Users\hbshr\Documents\programming\chompy\chompy\etaExpansion.py:29(main)
-        8    0.001    0.000   34.234    4.279 C:\Users\hbshr\Documents\programming\chompy\chompy\etaExpansion.py:53(expand)
-        8    0.159    0.020   23.059    2.882 C:\Users\hbshr\Documents\programming\chompy\chompy\etaExpansion.py:117(nodeInNodes)
-   104404    0.149    0.000   22.462    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\eta.py:8(eta)
-    59270    0.136    0.000   22.178    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\eta.py:41(etaPrime)
-    58548    3.090    0.000   21.961    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\eta.py:49(etaGraph)
-        8    9.562    1.195    9.772    1.221 C:\Users\hbshr\Documents\programming\chompy\chompy\etaExpansion.py:74(gInGs)
-  2793963    9.290    0.000    9.290    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:110(dKey)
-    58548    1.031    0.000    6.430    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\heritage3.py:6(getChildren)
-  2684008    4.117    0.000    4.763    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:15(bite)
-   418431    2.804    0.000    2.904    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:208(mirror)
-        8    0.120    0.015    0.888    0.111 C:\Users\hbshr\Documents\programming\chompy\chompy\etaExpansion.py:88(gInNewGs)
- 11702871    0.675    0.000    0.675    0.000 {built-in method builtins.len}
-  2684008    0.466    0.000    0.624    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:74(getM)
-       18    0.013    0.001    0.460    0.026 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:195(store)
-   104404    0.355    0.000    0.452    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:149(combineG_L)
-    58548    0.070    0.000    0.437    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:181(getChoices)
-       18    0.001    0.000    0.364    0.020 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\json\__init__.py:183(dumps)
-    58548    0.364    0.000    0.364    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:182(<listcomp>)
-       18    0.000    0.000    0.363    0.020 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\json\encoder.py:182(encode)
-       18    0.360    0.020    0.360    0.020 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\json\encoder.py:204(iterencode)
-  5368016    0.335    0.000    0.335    0.000 {built-in method builtins.abs}
-    33097    0.078    0.000    0.286    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:125(getL)
-  2684008    0.256    0.000    0.256    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:77(getN)
-  3099036    0.237    0.000    0.237    0.000 {method 'append' of 'list' objects}
-   144425    0.060    0.000    0.181    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:106(rank)
-    33097    0.057    0.000    0.149    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:140(<listcomp>)
-   144425    0.104    0.000    0.112    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:99(inverseRank)
-    58548    0.067    0.000    0.081    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:173(combineGP_LP)
-       18    0.006    0.000    0.064    0.004 {method 'write' of '_io.TextIOWrapper' objects}
-        8    0.000    0.000    0.063    0.008 C:\Users\hbshr\Documents\programming\chompy\chompy\etaExpansion.py:114(sortNodes)
+      3/1    0.000    0.000   26.085   26.085 {built-in method builtins.exec}
+        1    0.000    0.000   26.085   26.085 <string>:1(<module>)
+        1    0.025    0.025   26.085   26.085 C:\Users\hbshr\Documents\programming\chompy\chompy\etaExpansion.py:145(profileIt)
+        1    0.017    0.017   26.039   26.039 C:\Users\hbshr\Documents\programming\chompy\chompy\etaExpansion.py:29(main)
+        8    0.001    0.000   25.987    3.248 C:\Users\hbshr\Documents\programming\chompy\chompy\etaExpansion.py:53(expand)
+        8    0.168    0.021   24.318    3.040 C:\Users\hbshr\Documents\programming\chompy\chompy\etaExpansion.py:123(nodeInNodes)
+   104404    0.159    0.000   23.684    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\eta.py:8(eta)
+    59270    0.124    0.000   23.381    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\eta.py:41(etaPrime)
+    58548    3.242    0.000   23.171    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\eta.py:49(etaGraph)
+  2793963    9.814    0.000    9.814    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:110(dKey)
+    58548    1.106    0.000    6.840    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\heritage3.py:6(getChildren)
+  2684008    4.408    0.000    5.069    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:15(bite)
+   411949    2.840    0.000    2.941    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:208(mirror)
+        8    0.087    0.011    0.951    0.119 C:\Users\hbshr\Documents\programming\chompy\chompy\etaExpansion.py:101(gInNewGs)
+ 11671087    0.694    0.000    0.694    0.000 {built-in method builtins.len}
+  2684008    0.480    0.000    0.643    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:74(getM)
+   104404    0.389    0.000    0.492    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:149(combineG_L)
+       18    0.011    0.001    0.473    0.026 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:195(store)
+    58548    0.074    0.000    0.462    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:181(getChoices)
+    58548    0.384    0.000    0.384    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:182(<listcomp>)
+       18    0.001    0.000    0.381    0.021 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\json\__init__.py:183(dumps)
+       18    0.000    0.000    0.380    0.021 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\json\encoder.py:182(encode)
+       18    0.377    0.021    0.377    0.021 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\json\encoder.py:204(iterencode)
+    33097    0.084    0.000    0.363    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:125(getL)
+  5368016    0.344    0.000    0.344    0.000 {built-in method builtins.abs}
+  2684008    0.267    0.000    0.267    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:77(getN)
+  3099036    0.245    0.000    0.245    0.000 {method 'append' of 'list' objects}
+    33097    0.063    0.000    0.236    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:140(<listcomp>)
+   156454    0.073    0.000    0.216    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:106(rank)
+        8    0.041    0.005    0.190    0.024 C:\Users\hbshr\Documents\programming\chompy\chompy\etaExpansion.py:74(gInGs)
+   156454    0.124    0.000    0.133    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:99(inverseRank)
+    66194    0.092    0.000    0.092    0.000 {built-in method builtins.min}
+    58548    0.071    0.000    0.086    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:173(combineGP_LP)
+       18    0.005    0.000    0.064    0.004 {method 'write' of '_io.TextIOWrapper' objects}
+        8    0.000    0.000    0.063    0.008 C:\Users\hbshr\Documents\programming\chompy\chompy\etaExpansion.py:120(sortNodes)
         8    0.021    0.003    0.063    0.008 {method 'sort' of 'list' objects}
-       12    0.062    0.005    0.062    0.005 {built-in method builtins.print}
        18    0.000    0.000    0.059    0.003 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\encodings\cp1252.py:18(encode)
        18    0.059    0.003    0.059    0.003 {built-in method _codecs.charmap_encode}
-   104404    0.019    0.000    0.041    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\etaExpansion.py:115(<lambda>)
-    33097    0.037    0.000    0.037    0.000 {built-in method builtins.max}
-   196049    0.034    0.000    0.034    0.000 {method 'copy' of 'list' objects}
-   104404    0.022    0.000    0.030    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\etaExpansion.py:107(ifDat)
-   144417    0.026    0.000    0.026    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:92(file)
-        1    0.000    0.000    0.025    0.025 C:\Users\hbshr\Documents\programming\chompy\chompy\etaExpansion.py:131(seed)
+       12    0.043    0.004    0.043    0.004 {built-in method builtins.print}
+   104404    0.019    0.000    0.041    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\etaExpansion.py:121(<lambda>)
+   196049    0.037    0.000    0.037    0.000 {method 'copy' of 'list' objects}
+   156446    0.031    0.000    0.031    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:92(file)
    104404    0.022    0.000    0.022    0.000 {built-in method builtins.sum}
-       20    0.015    0.001    0.020    0.001 {built-in method io.open}
-    66194    0.018    0.000    0.018    0.000 {built-in method builtins.min}
+        1    0.000    0.000    0.021    0.021 C:\Users\hbshr\Documents\programming\chompy\chompy\etaExpansion.py:137(seed)
+       20    0.013    0.001    0.019    0.001 {built-in method io.open}
+    33097    0.017    0.000    0.017    0.000 {built-in method builtins.max}
         2    0.000    0.000    0.005    0.002 <frozen importlib._bootstrap>:978(_find_and_load)
-        2    0.000    0.000    0.005    0.002 <frozen importlib._bootstrap>:948(_find_and_load_unlocked)
-        2    0.000    0.000    0.004    0.002 <frozen importlib._bootstrap>:663(_load_unlocked)
-        2    0.000    0.000    0.003    0.001 <frozen importlib._bootstrap_external>:722(exec_module)
-        2    0.000    0.000    0.003    0.001 <frozen importlib._bootstrap_external>:793(get_code)
-        1    0.000    0.000    0.003    0.003 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\encodings\__init__.py:71(search_function)
+        2    0.000    0.000    0.004    0.002 <frozen importlib._bootstrap>:948(_find_and_load_unlocked)
+        2    0.000    0.000    0.003    0.001 <frozen importlib._bootstrap>:663(_load_unlocked)
        63    0.003    0.000    0.003    0.000 {method 'join' of 'str' objects}
+        2    0.000    0.000    0.003    0.001 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:189(load)
+        2    0.000    0.000    0.003    0.001 <frozen importlib._bootstrap_external>:722(exec_module)
+        1    0.000    0.000    0.003    0.003 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\encodings\__init__.py:71(search_function)
         1    0.000    0.000    0.002    0.002 {built-in method builtins.__import__}
-        2    0.000    0.000    0.002    0.001 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:189(load)
+        2    0.000    0.000    0.002    0.001 <frozen importlib._bootstrap_external>:793(get_code)
         2    0.002    0.001    0.002    0.001 <frozen importlib._bootstrap_external>:914(get_data)
         2    0.000    0.000    0.001    0.001 <frozen importlib._bootstrap>:882(_find_spec)
-       20    0.000    0.000    0.001    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\pathlib.py:907(__truediv__)
-       20    0.000    0.000    0.001    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\pathlib.py:694(_make_child)
-        2    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:1272(find_spec)
-        2    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:1240(_get_spec)
-        8    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:74(_path_stat)
-        8    0.001    0.000    0.001    0.000 {built-in method nt.stat}
+        2    0.000    0.000    0.001    0.001 <frozen importlib._bootstrap_external>:1272(find_spec)
+        2    0.000    0.000    0.001    0.001 <frozen importlib._bootstrap_external>:1240(_get_spec)
         4    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:1356(find_spec)
-        2    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap>:576(module_from_spec)
-        2    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap>:504(_init_module_attrs)
-        4    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:271(cache_from_source)
-        4    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap>:403(cached)
-        2    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:369(_get_cached)
+       20    0.000    0.000    0.001    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\pathlib.py:907(__truediv__)
+        8    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:74(_path_stat)
+       20    0.000    0.000    0.001    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\pathlib.py:694(_make_child)
+        8    0.001    0.000    0.001    0.000 {built-in method nt.stat}
        20    0.000    0.000    0.001    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\pathlib.py:640(_parse_args)
-        4    0.001    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:62(_path_split)
-       20    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\pathlib.py:63(parse_parts)
-       20    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\_bootlocale.py:11(getpreferredencoding)
         2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:93(_path_isfile)
         2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:84(_path_is_mode_type)
+       20    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\pathlib.py:63(parse_parts)
+       20    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\_bootlocale.py:11(getpreferredencoding)
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:211(_call_with_frames_removed)
        20    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\pathlib.py:710(__fspath__)
-        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:951(path_stats)
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:576(module_from_spec)
+        1    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\encodings\cp1252.py:3(<module>)
        20    0.000    0.000    0.000    0.000 {built-in method _locale._getdefaultlocale}
        20    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\pathlib.py:700(__str__)
-        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:211(_call_with_frames_removed)
-        1    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\encodings\cp1252.py:3(<module>)
-       20    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\pathlib.py:673(_from_parsed_parts)
         2    0.000    0.000    0.000    0.000 {method 'read' of '_io.FileIO' objects}
-        2    0.000    0.000    0.000    0.000 {method 'read' of '_io.TextIOWrapper' objects}
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:504(_init_module_attrs)
         5    0.000    0.000    0.000    0.000 {built-in method builtins.__build_class__}
         2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:523(_compile_bytecode)
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:951(path_stats)
+       20    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\pathlib.py:673(_from_parsed_parts)
         2    0.000    0.000    0.000    0.000 {built-in method marshal.loads}
+        4    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:403(cached)
+        2    0.000    0.000    0.000    0.000 {method 'read' of '_io.TextIOWrapper' objects}
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:147(__enter__)
+        4    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:271(cache_from_source)
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:369(_get_cached)
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:157(_get_module_lock)
        20    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\pathlib.py:683(_format_parsed_parts)
-        2    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\json\__init__.py:299(loads)
        20    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:56(_path_join)
        20    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\pathlib.py:145(splitroot)
-        2    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\json\decoder.py:332(decode)
-        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:147(__enter__)
+        2    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\json\__init__.py:299(loads)
        87    0.000    0.000    0.000    0.000 {built-in method builtins.isinstance}
-        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:157(_get_module_lock)
-        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:438(_classify_pyc)
-       18    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\codecs.py:186(__init__)
-       20    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:58(<listcomp>)
-       20    0.000    0.000    0.000    0.000 {built-in method sys.intern}
-        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:151(__exit__)
-       20    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\pathlib.py:1017(_init)
+        4    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:62(_path_split)
+        2    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\json\decoder.py:332(decode)
         2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1351(_get_spec)
+       18    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\codecs.py:186(__init__)
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:438(_classify_pyc)
+       20    0.000    0.000    0.000    0.000 {built-in method sys.intern}
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:58(__init__)
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:151(__exit__)
+       20    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:58(<listcomp>)
+       20    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\pathlib.py:1017(_init)
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:574(spec_from_file_location)
         2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:318(__exit__)
        21    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\_bootlocale.py:5(<module>)
        20    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\pathlib.py:101(join_parsed_parts)
        26    0.000    0.000    0.000    0.000 {built-in method nt.fspath}
         2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:103(release)
-        2    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\encodings\cp1252.py:22(decode)
-       22    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:222(_verbose_message)
         1    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\encodings\cp1252.py:33(getregentry)
-        4    0.000    0.000    0.000    0.000 {method 'match' of 're.Pattern' objects}
-        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:574(spec_from_file_location)
-        2    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\json\decoder.py:343(raw_decode)
-       21    0.000    0.000    0.000    0.000 {built-in method __new__ of type object at 0x00007FFCAED059A0}
-        6    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:51(_r_long)
-        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:58(__init__)
-        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:471(_validate_timestamp_pyc)
-        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:176(cb)
         1    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\encodings\__init__.py:43(normalize_encoding)
-        1    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\_bootlocale.py:5(<module>)
-       12    0.000    0.000    0.000    0.000 {built-in method builtins.getattr}
-        1    0.000    0.000    0.000    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:201(seed)
-        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:78(acquire)
-        2    0.000    0.000    0.000    0.000 {built-in method _codecs.charmap_decode}
-        9    0.000    0.000    0.000    0.000 {built-in method builtins.hasattr}
+       22    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:222(_verbose_message)
         4    0.000    0.000    0.000    0.000 {built-in method _thread.allocate_lock}
-        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:401(_check_name_wrapper)
-        1    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\codecs.py:94(__new__)
-       20    0.000    0.000    0.000    0.000 {method 'reverse' of 'list' objects}
-       13    0.000    0.000    0.000    0.000 {method 'rpartition' of 'str' objects}
-        2    0.000    0.000    0.000    0.000 {built-in method builtins.any}
-        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:719(find_spec)
+        6    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:51(_r_long)
+       21    0.000    0.000    0.000    0.000 {built-in method __new__ of type object at 0x00007FFCAF0559A0}
+        4    0.000    0.000    0.000    0.000 {method 'match' of 're.Pattern' objects}
+       12    0.000    0.000    0.000    0.000 {built-in method builtins.getattr}
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:176(cb)
+        2    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\encodings\cp1252.py:22(decode)
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:78(acquire)
+        2    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\json\decoder.py:343(raw_decode)
+        9    0.000    0.000    0.000    0.000 {built-in method builtins.hasattr}
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:471(_validate_timestamp_pyc)
         6    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:859(__exit__)
-        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:35(_new_module)
-        4    0.000    0.000    0.000    0.000 {method 'rsplit' of 'str' objects}
-        4    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:36(_relax_case)
-       44    0.000    0.000    0.000    0.000 {method 'rstrip' of 'str' objects}
-        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:311(__enter__)
-        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:792(find_spec)
+        1    0.000    0.000    0.000    0.000 C:\Users\hbshr\Documents\programming\chompy\chompy\util3.py:201(seed)
         5    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:1203(_path_importer_cache)
-        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:416(parent)
-        6    0.000    0.000    0.000    0.000 {built-in method from_bytes}
-        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1009(_handle_fromlist)
-        1    0.000    0.000    0.000    0.000 {built-in method _codecs.charmap_build}
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:35(_new_module)
         6    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:855(__enter__)
-        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:369(__init__)
-        1    0.000    0.000    0.000    0.000 {built-in method _imp.is_builtin}
-        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:307(__init__)
-        3    0.000    0.000    0.000    0.000 {method 'startswith' of 'str' objects}
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:719(find_spec)
+        2    0.000    0.000    0.000    0.000 {built-in method _codecs.charmap_decode}
+        1    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\codecs.py:94(__new__)
+        2    0.000    0.000    0.000    0.000 {built-in method builtins.any}
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:401(_check_name_wrapper)
+       13    0.000    0.000    0.000    0.000 {method 'rpartition' of 'str' objects}
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:416(parent)
+       44    0.000    0.000    0.000    0.000 {method 'rstrip' of 'str' objects}
+        4    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:36(_relax_case)
+       20    0.000    0.000    0.000    0.000 {method 'reverse' of 'list' objects}
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:792(find_spec)
        10    0.000    0.000    0.000    0.000 {built-in method _imp.acquire_lock}
-        2    0.000    0.000    0.000    0.000 {method 'endswith' of 'str' objects}
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:369(__init__)
+        1    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:1009(_handle_fromlist)
+        4    0.000    0.000    0.000    0.000 {method 'rsplit' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 {built-in method _imp.is_builtin}
+        6    0.000    0.000    0.000    0.000 {built-in method from_bytes}
         2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:143(__init__)
         7    0.000    0.000    0.000    0.000 {method 'get' of 'dict' objects}
-        2    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\codecs.py:260(__init__)
-        1    0.000    0.000    0.000    0.000 {built-in method builtins.setattr}
-        4    0.000    0.000    0.000    0.000 {built-in method _thread.get_ident}
+        1    0.000    0.000    0.000    0.000 {built-in method _codecs.charmap_build}
        10    0.000    0.000    0.000    0.000 {built-in method _imp.release_lock}
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:884(__init__)
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:311(__enter__)
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:307(__init__)
+        3    0.000    0.000    0.000    0.000 {method 'startswith' of 'str' objects}
+        2    0.000    0.000    0.000    0.000 {method 'endswith' of 'str' objects}
         2    0.000    0.000    0.000    0.000 {built-in method _imp.is_frozen}
         2    0.000    0.000    0.000    0.000 {built-in method _imp._fix_co_filename}
         8    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:321(<genexpr>)
-        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:884(__init__)
-        4    0.000    0.000    0.000    0.000 {method 'end' of 're.Match' objects}
+        2    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\codecs.py:260(__init__)
         6    0.000    0.000    0.000    0.000 {method 'isalnum' of 'str' objects}
-        1    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\encodings\cp1252.py:9(Codec)
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.setattr}
+        4    0.000    0.000    0.000    0.000 {built-in method _thread.get_ident}
         2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:424(has_location)
-        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:909(get_filename)
+        1    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\encodings\cp1252.py:9(Codec)
         1    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\encodings\cp1252.py:17(IncrementalEncoder)
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:909(get_filename)
         2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap_external>:719(create_module)
+        4    0.000    0.000    0.000    0.000 {method 'end' of 're.Match' objects}
         1    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\encodings\cp1252.py:25(StreamWriter)
         1    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\encodings\cp1252.py:21(IncrementalDecoder)
-        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
         1    0.000    0.000    0.000    0.000 C:\Users\hbshr\AppData\Local\Programs\Python\Python37\lib\encodings\cp1252.py:28(StreamReader)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
 
 
