@@ -78,7 +78,7 @@ def gInGs(G, etaData):
 		newGs.append(g)
 		if len(g[0]) == g[0][0]:
 			mir = util.mirror(g[0])
-			if mir not in newGs:
+			if (mir, g[1]) not in newGs:
 				newGs.append((mir, g[1]))
 				etaData[util.dKey(mir)] = g[1]
 	return newGs
@@ -97,8 +97,8 @@ def gInNewGs(newGs, etaData, n):
 			dat = [N, g[0], l, g[1]]
 			if dat not in newNodes:
 				newNodes.append(dat)
-			# else:
-				# print("DUPLICATE!!!!!!!")
+			else:
+				print("DUPLICATE!!!!!!!")
 	return newNodes
 
 def sortNodes(newNodes):
