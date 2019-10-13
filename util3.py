@@ -13,39 +13,17 @@ The poison is counted in the number of squares in the first row.
 #x, y are 0 indexed. X is the row, Y is the col
 #returns the bitten board
 def bite(board, pos):
-	x = pos[1]
-	y = pos[0]
-	#check x and y in bounds
-	if abs(x) > board[0] or abs(y) > len(board):
-		print("Error: Bite taken out of range")
-		return board
+	if pos[1] == 0:
+		return board[0:pos[0]]
 
-	#convert the values of x and y to positives so the for loop works
-	if x < 0:
-		x = board[0] + x
-	if y < 0:
-		y = len(board) + y
-
-	#shallow copy board
 	board = board[:]
 
-	#loop through the rows of board, starting at y
-	#if the value of board at the current row is greater than x,
-		#set the value of the new board at the row to x
-	#else
-		#none of the others will have a greater length value, so we can end
-		#break
-
-	#trim the board
-	#if x is 0, remove elements starting at y
-	for row in range(y, len(board)):
-		if board[row] > x:
-			board[row] = x;
+	for row in range(pos[0], len(board)):
+		if board[row] > pos[1]:
+			board[row] = pos[1];
 		else:
 			break;
 
-	if x == 0:
-		board = board[0:y]
 	return board
 
 def addRow(boardStates, newM):
