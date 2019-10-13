@@ -119,39 +119,6 @@ def genEndBoard():
 def genBoard(m, n):
 	return [n] * m
 
-"""
-def getL(board, newSize):
-	L = []
-	#l is a tuple (m, n)
-	#m is across the row
-	#n is down the col
-	if getM(board) == newSize-1 and getN(board) == newSize-1:
-		#min m is file(board) + 1
-		#min n is rank(board) + 1
-		#max of both is newSize-1
-		L = [(i, j) for i in range(file(board)+1, newSize + 1) for j in range(rank(board) + 1, newSize)]
-		if file(board) == 0 and rank(board) == 0:
-			L.append((0, 0))
-	elif getM(board) == newSize-1:
-		#getN(board) is less than newSize-1
-		#n will be newSize
-		#m will have min file(board)+2 and max newSize-1
-		L = [(i, newSize) for i in range(file(board)+2, newSize)]
-	elif getN(board) == newSize-1:
-		#getM(board) is less than newSize-1
-		#m will be newSize
-		#n will have min rank(board)+2 and max newSize-1
-		L = [(newSize, j) for j in range(rank(board)+2, newSize)]
-	toRemove = []
-	for i in range(len(L)):
-		if L[i][0] < L[i][1]:
-		# 	l = (l[1], l[0])
-			toRemove.append(i)
-	for index in toRemove:
-		L.remove(L[index])
-	return L
-"""
-
 def getL(board, n):
 	L = []
 	b = board.copy()

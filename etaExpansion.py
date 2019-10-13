@@ -25,7 +25,7 @@ etaData = {N : eta(N)}
 workingNodes = [n-1,[(g,eta(g)), ]]
 
 """
-
+MAX_SIZE = 12
 
 def main():
 	print("Loading Initial Data")
@@ -34,7 +34,7 @@ def main():
 	print("Loaded")
 
 	count = 0
-	while count < 7:
+	while count < MAX_SIZE-2:
 		count += 1
 		#data of form {node : eta}
 		n = workingNodesData[0] + 1
@@ -56,7 +56,7 @@ def expand(n, G, etaData):
 	#for each g + l combo find eta and add to data
 
 	#[N, g[0], l, g[1]]
-	newNodes = [] 
+	newNodes = []
 	newGs = []
 	for g in G:
 		newGs.append(g)
@@ -76,7 +76,7 @@ def expand(n, G, etaData):
 			dat = [N, g[0], l, g[1]]
 			if dat not in newNodes:
 				newNodes.append(dat)
-			
+
 
 	newNodes.sort(key = lambda x: sum(x[0]))
 
