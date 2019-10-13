@@ -2,6 +2,7 @@ import util3 as util
 import eta
 import os
 from pathlib import Path
+from multiprocessing import Pool
 
 THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 #THIS_FOLDER = "D:/Mass Storage/Math/chompy"
@@ -38,14 +39,9 @@ def main():
 		count += 1
 		#data of form {node : eta}
 		n = workingNodesData[0] + 1
-		print("\n\n\nExpanding to " + str(n)+"X"+str(n)+"\n\n\n")
+		print("\nExpanding to " + str(n)+"X"+str(n)+"\n")
 		#working nodes [(g,eta(g)),]
 		G = workingNodesData[1]
-		#print("G: " + str(G))
-
-		#print("etaData: " + str(etaData))
-
-		#print("etaData: " + str(etaData))
 
 		etaData, workingNodesData = expand(n, G, etaData)
 
@@ -63,38 +59,46 @@ def expand(n, G, etaData):
 		if len(g[0]) == g[0][0]:
 			mir = util.mirror(g[0])
 			newGs.append((mir, g[1]))
+
 			etaData[util.dKey(mir)] = g[1]
+
 	for g in newGs:
-		#print("\n\ng: " + str(g))
 		L = util.getL(g[0],n)
-		#print("L: " + str(L))
 		for l in L:
 			N = util.combineG_L(g[0] ,l)
-			#print("g: " + str(g)+"\tl: "+str(l) +" => " + str(N))
-			#print("N: " + str(n))
-			#print(N)
-			dat = [N, g[0], l, g[1]]
+			#dat = [N, g[0], l, g[1], N]
+			dat = [g[0], l, g[1], n, etaData, N]
 			if dat not in newNodes:
 				newNodes.append(dat)
 
 
 	newNodes.sort(key = lambda x: sum(x[0]))
 
+	#replace with pool
+	"""
 	for node in newNodes:
 
 		N = node[0]
 		g0 = node[1]
 		l = node[2]
 		g1 = node[3]
-		#print("\n\netaData: " + str(etaData))
-		#print("\n\nGetting eta for " + str(N))
+
 		num = eta.eta(g0, l, g1, n, etaData)
-		#print("N: " + str(N) + "\tnum: " + str(num))
+
 		etaData[util.dKey(N)] = num
 		nextWorkingNodes.append( (N, num) )
+	"""
+
+	p = Pool(8)
+	#g, l, etaG, n, NXn
+	dat = p.map(eta.eta, newNodes)
+
+	for nodeDat in dat:
+
+		etaData[util.dKey(nodeDat[0])] = nodeDat[1]
+		nextWorkingNodes.append( (nodeDat[0], nodeDat[1]) )
 
 
-	#print("finished expand, etaData: " + str(etaData) + "\tnextWorkingNodes: " + str(nextWorkingNodes))
 	print("Storing...")
 	util.store([n, nextWorkingNodes], DATA_FOLDER / "workingNodes.json")
 	util.store(etaData, DATA_FOLDER / "etaData.json")
@@ -105,7 +109,6 @@ def expand(n, G, etaData):
 def seed():
 	print("Seeding")
 	etaData, workingNodes = util.seed()
-	#print([2, workingNodes])
 	util.store([2, workingNodes], DATA_FOLDER / "workingNodes.json")
 	util.store(etaData, DATA_FOLDER / "etaData.json")
 	print("Seeded")
