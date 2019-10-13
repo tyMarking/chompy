@@ -25,7 +25,7 @@ etaData = {N : eta(N)}
 workingNodes = [n-1,[(g,eta(g)), ]]
 
 """
-MAX_SIZE = 4
+MAX_SIZE = 15
 
 def main():
 	print("Loading Initial Data")
@@ -38,7 +38,7 @@ def main():
 		count += 1
 		#data of form {node : eta}
 		n = workingNodesData[0] + 1
-		print("\n\n\nExpanding to " + str(n)+"X"+str(n)+"\n\n\n")
+		print("\nExpanding to " + str(n)+"X"+str(n))
 		#working nodes [(g,eta(g)),]
 		G = workingNodesData[1]
 		#print("G: " + str(G))
@@ -66,10 +66,10 @@ def expand(n, G, etaData):
 
 
 	#print("finished expand, etaData: " + str(etaData) + "\tnextWorkingNodes: " + str(nextWorkingNodes))
-	print("Storing...")
+	#print("Storing...")
 	util.store([n, nextWorkingNodes], DATA_FOLDER / "workingNodes.json")
 	util.store(etaData, DATA_FOLDER / "etaData.json")
-	print("Stored")
+	#print("Stored")
 
 	return etaData, [n, nextWorkingNodes]
 
@@ -77,6 +77,9 @@ def gInGs(G, etaData):
 	newGs = []
 	for g in G:
 		newGs.append((g[0], g[1]))
+
+	for g in G:
+
 		if len(g[0]) == g[0][0]:
 			mir = util.mirror(g[0])
 			if (mir, g[1]) not in newGs:
