@@ -72,15 +72,30 @@ def expand(n, G, etaData):
 	return etaData, [n, nextWorkingNodes]
 
 def gInGs(G, etaData):
+	"""
 	newGs = []
 	for g in G:
 		newGs.append((g[0], g[1]))
+
 	for g in G:
 		if len(g[0]) == g[0][0]:
 			mir = util.mirror(g[0])
 			if (mir, g[1]) not in newGs:
 				newGs.append((mir, g[1]))
 				etaData[util.dKey(mir)] = g[1]
+
+	return newGs
+	"""
+	newGs = []
+	for g in G:
+		newGs.append((g[0], g[1]))
+		if len(g[0]) == g[0][0] and util.file(g[0]) > util.rank(g[0]):
+			mir = util.mirror(g[0])
+
+			newGs.append((mir, g[1]))
+			etaData[util.dKey(mir)] = g[1]
+
+
 	return newGs
 
 def gInNewGs(newGs, etaData, n):
