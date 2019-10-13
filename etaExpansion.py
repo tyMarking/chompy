@@ -6,7 +6,7 @@ from pathlib import Path
 THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 #THIS_FOLDER = "D:/Mass Storage/Math/chompy"
 DATA_FOLDER = Path(THIS_FOLDER, "./data/epoc2/")
-
+numDupes = 0
 
 """
 start with 2x2 seed - have some way of tracking progress
@@ -48,6 +48,7 @@ def main():
 		#print("etaData: " + str(etaData))
 
 		etaData, workingNodesData = expand(n, G, etaData)
+	print("Num Duplicates: " + str(numDupes))
 
 
 #G = [(g, eta(g))]
@@ -79,7 +80,7 @@ def gInGs(G, etaData):
 		newGs.append((g[0], g[1]))
 	
 	for g in G:
-		
+
 		if len(g[0]) == g[0][0]:
 			mir = util.mirror(g[0])
 			if (mir, g[1]) not in newGs:
@@ -112,11 +113,19 @@ def gInNewGs(newGs, etaData, n):
 			#print("N: " + str(n))
 			#print(N)
 			dat = [N, g[0], l, g[1]]
-			if dat not in newNodes:
-				newNodes.append(dat)
-			else:
-				print("DUPLICATE!!!!!!!")
+			ifDat(dat, newNodes)
+			# if dat not in newNodes:
+				# newNodes.append(dat)
+			# else:
+				# print("DUPLICATE!!!!!!!")
 	return newNodes
+
+def ifDat(dat, newNodes):
+	if dat not in newNodes:
+		newNodes.append(dat)
+	else:
+		global numDupes
+		numDupes += 1
 
 def sortNodes(newNodes):
 	newNodes.sort(key = lambda x: sum(x[0]))
