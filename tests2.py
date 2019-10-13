@@ -10,12 +10,19 @@ DATA_FOLDER = Path(THIS_FOLDER, "./data/epoc2/")
 
 def mirro(G):
 	newGs = []
+	#count = 0
 	for g in G:
-		#newGs.append((g[0], g[1]))
-		if len(g[0]) == g[0][0]:
-			mir = util.mirror(g[0])
-			if (mir, g[1]) not in newGs:
-				newGs.append((mir, g[1]))
+		newGs.append((g[0], g[1]))
+	for g in G:
+		#if len(g[0]) == g[0][0]:
+		#count += 1
+		mir = util.mirror(g[0])
+		
+		mirT = (mir, g[1])
+		if mirT not in newGs:
+			newGs.append(mirT)
+
+	#print(count)
 	return newGs
 
 def gInNewGs(newGs, etaData, n):
@@ -33,8 +40,8 @@ def gInNewGs(newGs, etaData, n):
 			#print(N)
 			#dat = [N, g[0], l, g[1]]
 			dat = g
-			if dat not in newNodes:
-				newNodes.append(dat)
+			#if dat not in newNodes:
+			newNodes.append(dat)
 			#else:
 			#	print("DUPLICATE!!!!!!!")
 	return newNodes
@@ -55,6 +62,7 @@ testGs = {}
 for g in nodes:
 	if util.dKey(g[0]) in testGs.keys():
 		testGs[util.dKey(g[0])] += 1
+		print(g)
 	else:
 		testGs[util.dKey(g[0])] = 1
 #print(testGs)

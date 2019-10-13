@@ -25,7 +25,7 @@ etaData = {N : eta(N)}
 workingNodes = [n-1,[(g,eta(g)), ]]
 
 """
-MAX_SIZE = 9
+MAX_SIZE = 8
 
 def main():
 	print("Loading Initial Data")
@@ -75,7 +75,10 @@ def expand(n, G, etaData):
 def gInGs(G, etaData):
 	newGs = []
 	for g in G:
-		newGs.append(g)
+		newGs.append((g[0], g[1]))
+
+	for g in G:
+		
 		if len(g[0]) == g[0][0]:
 			mir = util.mirror(g[0])
 			if (mir, g[1]) not in newGs:
