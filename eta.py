@@ -74,9 +74,9 @@ def etaGraph(node, NXn):
 
 		#odd
 		if (cNum + 1) % 2 == 1:
-			if num % 2 == 0 or cNum > num:
+			if num % 2 == 0 or (cNum+1) > num:
 				num = cNum+1
 		#even
-		elif cNum > num:
+		elif num % 2 == 0 and (cNum+1) > num:
 			num = cNum+1
 	return num

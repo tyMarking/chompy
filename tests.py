@@ -23,7 +23,7 @@ for i in range(2,n+1):
 		emptyB = [j]*i
 		children = heritage3.getChildren(emptyB)
 		for child in children:
-			if util.getN(child) >= util.getM(child):
+			if util.dKey(child) in etaData.keys():
 				cNum = etaData[util.dKey(child)]
 			else:
 				cNum = etaData[util.dKey(util.mirror(child))]

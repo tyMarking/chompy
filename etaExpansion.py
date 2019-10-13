@@ -34,7 +34,7 @@ def main():
 	print("Loaded")
 
 	count = 0
-	while count >= 0:
+	while count < 7:
 		count += 1
 		#data of form {node : eta}
 		n = workingNodesData[0] + 1
@@ -87,7 +87,7 @@ def expand(n, G, etaData):
 		l = node[2]
 		g1 = node[3]
 		#print("\n\netaData: " + str(etaData))
-		#print("Getting eta for " + str(N))
+		#print("\n\nGetting eta for " + str(N))
 		num = eta.eta(g0, l, g1, n, etaData)
 		#print("N: " + str(N) + "\tnum: " + str(num))
 		etaData[util.dKey(N)] = num
