@@ -21,7 +21,7 @@ def eta(g, l, etaG, n, NXn):
 				print("This should not have happend - eta case 1")
 		#bite at winning square move then calc remaining moves
 		else:
-			
+
 			#if l doesn't extend into first col or top row
 			if l[0] < n and l[1] < n:
 				return 2*n-1
@@ -64,12 +64,26 @@ def etaGraph(node, NXn):
 	num = 0
 	#print(NXn)
 	for child in children:
-		
+
 		if util.getN(child) >= util.getM(child):
+			# key = ""#util.dKey because it might be faster
+			# for row in child:
+				# keyList.append("/" + str(int(row)))
+				# key += "/" + str(int(row))
+			# return ''.join(keyList[1:])
+			# dKey = key[1:]
+			# cNum = NXn[dKey]
 			cNum = NXn[util.dKey(child)]
 		else:
-			cNum = NXn[util.dKey(util.mirror(child))]
-
+			mir = util.mirror(child)
+			# key = ""
+			# for row in mir:
+			# 	# keyList.append("/" + str(int(row)))
+				# key += "/" + str(int(row))
+			# return ''.join(keyList[1:])
+			# dKey = key[1:]
+			cNum = NXn[util.dKey(mir)]
+			# cNum = NXn[dKey]
 
 		#print("child: " +str(child)+"\tcNum: " + str(cNum))
 
