@@ -10,7 +10,7 @@ DATA_FOLDER = Path(THIS_FOLDER, "./data/epoc2/")
 etaData = util.load(DATA_FOLDER / "etaData.json")
 
 
-#print(etaData[util.dKey([5,3,3,3,3])])
+#print(etaData[str([5,3,3,3,3])])
 
 #print(util.file([3]))
 
@@ -23,10 +23,10 @@ for i in range(2,n+1):
 		emptyB = [j]*i
 		children = heritage3.getChildren(emptyB)
 		for child in children:
-			if util.dKey(child) in etaData.keys():
-				cNum = etaData[util.dKey(child)]
+			if str(child) in etaData.keys():
+				cNum = etaData[str(child)]
 			else:
-				cNum = etaData[util.dKey(util.mirror(child))]
+				cNum = etaData[str(util.mirror(child))]
 			if cNum % 2 == 0:
 				fms.append(child)
 		firstMoves[str(i)+"X"+str(j)] = fms

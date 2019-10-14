@@ -85,7 +85,7 @@ def rank(board):
 	return len(board) - inverseRank(board)
 
 #generates a unique key to be used in the dict.
-def dKey(board):
+# def dKey(board):
 	# keyList = []
 	# key = ""
 	# for row in board:
@@ -93,7 +93,7 @@ def dKey(board):
 		# key += "/" + str(int(row))
 	# return ''.join(keyList[1:])
 	# return key[1:]
-	return str(board)
+	# return str(board)
 
 def genEndBoard():
 	return [1]
@@ -180,7 +180,7 @@ def store(data, fileName):
 def seed():
 	#{key:eta}
 	#[(node,eta)]
-	etaData = {dKey([1]):0, dKey([2]):1, dKey([2,1]):2, dKey([2,2]):3}#don't seed [1,1] b/c rows > cols
+	etaData = {str([1]):0, str([2]):1, str([2,1]):2, str([2,2]):3}#don't seed [1,1] b/c rows > cols
 	workingData = [([2], 1), ([2,1], 2), ([2,2], 3)]
 	return etaData, workingData
 

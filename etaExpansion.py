@@ -23,7 +23,7 @@ etaData = {N : eta(N)}
 workingNodes = [n-1,[(g,eta(g)), ]]
 """
 
-MAX_SIZE = 12
+MAX_SIZE = 10
 
 def main():
 	print("Loading Initial Data")
@@ -94,7 +94,7 @@ def gInGs(G, etaData):
 			mir = util.mirror(g[0])
 			if (mir, g[1]) not in newGs:
 				newGs.append((mir, g[1]))
-				etaData[util.dKey(mir)] = g[1]
+				etaData[str(mir)] = g[1]
 
 	return newGs
 	"""
@@ -105,7 +105,7 @@ def gInGs(G, etaData):
 			mir = util.mirror(g[0])
 
 			newGs.append((mir, g[1]))
-			etaData[util.dKey(mir)] = g[1]
+			etaData[str(mir)] = g[1]
 
 
 	return newGs
@@ -143,7 +143,7 @@ def nodeInNodes(newNodes, etaData, nextWorkingNodes, n):
 		#print("\n\nGetting eta for " + str(N))
 		num = eta.eta(g0, l, g1, n, etaData)
 		#print("N: " + str(N) + "\tnum: " + str(num))
-		etaData[util.dKey(N)] = num
+		etaData[str(N)] = num
 		nextWorkingNodes.append( (N, num) )
 
 def seed():

@@ -66,24 +66,10 @@ def etaGraph(node, NXn):
 	for child in children:
 
 		if util.getN(child) >= util.getM(child):
-			# key = ""#util.dKey because it might be faster
-			# for row in child:
-				# keyList.append("/" + str(int(row)))
-				# key += "/" + str(int(row))
-			# return ''.join(keyList[1:])
-			# dKey = key[1:]
-			# cNum = NXn[dKey]
-			cNum = NXn[util.dKey(child)]
+			cNum = NXn[str(child)]
 		else:
 			mir = util.mirror(child)
-			# key = ""
-			# for row in mir:
-			# 	# keyList.append("/" + str(int(row)))
-				# key += "/" + str(int(row))
-			# return ''.join(keyList[1:])
-			# dKey = key[1:]
-			cNum = NXn[util.dKey(mir)]
-			# cNum = NXn[dKey]
+			cNum = NXn[str(mir)]
 
 		#print("child: " +str(child)+"\tcNum: " + str(cNum))
 

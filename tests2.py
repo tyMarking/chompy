@@ -1,4 +1,4 @@
-import util3 as util 
+import util3 as util
 import eta
 from pathlib import Path
 import os
@@ -17,7 +17,7 @@ def mirro(G):
 		#if len(g[0]) == g[0][0]:
 		#count += 1
 		mir = util.mirror(g[0])
-		
+
 		mirT = (mir, g[1])
 		if mirT not in newGs:
 			newGs.append(mirT)
@@ -60,11 +60,11 @@ gInNewGs(nodes, {}, n)
 
 testGs = {}
 for g in nodes:
-	if util.dKey(g[0]) in testGs.keys():
-		testGs[util.dKey(g[0])] += 1
+	if str(g[0]) in testGs.keys():
+		testGs[str(g[0])] += 1
 		print(g)
 	else:
-		testGs[util.dKey(g[0])] = 1
+		testGs[str(g[0])] = 1
 #print(testGs)
 
 numDupes = {}
