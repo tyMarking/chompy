@@ -6,3 +6,6 @@
 **/*.dat
 etaStats
 expansionTime.csv
+data/epoc2/etaData.json
+data/epoc2/workingNodes.json
+data/epoc2/workingNodes.json
