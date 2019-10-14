@@ -4,11 +4,15 @@ import os
 from pathlib import Path
 import time
 import csv
+from multiP import ProccesHandler
 
 THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 #THIS_FOLDER = "D:/Mass Storage/Math/chompy"
 THIS_FOLDER = Path(THIS_FOLDER)
 DATA_FOLDER = Path(THIS_FOLDER, "./data/epoc2/")
+
+MULTI_PROCESS = True
+THREADS = 2
 
 """
 start with 2x2 seed - have some way of tracking progress
@@ -23,7 +27,7 @@ etaData = {N : eta(N)}
 workingNodes = [n-1,[(g,eta(g)), ]]
 """
 
-MAX_SIZE = 10
+MAX_SIZE = 20
 
 def main():
 	print("Loading Initial Data")
@@ -43,6 +47,7 @@ def main():
 		timeWriter.writerow(["N", "Time Added", "Total Time"])
 
 		for count in range(0, MAX_SIZE-workingNodesData[0]):
+
 			timeStart = time.time()
 			#data of form {node : eta}
 			n = workingNodesData[0] + 1
@@ -54,11 +59,12 @@ def main():
 			#print("etaData: " + str(etaData))
 
 			#print("etaData: " + str(etaData))
-
-			etaData, workingNodesData = expand(n, G, etaData)
+			if MULTI_PROCESS:
+				etaData, workingNodesData = multiExpand(n, G, etaData)
+			else:
+				etaData, workingNodesData = expand(n, G, etaData)
 			timeEnd = time.time()
 			timeWriter.writerow([n, timeEnd-timeStart, timeEnd-timeBeginExpand])
-
 
 
 #G = [(g, eta(g))]
@@ -68,7 +74,7 @@ def expand(n, G, etaData):
 
 	#[N, g[0], l, g[1]]
 	newGs = gInGs(G, etaData)
-	newNodes = gInNewGs(newGs, etaData, n)
+	newNodes = gInNewGs(newGs, n)
 
 	sortNodes(newNodes)
 
@@ -82,6 +88,50 @@ def expand(n, G, etaData):
 	#print("Stored")
 
 	return etaData, [n, nextWorkingNodes]
+
+def multiExpand(n, G, etaData):
+	nextWorkingNodes = []
+
+	#[N, g[0], l, g[1]]
+	newGs = gInGs(G, etaData)
+	#dictionary of g's by choices
+	areaUnBittenXg = {}
+	for i in range(1,(n-1)*(n-1)):
+		areaUnBittenXg[i] = []
+	for g in newGs:
+		#print("g: " + str(g))
+
+		areaUnBittenXg[len(util.getChoices(g[0]))].append(g)
+
+	handler = ProccesHandler(THREADS)
+
+	#print("areaUnBittenXg: " + str(areaUnBittenXg))
+
+	for i in range(1,(n-1)*(n-1)):
+		Gi = areaUnBittenXg[i]
+		#for g in Gi:
+		for g in Gi:
+			handler.add((g,n,etaData))
+
+		handler.q.join()
+		while not handler.outQ.empty():
+			item = handler.outQ.get()
+			for node in item:
+				N = node[0]
+				num = node[1]
+				etaData[str(N)] = num
+				nextWorkingNodes.append( (N, num) )
+	
+
+	util.store([n, nextWorkingNodes], DATA_FOLDER / "workingNodes.json")
+	util.store(etaData, DATA_FOLDER / "etaData.json")
+	return etaData, [n, nextWorkingNodes]
+	
+
+
+
+
+
 
 def gInGs(G, etaData):
 	"""
@@ -101,6 +151,10 @@ def gInGs(G, etaData):
 	newGs = []
 	for g in G:
 		newGs.append((g[0], g[1]))
+		if g[0] == [4,4,3,3]:
+			print("YES [4,4,3,3] EXISTS")
+		if g[0] == [5,1,1]:
+			print("YES [5,1,1] exists")
 		if len(g[0]) == g[0][0] and util.file(g[0]) > util.rank(g[0]):
 			mir = util.mirror(g[0])
 
@@ -110,7 +164,7 @@ def gInGs(G, etaData):
 
 	return newGs
 
-def gInNewGs(newGs, etaData, n):
+def gInNewGs(newGs, n):
 	newNodes = []
 	for g in newGs:
 		#print("\n\ng: " + str(g))
@@ -145,6 +199,21 @@ def nodeInNodes(newNodes, etaData, nextWorkingNodes, n):
 		#print("N: " + str(N) + "\tnum: " + str(num))
 		etaData[str(N)] = num
 		nextWorkingNodes.append( (N, num) )
+
+
+
+def multiNodeInNodes(newNodes, etaData, n):
+	ret = []
+	for node in newNodes:
+
+		N = node[0]
+		g0 = node[1]
+		l = node[2]
+		g1 = node[3]
+
+		num = eta.eta(g0, l, g1, n, etaData)
+		ret.append((N, num))
+	return ret
 
 def seed():
 	print("Seeding")

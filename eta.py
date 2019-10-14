@@ -16,7 +16,7 @@ def eta(g, l, etaG, n, NXn):
 			if l == (n-1, n-1):
 				return 2*n-2
 			elif l == (n, n-1):
-				return 2*n-3
+				return 2*n-3 
 			else:
 				print("This should not have happend - eta case 1")
 		#bite at winning square move then calc remaining moves

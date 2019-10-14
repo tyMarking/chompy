@@ -26,6 +26,7 @@ def bite(board, pos):
 
 	return board
 
+
 def addRow(boardStates, newM):
 	newStates = []
 	for board in boardStates:

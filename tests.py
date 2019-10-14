@@ -14,7 +14,7 @@ etaData = util.load(DATA_FOLDER / "etaData.json")
 
 #print(util.file([3]))
 
-n = 8
+n = 10
 
 firstMoves = {}
 for i in range(2,n+1):

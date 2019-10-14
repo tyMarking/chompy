@@ -1,4 +1,4 @@
-import util3 as util
+import util3 as util 
 import eta
 from pathlib import Path
 import os
@@ -7,80 +7,23 @@ THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 #THIS_FOLDER = "D:/Mass Storage/Math/chompy"
 DATA_FOLDER = Path(THIS_FOLDER, "./data/epoc2/")
 
-
-def mirro(G):
-	newGs = []
-	#count = 0
-	for g in G:
-		newGs.append((g[0], g[1]))
-	for g in G:
-		#if len(g[0]) == g[0][0]:
-		#count += 1
-		mir = util.mirror(g[0])
-
-		mirT = (mir, g[1])
-		if mirT not in newGs:
-			newGs.append(mirT)
-
-	#print(count)
-	return newGs
-
-def gInNewGs(newGs, etaData, n):
-	newNodes = []
-	for g in newGs:
-		#print("\n\ng: " + str(g))
-		L = util.getL(g[0],n)
-		#print("L: " + str(L))
-		for l in L:
-			N = util.combineG_L(g[0] ,l)
-			#print(N)
-			#print(g)
-			#print("g: " + str(g)+"\tl: "+str(l) +" => " + str(N))
-			#print("N: " + str(n))
-			#print(N)
-			#dat = [N, g[0], l, g[1]]
-			dat = g
-			#if dat not in newNodes:
-			newNodes.append(dat)
-			#else:
-			#	print("DUPLICATE!!!!!!!")
-	return newNodes
+etaData = util.load(DATA_FOLDER / "etaData.json")
 
 
-workingNodesData = util.load(DATA_FOLDER / "workingNodes.json")
-n = workingNodesData[0]
-print(len(workingNodesData[1]))
-nodes = mirro(workingNodesData[1])
-#nodes = workingNodesData[1]
-print(len(nodes))
-print("done mirroring")
-newGs = []
+m = 9
+n = m+1
 
-gInNewGs(nodes, {}, n)
+#rank = 1
+#g - 5x5s
+G = []
+for i in range(n-1):
+	b = [n-1]*(m-1)
+	b.append(i+1)
+	G.append(b)
 
-testGs = {}
-for g in nodes:
-	if str(g[0]) in testGs.keys():
-		testGs[str(g[0])] += 1
-		print(g)
-	else:
-		testGs[str(g[0])] = 1
-#print(testGs)
-
-numDupes = {}
-for key in testGs.keys():
-	val = testGs[key]
-	if val in numDupes.keys():
-		numDupes[val] += 1
-	else:
-		numDupes[val] = 1
-print(numDupes)
-
-for g in nodes:
-	L = util.getL(g[0],n)
-	for l in L:
-		if (g[0],l) in newGs:
-			#print("THERE IS A DUPLICATE: " + str((g[0],l)))
-			pass
-		else:
-			newGs.append((g[0],l))
+for g in G:
+	N = g[:]
+	for i in range(len(N)-1):
+		N[i] += 1
+	print("g: " + str(g) + "\tN: " + str(N))
+	print("Eta(g): " + str(etaData[str(g)]) + "\tEta(N): " + str(etaData[str(N)]))
