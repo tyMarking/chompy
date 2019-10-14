@@ -2,9 +2,12 @@ import util3 as util
 import eta
 import os
 from pathlib import Path
+import time
+import csv
 
 THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 #THIS_FOLDER = "D:/Mass Storage/Math/chompy"
+THIS_FOLDER = Path(THIS_FOLDER)
 DATA_FOLDER = Path(THIS_FOLDER, "./data/epoc2/")
 
 """
@@ -15,16 +18,12 @@ go through non-square cases
 do any manual eta if necessary
 continue
 
-"""
-
-
-"""
 Files:
 etaData = {N : eta(N)}
 workingNodes = [n-1,[(g,eta(g)), ]]
-
 """
-MAX_SIZE = 10
+
+MAX_SIZE = 12
 
 def main():
 	print("Loading Initial Data")
@@ -32,21 +31,34 @@ def main():
 	workingNodesData = util.load(DATA_FOLDER / "workingNodes.json")
 	print("Loaded")
 
-	count = 0
-	while count < MAX_SIZE-2:
-		count += 1
-		#data of form {node : eta}
-		n = workingNodesData[0] + 1
-		print("\nExpanding to " + str(n)+"X"+str(n))
-		#working nodes [(g,eta(g)),]
-		G = workingNodesData[1]
-		#print("G: " + str(G))
+	timeBeginExpand = time.time()
+	timeStart = timeBeginExpand
 
-		#print("etaData: " + str(etaData))
+	timeDataFile = THIS_FOLDER / "expansionTime.csv"
 
-		#print("etaData: " + str(etaData))
+	with open(timeDataFile, "w") as timeData:
 
-		etaData, workingNodesData = expand(n, G, etaData)
+		timeWriter = csv.writer(timeData, dialect='excel')
+
+		timeWriter.writerow(["N", "Time Added", "Total Time"])
+
+		for count in range(0, MAX_SIZE-workingNodesData[0]):
+			timeStart = time.time()
+			#data of form {node : eta}
+			n = workingNodesData[0] + 1
+			print("\nExpanding to " + str(n)+"X"+str(n))
+			#working nodes [(g,eta(g)),]
+			G = workingNodesData[1]
+			#print("G: " + str(G))
+
+			#print("etaData: " + str(etaData))
+
+			#print("etaData: " + str(etaData))
+
+			etaData, workingNodesData = expand(n, G, etaData)
+			timeEnd = time.time()
+			timeWriter.writerow([n, timeEnd-timeStart, timeEnd-timeBeginExpand])
+
 
 
 #G = [(g, eta(g))]
