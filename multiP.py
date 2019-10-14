@@ -3,6 +3,7 @@ import multiprocessing as mp
 import eta
 import os
 import util3 as util
+import time
 
 def etaProcess(q, outQ):
 	while True:
@@ -11,7 +12,36 @@ def etaProcess(q, outQ):
 			#print("item: " + str(item))
 			#print(str(os.getppid()) + " processing " + str(item[0]))
 			outQ.put(multiExpandProc(item))
+
+
+			G = item[0]
+			n = item[1]
+			etaData = item[2]
+
+			newNodes = gInNewGs(G, n)
+			sortNodes(newNodes)
+
+			#return(multiNodeInNodes(newNodes, etaData, n))
+			ret = []
+			for node in newNodes:
+
+				N = node[0]
+				g0 = node[1]
+				l = node[2]
+				g1 = node[3]
+				#print("eta of " + str(N))
+				num = eta.eta(g0, l, g1, n, etaData)
+				etaData[str(N)] = num
+				ret.append((N, num))
+			#return ret
+
+
+			outQ.put(ret)
+
+
 			q.task_done()
+		else:
+			time.sleep(0.1)
 
 	
 

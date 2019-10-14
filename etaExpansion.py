@@ -12,7 +12,7 @@ THIS_FOLDER = Path(THIS_FOLDER)
 DATA_FOLDER = Path(THIS_FOLDER, "./data/epoc2/")
 
 MULTI_PROCESS = True
-THREADS = 2
+THREADS = 6
 
 """
 start with 2x2 seed - have some way of tracking progress
@@ -114,6 +114,7 @@ def multiExpand(n, G, etaData):
 			handler.add((g,n,etaData))
 
 		handler.q.join()
+
 		while not handler.outQ.empty():
 			item = handler.outQ.get()
 			for node in item:
@@ -151,10 +152,10 @@ def gInGs(G, etaData):
 	newGs = []
 	for g in G:
 		newGs.append((g[0], g[1]))
-		if g[0] == [4,4,3,3]:
-			print("YES [4,4,3,3] EXISTS")
-		if g[0] == [5,1,1]:
-			print("YES [5,1,1] exists")
+		#if g[0] == [4,4,3,3]:
+			#print("YES [4,4,3,3] EXISTS")
+		#if g[0] == [5,1,1]:
+			#print("YES [5,1,1] exists")
 		if len(g[0]) == g[0][0] and util.file(g[0]) > util.rank(g[0]):
 			mir = util.mirror(g[0])
 
@@ -224,9 +225,9 @@ def seed():
 	print("Seeded")
 
 def profileIt():
-	seed()
+	#seed()
 	main()
 
 if __name__ == "__main__":
-	seed()
+	#seed()
 	main()
