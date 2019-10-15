@@ -43,10 +43,10 @@ def etaPrime(gP, lP, evens):
 	if str(gP) in evens:
 		return 1
 	N = util.combineGP_LP(gP, lP)
-	#print("etaPrime N: "+str(N))
+	print("\netaPrime N: "+str(N))
 	return etaGraph(N, evens)
 
-@profile
+#@profile
 def etaGraph(node, evens):
 	"""
 	get children of node,
@@ -55,14 +55,16 @@ def etaGraph(node, evens):
 			return 1
 	return 0
 	"""
-	"""
+	
 	bites = util.getChoices(node)
 	mirrors = []
 	for bite in bites:
 		child = util.bite(node, bite)
 		if str(child) in evens:
+			print("Even child: " + str(child))
 			return 1
 		else:
+			print("Odd child: " + str(child))
 			mirrors.append(child)
 		#elif str(util.mirror(child)) in evens:
 			#return 1
@@ -70,9 +72,11 @@ def etaGraph(node, evens):
 		if str(util.mirror(child)) in evens:
 			return 1
 	return 0
+	
 	"""
 	for evenS in evens:
 		even = util.toBoard(evenS)
 		if util.isDirectChild(node, even):
 			return 1
 	return 0
+	"""
