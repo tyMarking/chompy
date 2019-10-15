@@ -46,7 +46,6 @@ def etaPrime(gP, lP, etaGP, NXn):
 	#print("etaPrime N: "+str(N))
 	return etaGraph(N, NXn)
 
-# @profile
 def etaGraph(node, NXn):
 	"""
 	get children of node,
@@ -59,26 +58,33 @@ def etaGraph(node, NXn):
 			num = childNum
 	"""
 
-	children = heritage3.getChildren(node)
-	#print("children: " + str(children))
+	bites = util.getChoices(node)
+	#print("Choices: " + str(bites))
+	#needMirror = []
+	for bite in bites:
+		child = util.bite(node, bite)
 
-	num = 0
-	#print(NXn)
-	for child in children:
-
-		if util.getN(child) >= util.getM(child):
-		# if child[0] >= len(child):
-			cNum = NXn[str(child)]
-		else:
-			mir = util.mirror(child)
-			cNum = NXn[str(mir)]
-
-		#print("child: " +str(child)+"\tcNum: " + str(cNum))
+		#if util.getN(child) >= util.getM(child):
+		try:
+			if (NXn[str(child)] + 1)%2 == 1:
+				return 1
+		#else:
+		except:
+			#needMirror.append(child)
+			#continue
+			if (NXn[str(util.mirror(child))] + 1)%2 == 1:
+				return 1
+			
 
 		#odd
+
+			"""
+	for child in needMirror:
+		mir = util.mirror(child)
+		cNum = NXn[str(mir)]
+
 		if (cNum + 1) % 2 == 1:
-			num = cNum+1
-		#even
-		elif num % 2 == 0 and (cNum+1) > num:
-			num = cNum+1
-	return num
+			return 1
+		"""
+
+	return 2

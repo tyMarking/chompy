@@ -8,7 +8,7 @@ import csv
 THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 #THIS_FOLDER = "D:/Mass Storage/Math/chompy"
 THIS_FOLDER = Path(THIS_FOLDER)
-DATA_FOLDER = Path(THIS_FOLDER, "./data/epoc2/")
+DATA_FOLDER = Path(THIS_FOLDER, "./data/epoc3/")
 
 """
 start with 2x2 seed - have some way of tracking progress
@@ -23,7 +23,7 @@ etaData = {N : eta(N)}
 workingNodes = [n-1,[(g,eta(g)), ]]
 """
 
-MAX_SIZE = 10
+MAX_SIZE = 15
 
 def main():
 	print("Loading Initial Data")
@@ -67,12 +67,11 @@ def expand(n, G, etaData):
 	#for each g + l combo find eta and add to data
 
 	#[N, g[0], l, g[1]]
-	newGs = gInGs(G, etaData)
-	newNodes = gInNewGs(newGs, etaData, n)
 
-	muliProcessCost(newGs, n)
-
-	newNodes.sort(key = lambda x: sum(x[0]))
+	
+	newNodes = gInNewGs(gInGs(G, etaData), etaData, n)
+	del G
+	sortNodes(newNodes)
 
 	nodeInNodes(newNodes, etaData, nextWorkingNodes, n)
 
@@ -112,14 +111,6 @@ def gInGs(G, etaData):
 
 	return newGs
 
-def muliProcessCost(newGs, n):
-	areaUnBittenXg = {}
-	for i in range(1, (n-1)*(n-1)):
-		areaUnBittenXg[i] = []
-	for g in newGs:
-		#print("g: " + str(g))
-		areaUnBittenXg[len(util.getChoices(g[0]))].append(g)
-
 def gInNewGs(newGs, etaData, n):
 	newNodes = []
 	for g in newGs:
@@ -138,6 +129,9 @@ def gInNewGs(newGs, etaData, n):
 			# else:
 				# print("DUPLICATE!!!!!!!")
 	return newNodes
+
+def sortNodes(newNodes):
+	newNodes.sort(key = lambda x: sum(x[0]))
 
 def nodeInNodes(newNodes, etaData, nextWorkingNodes, n):
 	for node in newNodes:
@@ -162,9 +156,9 @@ def seed():
 	print("Seeded")
 
 def profileIt():
-	seed()
+	#seed()
 	main()
 
 if __name__ == "__main__":
-	seed()
+	#seed()
 	main()
