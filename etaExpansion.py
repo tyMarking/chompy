@@ -56,9 +56,6 @@ def main():
 			timeEnd = time.time()
 			timeWriter.writerow([n, timeEnd-timeStart, timeEnd-timeBeginExpand])
 
-
-
-
 def expand(n, G, evens):
 	nextWorkingNodes = []
 	#for each g + l combo find eta and add to data
@@ -112,11 +109,13 @@ def nodeInNodes(newNodes, evens, nextWorkingNodes, n):
 		l = node[2]
 
 		num = eta.eta(g, l, n, evens)
+
 		if num % 2 == 0:
 			evens.add(str(N))
 			if len(N) == N[0] and util.file(N) > util.rank(N):
 				evens.add(util.mirror(N))
 		
+
 		newEtaData[str(N)] = num
 		nextWorkingNodes.append(N)
 	return newEtaData
