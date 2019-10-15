@@ -12,20 +12,17 @@ The poison is counted in the number of squares in the first row.
 #bite the matrix based board at the coordinates (x, y)
 #x, y are 0 indexed. X is the row, Y is the col
 #returns the bitten board
-# @profile
-def bite(b, pos):
+def bite(board, pos):
 	if pos[1] == 0:
-		return b[:pos[0]]
+		return board[0:pos[0]]
 
-	board = b[:]
+	board = board[:]
 
 	for row in range(pos[0], len(board)):
 		if board[row] > pos[1]:
 			board[row] = pos[1];
 		else:
 			break;
-
-	# board = [r if r > pos[1] else r for r in b]
 
 	return board
 
@@ -59,8 +56,15 @@ def getN(board):
 	return board[0]
 
 #returns a 2d array corresponding to the board state
-def toArrayNotation(b):
-	return [[0 if i < r else 1 for i in range(b[0])] for r in b]
+def toArrayNotation(board):
+	#true (1) is bitten
+	n = board[0]
+	boardAsArr = [[0] * n for i in range(len(board))]#generate an MxN array
+	for i in range(len(board)):
+		for j in range(board[i], n):
+			boardAsArr[i][j] = 1
+	boardAsArr[0][0] = -1
+	return boardAsArr
 
 #the number of cols that have a bite taken out of it, if there are no bites, 0
 def file(board):
@@ -123,7 +127,7 @@ def getLPrime(board):
 
 def combineG_L(g, l):
 	#print("Combining g: " + str(g) + " and l: " + str(l))
-	node = g.copy()
+	node = g[:]
 	n = g[0] + 1
 
 	#print("g pre expansion: " + str(node))
@@ -153,7 +157,6 @@ def combineGP_LP(gP, lP):
 		node[i] += 1
 	return node
 
-# @profile
 def getChoices(board):
 	choices = [(i, j) for i in range(len(board)) for j in range(board[i])]
 	choices = choices[1:]
@@ -181,7 +184,6 @@ def seed():
 	workingData = [([2], 1), ([2,1], 2), ([2,2], 3)]
 	return etaData, workingData
 
-# @profile
 def mirror(board):
 	# [ for i in range(len(board))]
 	mirrored = [0] * board[0] #initialize the mirrored rectangular board
@@ -192,40 +194,6 @@ def mirror(board):
 				mirrored[i] += 1
 	return mirrored
 
-def fromArr(arr):
-	b = []
-	for r in arr:
-		n = 0
-		for c in r:
-			if c == 1:
-				break
-			else:
-				n += 1
-		b.append(n)
-	return b
-
-#can you get to c from b with only 1 bite
-def isDirectChild(b, c):
-	hasDelta = False#has the value of at least one previous row changed
-	changedVal = 0#stores the new value of the changed row
-	if len(c) > len(b):
-		return False
-	c = c[:]
-	while len(c) < len(b):
-		c.append(0)
-	for i in range(len(b)):
-		delta = c[i] - b[i]
-		if delta > 0:
-			return False
-		if not delta == 0:
-			if hasDelta:
-				if not c[i] == changedVal:
-					return False
-			else:
-				hasDelta = True
-				changedVal = c[i]
-	return True
-
 
 """
 TEST STUFF
@@ -234,16 +202,6 @@ def main():
 	states = [
 	[1], [2], [1,1], [2,1], [2,2]
 	]
-
-	b = [5, 5, 4, 2]
-
-	a = toArrayNotation(b)
-
-	nA = [[a[i][j] for i in range(len(b))] for j in range(b[0])]#mirror
-
-	print(np.array(a))
-	print(np.array(nA))
-	print(fromArr(nA))
 
 
 if __name__ == "__main__":
