@@ -5,7 +5,7 @@ import heritage3
 
 #for square
 #G MUST BE SQUARE OR IT BREAK
-def eta(g, l, n, evens):
+def eta(g, l, n, evens, evenObjs):
 	#print("\n\neta for g: "+str(g)+" l: "+str(l))
 	#rank(g) < n-1 and file(g) < n-1
 	#first part for if square
@@ -31,21 +31,21 @@ def eta(g, l, n, evens):
 				#getLPrime is adding a col to the right
 				#getLPrime shouldn't return a full L
 				#l[1] was util.getLPrime(g)
-				return etaPrime(g, l[1]-1, evens)
+				return etaPrime(g, l[1]-1, evens, evenObjs)
 	else:
 		#print("wants to be elsa")
-		return etaPrime(g, l[1]-(n-len(g)), evens)
+		return etaPrime(g, l[1]-(n-len(g)), evens, evenObjs)
 
 #for not square, only called by eta
-def etaPrime(gP, lP, evens):
+def etaPrime(gP, lP, evens, evenObjs):
 	#print("etaPrime gP: " + str(gP)+"\tlP: " + str(lP))
 	if str(gP) in evens:
 		return 1
 	N = util.combineGP_LP(gP, lP)
 	#print("etaPrime N: "+str(N))
-	return etaGraph(N, evens)
+	return etaGraph(N, evens, evenObjs)
 
-def etaGraph(node, evens):
+def etaGraph(node, evens, evenObjs):
 	"""
 	get children of node,
 	for child:
@@ -53,6 +53,7 @@ def etaGraph(node, evens):
 			return 1
 	return 0
 	"""
+	
 	bites = util.getChoices(node)
 	mirrors = []
 	for bite in bites:
@@ -67,3 +68,19 @@ def etaGraph(node, evens):
 		if str(util.mirror(child)) in evens:
 			return 1
 	return 0
+	
+	"""
+	for even in evenObjs:
+		if util.isDirectChild(node, even):
+			return 1
+	return 0
+	"""
+	"""
+
+	for evenS in evens:
+		even = eval(evenS)
+		if util.isDirectChild(node, even):
+			return 1
+	return 0
+	"""
+

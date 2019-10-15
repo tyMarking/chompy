@@ -23,13 +23,13 @@ etaData = {N : eta(N)}
 workingNodes = [n-1,[(g,eta(g)), ]]
 """
 
-MAX_SIZE = 10
+MAX_SIZE = 12
 
 def main():
 	print("Loading Initial Data")
 	#etaData = util.load(DATA_FOLDER / "etaData.json")
 	evens = set(util.load(DATA_FOLDER / "evens.json"))
-
+	evenObjs = util.load(DATA_FOLDER / "evenObjs.json")
 	workingNodesData = util.load(DATA_FOLDER / "workingNodes.json")
 	print("Loaded")
 
@@ -52,28 +52,29 @@ def main():
 			#working nodes [g]
 			G = workingNodesData[1]
 
-			evens, workingNodesData = expand(n, G, evens)
+			evens, evenObjs, workingNodesData = expand(n, G, evens, evenObjs)
 			timeEnd = time.time()
 			timeWriter.writerow([n, timeEnd-timeStart, timeEnd-timeBeginExpand])
 
-def expand(n, G, evens):
+def expand(n, G, evens, evenObjs):
 	nextWorkingNodes = []
 	#for each g + l combo find eta and add to data
 	newNodes = gInNewGs(gInGs(G), n)
 	del G
 	sortNodes(newNodes)
 
-	newEtaData = nodeInNodes(newNodes, evens, nextWorkingNodes, n)
-
+	newEtaData = nodeInNodes(newNodes, evens, evenObjs, nextWorkingNodes, n)
+	print("Length of evenObjs: " + str(len(evenObjs)))
 
 	#print("finished expand, etaData: " + str(etaData) + "\tnextWorkingNodes: " + str(nextWorkingNodes))
 	#print("Storing...")
 	util.store([n, nextWorkingNodes], DATA_FOLDER / "workingNodes.json")
 	util.store(newEtaData, DATA_FOLDER / (str(n)+"X"+str(n)+"etaData.json"))
 	util.store(list(evens), DATA_FOLDER / "evens.json")
+	util.store(evenObjs, DATA_FOLDER / "evenObjs.json")
 	#print("Stored")
 
-	return evens, [n, nextWorkingNodes]
+	return evens, evenObjs, [n, nextWorkingNodes]
 
 def gInGs(G):
 	newGs = []
@@ -101,7 +102,7 @@ def gInNewGs(newGs, n):
 def sortNodes(newNodes):
 	newNodes.sort(key = lambda x: sum(x[0]))
 
-def nodeInNodes(newNodes, evens, nextWorkingNodes, n):
+def nodeInNodes(newNodes, evens, evenObjs, nextWorkingNodes, n):
 	newEtaData = {}
 	for node in newNodes:
 
@@ -109,12 +110,15 @@ def nodeInNodes(newNodes, evens, nextWorkingNodes, n):
 		g = node[1]
 		l = node[2]
 
-		num = eta.eta(g, l, n, evens)
+		num = eta.eta(g, l, n, evens, evenObjs)
 
 		if num % 2 == 0:
 			evens.add(str(N))
+			evenObjs.append(N)
 			if len(N) == N[0] and util.file(N) > util.rank(N):
-				evens.add(util.mirror(N))
+				mir = util.mirror(N)
+				evens.add(str(mir))
+				evenObjs.append(mir)
 		
 
 		newEtaData[str(N)] = num
@@ -123,11 +127,12 @@ def nodeInNodes(newNodes, evens, nextWorkingNodes, n):
 
 def seed():
 	print("Seeding")
-	etaData, workingNodes, evens= util.seed()
+	etaData, workingNodes, evens, evenObjs = util.seed()
 	#print([2, workingNodes])
 	util.store([2, workingNodes], DATA_FOLDER / "workingNodes.json")
 	util.store(etaData, DATA_FOLDER / "2X2etaData.json")
 	util.store(evens, DATA_FOLDER / "evens.json")
+	util.store(evenObjs, DATA_FOLDER / "evenObjs.json")
 	print("Seeded")
 
 def profileIt():

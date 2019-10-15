@@ -179,8 +179,9 @@ def seed():
 	#[(node,eta)]
 	etaData = {str([1]):0, str([2]):1, str([2,1]):2, str([2,2]):3}#don't seed [1,1] b/c rows > cols
 	evens = [str([1]), str([2,1])]
+	evenObjs = [[1],[2,1]]
 	workingData = [[2], [2,1], [2,2]]
-	return etaData, workingData, evens
+	return etaData, workingData, evens, evenObjs
 
 # @profile
 def mirror(board):
