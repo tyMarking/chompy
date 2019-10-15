@@ -45,6 +45,7 @@ def etaPrime(gP, lP, evens):
 	#print("etaPrime N: "+str(N))
 	return etaGraph(N, evens)
 
+@profile
 def etaGraph(node, evens):
 	"""
 	get children of node,
