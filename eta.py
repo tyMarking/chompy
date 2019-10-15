@@ -54,10 +54,16 @@ def etaGraph(node, evens):
 	return 0
 	"""
 	bites = util.getChoices(node)
+	mirrors = []
 	for bite in bites:
 		child = util.bite(node, bite)
 		if str(child) in evens:
 			return 1
-		elif str(util.mirror(child)) in evens:
+		else:
+			mirrors.append(child)
+		#elif str(util.mirror(child)) in evens:
+			#return 1
+	for mirror in mirrors:
+		if str(util.mirror(child)) in evens:
 			return 1
 	return 0

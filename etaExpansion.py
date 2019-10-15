@@ -70,6 +70,7 @@ def expand(n, G, evens):
 	#print("Storing...")
 	util.store([n, nextWorkingNodes], DATA_FOLDER / "workingNodes.json")
 	util.store(newEtaData, DATA_FOLDER / (str(n)+"X"+str(n)+"etaData.json"))
+	util.store(list(evens), DATA_FOLDER / "evens.json")
 	#print("Stored")
 
 	return evens, [n, nextWorkingNodes]
