@@ -27,7 +27,9 @@ MAX_SIZE = 15
 
 def main():
 	print("Loading Initial Data")
-	etaData = util.load(DATA_FOLDER / "etaData.json")
+	#etaData = util.load(DATA_FOLDER / "etaData.json")
+	evens = set(util.load(DATA_FOLDER / "evens.json"))
+
 	workingNodesData = util.load(DATA_FOLDER / "workingNodes.json")
 	print("Loaded")
 
@@ -47,112 +49,80 @@ def main():
 			#data of form {node : eta}
 			n = workingNodesData[0] + 1
 			print("\nExpanding to " + str(n)+"X"+str(n))
-			#working nodes [(g,eta(g)),]
+			#working nodes [g]
 			G = workingNodesData[1]
-			#print("G: " + str(G))
 
-			#print("etaData: " + str(etaData))
-
-			#print("etaData: " + str(etaData))
-
-			etaData, workingNodesData = expand(n, G, etaData)
+			evens, workingNodesData = expand(n, G, evens)
 			timeEnd = time.time()
 			timeWriter.writerow([n, timeEnd-timeStart, timeEnd-timeBeginExpand])
 
 
 
-#G = [(g, eta(g))]
-def expand(n, G, etaData):
+
+def expand(n, G, evens):
 	nextWorkingNodes = []
 	#for each g + l combo find eta and add to data
-
-	#[N, g[0], l, g[1]]
-
-	
-	newNodes = gInNewGs(gInGs(G, etaData), etaData, n)
+	newNodes = gInNewGs(gInGs(G), n)
 	del G
 	sortNodes(newNodes)
 
-	nodeInNodes(newNodes, etaData, nextWorkingNodes, n)
+	newEtaData = nodeInNodes(newNodes, evens, nextWorkingNodes, n)
 
 
 	#print("finished expand, etaData: " + str(etaData) + "\tnextWorkingNodes: " + str(nextWorkingNodes))
 	#print("Storing...")
 	util.store([n, nextWorkingNodes], DATA_FOLDER / "workingNodes.json")
-	util.store(etaData, DATA_FOLDER / "etaData.json")
+	util.store(newEtaData, DATA_FOLDER / str(n)+"X"+str(n)+"etaData.json")
 	#print("Stored")
 
-	return etaData, [n, nextWorkingNodes]
+	return evens, [n, nextWorkingNodes]
 
-def gInGs(G, etaData):
-	"""
+def gInGs(G):
 	newGs = []
 	for g in G:
-		newGs.append((g[0], g[1]))
+		if len(g) == g[0] and util.file(g) > util.rank(g):
+			newGs.append(util.mirror(g))
 
-	for g in G:
-		if len(g[0]) == g[0][0]:
-			mir = util.mirror(g[0])
-			if (mir, g[1]) not in newGs:
-				newGs.append((mir, g[1]))
-				etaData[str(mir)] = g[1]
+	G = G + newGs
+	return G
 
-	return newGs
-	"""
-	newGs = []
-	for g in G:
-		newGs.append((g[0], g[1]))
-		if len(g[0]) == g[0][0] and util.file(g[0]) > util.rank(g[0]):
-			mir = util.mirror(g[0])
-
-			newGs.append((mir, g[1]))
-			etaData[str(mir)] = g[1]
-
-
-	return newGs
-
-def gInNewGs(newGs, etaData, n):
+def gInNewGs(newGs, n):
 	newNodes = []
 	for g in newGs:
-		#print("\n\ng: " + str(g))
-		L = util.getL(g[0],n)
-		#print("L: " + str(L))
+		L = util.getL(g,n)
 		for l in L:
-			N = util.combineG_L(g[0] ,l)
-			#print("g: " + str(g)+"\tl: "+str(l) +" => " + str(N))
-			#print("N: " + str(n))
-			#print(N)
-			dat = [N, g[0], l, g[1]]
-			# ifDat(dat, newNodes)
-			# if dat not in newNodes:
+			N = util.combineG_L(g ,l)
+			dat = [N, g, l]
+
 			newNodes.append(dat)
-			# else:
-				# print("DUPLICATE!!!!!!!")
+
 	return newNodes
 
 def sortNodes(newNodes):
 	newNodes.sort(key = lambda x: sum(x[0]))
 
-def nodeInNodes(newNodes, etaData, nextWorkingNodes, n):
+def nodeInNodes(newNodes, evens, nextWorkingNodes, n):
+	newEtaData = {}
 	for node in newNodes:
 
 		N = node[0]
-		g0 = node[1]
+		g = node[1]
 		l = node[2]
-		g1 = node[3]
-		#print("\n\netaData: " + str(etaData))
-		#print("\n\nGetting eta for " + str(N))
-		num = eta.eta(g0, l, g1, n, etaData)
-		#print("N: " + str(N) + "\tnum: " + str(num))
-		etaData[str(N)] = num
+
+		num = eta.eta(g, l, n, evens)
+
+		
+		newEtaData[str(N)] = num
 		nextWorkingNodes.append( (N, num) )
+	return newEtaData
 
 def seed():
 	print("Seeding")
-	etaData, workingNodes = util.seed()
+	etaData, workingNodes, evens= util.seed()
 	#print([2, workingNodes])
 	util.store([2, workingNodes], DATA_FOLDER / "workingNodes.json")
-	util.store(etaData, DATA_FOLDER / "etaData.json")
+	util.store(etaData, DATA_FOLDER / "2X2etaData.json")
+	util.store(evenData / "evens.json")
 	print("Seeded")
 
 def profileIt():
