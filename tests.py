@@ -1,7 +1,7 @@
 import util3 as util
 import heritage3
 import os
-from pathlib import Path 
+from pathlib import Path
 
 THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 #THIS_FOLDER = "D:/Mass Storage/Math/chompy"
@@ -14,7 +14,7 @@ etaData = util.load(DATA_FOLDER / "etaData.json")
 
 #print(util.file([3]))
 
-n = 8
+n = 10
 
 firstMoves = {}
 for i in range(2,n+1):

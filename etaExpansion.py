@@ -70,7 +70,9 @@ def expand(n, G, etaData):
 	newGs = gInGs(G, etaData)
 	newNodes = gInNewGs(newGs, etaData, n)
 
-	sortNodes(newNodes)
+	muliProcessCost(newGs, n)
+
+	newNodes.sort(key = lambda x: sum(x[0]))
 
 	nodeInNodes(newNodes, etaData, nextWorkingNodes, n)
 
@@ -110,6 +112,14 @@ def gInGs(G, etaData):
 
 	return newGs
 
+def muliProcessCost(newGs, n):
+	areaUnBittenXg = {}
+	for i in range(1, (n-1)*(n-1)):
+		areaUnBittenXg[i] = []
+	for g in newGs:
+		#print("g: " + str(g))
+		areaUnBittenXg[len(util.getChoices(g[0]))].append(g)
+
 def gInNewGs(newGs, etaData, n):
 	newNodes = []
 	for g in newGs:
@@ -128,9 +138,6 @@ def gInNewGs(newGs, etaData, n):
 			# else:
 				# print("DUPLICATE!!!!!!!")
 	return newNodes
-
-def sortNodes(newNodes):
-	newNodes.sort(key = lambda x: sum(x[0]))
 
 def nodeInNodes(newNodes, etaData, nextWorkingNodes, n):
 	for node in newNodes:

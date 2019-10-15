@@ -1,8 +1,6 @@
 import numpy as np
 import util3 as util
 
-
-
 def getChildren(state):
 	children = []
 	#print("State: " +str(state))

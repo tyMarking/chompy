@@ -46,6 +46,7 @@ def etaPrime(gP, lP, etaGP, NXn):
 	#print("etaPrime N: "+str(N))
 	return etaGraph(N, NXn)
 
+# @profile
 def etaGraph(node, NXn):
 	"""
 	get children of node,
@@ -66,6 +67,7 @@ def etaGraph(node, NXn):
 	for child in children:
 
 		if util.getN(child) >= util.getM(child):
+		# if child[0] >= len(child):
 			cNum = NXn[str(child)]
 		else:
 			mir = util.mirror(child)
@@ -73,11 +75,9 @@ def etaGraph(node, NXn):
 
 		#print("child: " +str(child)+"\tcNum: " + str(cNum))
 
-
 		#odd
 		if (cNum + 1) % 2 == 1:
-			if num % 2 == 0 or (cNum+1) > num:
-				num = cNum+1
+			num = cNum+1
 		#even
 		elif num % 2 == 0 and (cNum+1) > num:
 			num = cNum+1
