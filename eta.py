@@ -1,5 +1,6 @@
 import util3 as util
 import heritage3
+import ast
 
 #number of columns >= num of rows (because mirroring)
 
@@ -54,6 +55,7 @@ def etaGraph(node, evens):
 			return 1
 	return 0
 	"""
+	"""
 	bites = util.getChoices(node)
 	mirrors = []
 	for bite in bites:
@@ -66,5 +68,11 @@ def etaGraph(node, evens):
 			#return 1
 	for mirror in mirrors:
 		if str(util.mirror(child)) in evens:
+			return 1
+	return 0
+	"""
+	for evenS in evens:
+		even = util.toBoard(evenS)
+		if util.isDirectChild(node, even):
 			return 1
 	return 0

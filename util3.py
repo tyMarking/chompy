@@ -205,7 +205,7 @@ def fromArr(arr):
 		b.append(n)
 	return b
 
-#can you get to c from b with only 1 bite
+#can you get from b to c with only 1 bite(b is parent)
 def isDirectChild(b, c):
 	hasDelta = False#has the value of at least one previous row changed
 	changedVal = 0#stores the new value of the changed row
@@ -215,7 +215,7 @@ def isDirectChild(b, c):
 	while len(c) < len(b):#at most
 		c.append(0)
 	for i in range(len(b)):
-		delta = c[i] - b[i]
+		delta = int(c[i]) - b[i]
 		if delta > 0:
 			return False
 		if not delta == 0:
@@ -227,6 +227,9 @@ def isDirectChild(b, c):
 				changedVal = c[i]
 	return True
 
+def toBoard(key):
+	# return np.array(key).tolist()
+	return key.strip('][').split(', ')
 
 """
 TEST STUFF
