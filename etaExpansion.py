@@ -23,7 +23,7 @@ etaData = {N : eta(N)}
 workingNodes = [n-1,[(g,eta(g)), ]]
 """
 
-MAX_SIZE = 15
+MAX_SIZE = 10
 
 def main():
 	print("Loading Initial Data")
@@ -56,9 +56,6 @@ def main():
 			timeEnd = time.time()
 			timeWriter.writerow([n, timeEnd-timeStart, timeEnd-timeBeginExpand])
 
-
-
-
 def expand(n, G, evens):
 	nextWorkingNodes = []
 	#for each g + l combo find eta and add to data
@@ -72,7 +69,7 @@ def expand(n, G, evens):
 	#print("finished expand, etaData: " + str(etaData) + "\tnextWorkingNodes: " + str(nextWorkingNodes))
 	#print("Storing...")
 	util.store([n, nextWorkingNodes], DATA_FOLDER / "workingNodes.json")
-	util.store(newEtaData, DATA_FOLDER / str(n)+"X"+str(n)+"etaData.json")
+	util.store(newEtaData, DATA_FOLDER / (str(n)+"X"+str(n)+"etaData.json"))
 	#print("Stored")
 
 	return evens, [n, nextWorkingNodes]
@@ -111,9 +108,8 @@ def nodeInNodes(newNodes, evens, nextWorkingNodes, n):
 
 		num = eta.eta(g, l, n, evens)
 
-		
 		newEtaData[str(N)] = num
-		nextWorkingNodes.append( (N, num) )
+		nextWorkingNodes.append(N)
 	return newEtaData
 
 def seed():
@@ -122,7 +118,7 @@ def seed():
 	#print([2, workingNodes])
 	util.store([2, workingNodes], DATA_FOLDER / "workingNodes.json")
 	util.store(etaData, DATA_FOLDER / "2X2etaData.json")
-	util.store(evenData / "evens.json")
+	util.store(evens, DATA_FOLDER / "evens.json")
 	print("Seeded")
 
 def profileIt():
@@ -130,5 +126,5 @@ def profileIt():
 	main()
 
 if __name__ == "__main__":
-	#seed()
+	seed()
 	main()

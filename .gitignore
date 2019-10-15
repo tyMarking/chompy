@@ -12,3 +12,5 @@ data/epoc2/workingNodes.json
 *.prof
 *.lprof
 data/epoc2/etaData.json
+data/epoc3/evens.json
+data/epoc3/workingNodes.json
