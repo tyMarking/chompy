@@ -23,7 +23,7 @@ etaData = {N : eta(N)}
 workingNodes = [n-1,[(g,eta(g)), ]]
 """
 
-MAX_SIZE = 10
+MAX_SIZE = 12
 
 def main():
 	print("Loading Initial Data")
@@ -115,7 +115,7 @@ def nodeInNodes(newNodes, evens, nextWorkingNodes, n):
 			evens.add(str(N))
 			if len(N) == N[0] and util.file(N) > util.rank(N):
 				evens.add(util.mirror(N))
-		
+
 
 		newEtaData[str(N)] = num
 		nextWorkingNodes.append(N)
