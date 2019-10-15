@@ -178,7 +178,7 @@ def seed():
 	#{key:eta}
 	#[(node,eta)]
 	etaData = {str([1]):0, str([2]):1, str([2,1]):2, str([2,2]):3}#don't seed [1,1] b/c rows > cols
-	workingData = [([2], 1), ([2,1], 2), ([2,2], 3)]
+	workingData = [[2], [2,1], [2,2]]
 	return etaData, workingData
 
 # @profile
