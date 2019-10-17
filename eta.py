@@ -1,11 +1,12 @@
 import util3 as util
 import heritage3
+import ast
 
 #number of columns >= num of rows (because mirroring)
 
 #for square
 #G MUST BE SQUARE OR IT BREAK
-def eta(g, l, etaG, n, NXn):
+def eta(g, l, n, evens):
 	#print("\n\neta for g: "+str(g)+" l: "+str(l))
 	#rank(g) < n-1 and file(g) < n-1
 	#first part for if square
@@ -14,17 +15,16 @@ def eta(g, l, etaG, n, NXn):
 		if g[0] == n-1 and len(g) > 1 and g[1] == 1:
 			#print("SQUARE bite detected for " + str(g))
 			if l == (n-1, n-1):
-				return 2*n-2
+				return 0
 			elif l == (n, n-1):
-				return 2*n-3
+				return 1
 			else:
 				print("This should not have happend - eta case 1")
 		#bite at winning square move then calc remaining moves
 		else:
-
 			#if l doesn't extend into first col or top row
 			if l[0] < n and l[1] < n:
-				return 2*n-1
+				return 1
 			#turned into a rectangle board
 			#if l[1] = n then l[0] = n which isn't in L therefore this is for l[0] = n
 			#l[0] = n
@@ -32,59 +32,51 @@ def eta(g, l, etaG, n, NXn):
 				#getLPrime is adding a col to the right
 				#getLPrime shouldn't return a full L
 				#l[1] was util.getLPrime(g)
-				return etaPrime(g, l[1]-1, etaG, NXn)
+				return etaPrime(g, l[1]-1, evens)
 	else:
 		#print("wants to be elsa")
-		return etaPrime(g, l[1]-(n-len(g)), etaG, NXn)
+		return etaPrime(g, l[1]-(n-len(g)), evens)
 
 #for not square, only called by eta
-def etaPrime(gP, lP, etaGP, NXn):
+def etaPrime(gP, lP, evens):
 	#print("etaPrime gP: " + str(gP)+"\tlP: " + str(lP))
-	if etaGP % 2 == 0:
-		return etaGP + 1
+	if str(gP) in evens:
+		return 1
 	N = util.combineGP_LP(gP, lP)
-	#print("etaPrime N: "+str(N))
-	return etaGraph(N, NXn)
+	print("\netaPrime N: "+str(N))
+	return etaGraph(N, evens)
 
-def etaGraph(node, NXn):
+#@profile
+def etaGraph(node, evens):
 	"""
 	get children of node,
-	init num = 0
 	for child:
-		if childNum + 1 is odd:
-			if childNum > num:
-				num = childNum
-		elif childNum + 1 is even and num is even and childNum > num:
-			num = childNum
+		if childNum is even:
+			return 1
+	return 0
 	"""
 
 	bites = util.getChoices(node)
-	#print("Choices: " + str(bites))
-	#needMirror = []
+	mirrors = []
 	for bite in bites:
 		child = util.bite(node, bite)
-
-		#if util.getN(child) >= util.getM(child):
-		try:
-			if (NXn[str(child)] + 1)%2 == 1:
-				return 1
-		#else:
-		except:
-			#needMirror.append(child)
-			#continue
-			if (NXn[str(util.mirror(child))] + 1)%2 == 1:
-				return 1
-			
-
-		#odd
-
-			"""
-	for child in needMirror:
-		mir = util.mirror(child)
-		cNum = NXn[str(mir)]
-
-		if (cNum + 1) % 2 == 1:
+		if str(child) in evens:
+			print("Even child: " + str(child))
 			return 1
-		"""
+		else:
+			print("Odd child: " + str(child))
+			mirrors.append(child)
+		#elif str(util.mirror(child)) in evens:
+			#return 1
+	for mirror in mirrors:
+		if str(util.mirror(child)) in evens:
+			return 1
+	return 0
 
-	return 2
+	"""
+	for evenS in evens:
+		even = util.toBoard(evenS)
+		if util.isDirectChild(node, even):
+			return 1
+	return 0
+	"""
