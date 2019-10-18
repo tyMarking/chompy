@@ -25,7 +25,8 @@ def bite(b, pos):
 		else:
 			break;
 
-	# board = [r if r > pos[1] else r for r in b]
+	# return [pos[1] if b[i] > pos[1] and i >= pos[0] else b[i] for i in range(len(b))]
+	# print(board)
 
 	return board
 
@@ -79,17 +80,6 @@ def inverseRank(board):
 
 def rank(board):
 	return len(board) - inverseRank(board)
-
-#generates a unique key to be used in the dict.
-# def dKey(board):
-	# keyList = []
-	# key = ""
-	# for row in board:
-		# keyList.append("/" + str(int(row)))
-		# key += "/" + str(int(row))
-	# return ''.join(keyList[1:])
-	# return key[1:]
-	# return str(board)
 
 def genEndBoard():
 	return [1]
@@ -182,11 +172,12 @@ def seed():
 	workingData = [[2], [2,1], [2,2]]
 	return etaData, workingData, evens
 
-# @profile
 def mirror(board):
 	# [ for i in range(len(board))]
 	mirrored = [0] * board[0] #initialize the mirrored rectangular board
-	for i in range(board[0]):
+	mirrored[0] = len(board)
+	mirrored[-1] = inverseRank(board)
+	for i in range(1, board[0] - 1):
 		mirrored[i] = 0
 		for j in range(len(board)):
 			if board[j] > i:
@@ -241,13 +232,8 @@ def main():
 
 	b = [5, 5, 4, 2]
 
-	a = toArrayNotation(b)
-
-	nA = [[a[i][j] for i in range(len(b))] for j in range(b[0])]#mirror
-
-	print(np.array(a))
-	print(np.array(nA))
-	print(fromArr(nA))
+	c = bite(b, (1, 1))
+	print(c)
 
 
 if __name__ == "__main__":

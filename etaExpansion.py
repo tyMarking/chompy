@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 import time
 import csv
+from memory_profiler import profile
 
 THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 #THIS_FOLDER = "D:/Mass Storage/Math/chompy"
@@ -23,8 +24,9 @@ etaData = {N : eta(N)}
 workingNodes = [n-1,[(g,eta(g)), ]]
 """
 
-MAX_SIZE = 5
+MAX_SIZE = 10
 
+# @profile(precision=4)
 def main():
 	print("Loading Initial Data")
 	#etaData = util.load(DATA_FOLDER / "etaData.json")
@@ -33,29 +35,30 @@ def main():
 	workingNodesData = util.load(DATA_FOLDER / "workingNodes.json")
 	print("Loaded")
 
-	timeBeginExpand = time.time()
-	timeStart = timeBeginExpand
+	# timeBeginExpand = time.time()
+	# timeStart = timeBeginExpand
 
-	timeDataFile = THIS_FOLDER / "expansionTime.csv"
+	# timeDataFile = THIS_FOLDER / "expansionTime.csv"
 
-	with open(timeDataFile, "w") as timeData:
+	# with open(timeDataFile, "w") as timeData:
 
-		timeWriter = csv.writer(timeData, dialect='excel')
+		# timeWriter = csv.writer(timeData, dialect='excel')
 
-		timeWriter.writerow(["N", "Time Added", "Total Time"])
+		# timeWriter.writerow(["N", "Time Added", "Total Time"])
 
-		for count in range(0, MAX_SIZE-workingNodesData[0]):
-			timeStart = time.time()
-			#data of form {node : eta}
-			n = workingNodesData[0] + 1
-			print("\nExpanding to " + str(n)+"X"+str(n))
-			#working nodes [g]
-			G = workingNodesData[1]
+	for count in range(0, MAX_SIZE-workingNodesData[0]):
+		timeStart = time.time()
+		#data of form {node : eta}
+		n = workingNodesData[0] + 1
+		print("\nExpanding to " + str(n)+"X"+str(n))
+		#working nodes [g]
+		G = workingNodesData[1]
 
-			evens, workingNodesData = expand(n, G, evens)
-			timeEnd = time.time()
-			timeWriter.writerow([n, timeEnd-timeStart, timeEnd-timeBeginExpand])
+		evens, workingNodesData = expand(n, G, evens)
+			# timeEnd = time.time()
+			# timeWriter.writerow([n, timeEnd-timeStart, timeEnd-timeBeginExpand])
 
+# @profile(precision=4)
 def expand(n, G, evens):
 	nextWorkingNodes = []
 	#for each g + l combo find eta and add to data

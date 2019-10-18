@@ -97,6 +97,7 @@ class ProccesHandler:
 #gets the list of solved sizes and gens the list of current nodes to be worked on
 
 def genIndexData():
+	# return "3X8.json"
 	files = os.listdir(STATES_FOLDER)
 	if ".DS_Store" in files:
 		files.remove(".DS_Store")
@@ -106,7 +107,7 @@ def genIndexData():
 	for file in files:
 			#rudementry check for format
 			#if file[1] == "X" and file[3] == ".":
-			#print(file)
+			print(file)
 			charI = 0
 			while file[charI] != "X":
 				charI += 1
@@ -124,13 +125,13 @@ def genIndexData():
 		if not ((size[0], size[1]+1) in solved):
 			nodes.append( (size[0], size[1]+1) )
 		#for adding square nodes (stats another m value chain)
-		if size[0] + 1 == size[1] and not ((size[0]+1, size[1]) in solved):
-			nodes.append( (size[0]+1, size[1]) )
+		# if size[0] + 1 == size[1] and not ((size[0]+1, size[1]) in solved):
+			# nodes.append( (size[0]+1, size[1]) )
 
 	return (solved, nodes)
 
 
-@profile
+# @profile
 def statesThread(q):
 	while True:
 		size = q.get()
@@ -185,8 +186,8 @@ def statesThread(q):
 		#print("Added " + str(size[0]) + "X" + str(size[1]+1) + " to queue")
 
 		#if m+1Xn is square (root of new column)
-		if size[0]+1 == size[1]:
-			q.put( (size[0]+1, size[1]) )
+		# if size[0]+1 == size[1]:
+			# q.put( (size[0]+1, size[1]) )
 			#print("Added " + str(size[0]+1) + "X" + str(size[1]) + " to queue")
 
 		del oldData
@@ -195,7 +196,7 @@ def statesThread(q):
 
 		q.task_done()
 
-@profile
+# @profile
 def graphThread(q):
 	while True:
 		if q.empty():
@@ -248,7 +249,7 @@ def graphThread(q):
 
 
 
-@profile
+# @profile
 def stateReader(q):
 	#read files names from folder
 	#find all redundent files (not going to be used for inheriting by any nodes)
@@ -453,6 +454,6 @@ def graphTest():
 
 if __name__ == "__main__":
 
-	seed()
+	# seed()
 	main()
 	#graphTest()
