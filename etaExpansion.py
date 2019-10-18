@@ -8,10 +8,11 @@ import csv
 THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 #THIS_FOLDER = "D:/Mass Storage/Math/chompy"
 THIS_FOLDER = Path(THIS_FOLDER)
-DATA_FOLDER = Path(THIS_FOLDER, "./data/epoc3/")
+DATA_FOLDER = Path(THIS_FOLDER, "./data/epoc4/")
+ETA_FOLDER = DATA_FOLDER / "etaData/"
 
 """
-start with 2x2 seed - have some way of tracking progress
+start with 1x1 seed - have some way of tracking progress
 for each g in G get L (don't need to do l max,max)
 go through square cases and establish eta
 go through non-square cases
@@ -23,14 +24,14 @@ etaData = {N : eta(N)}
 workingNodes = [n-1,[(g,eta(g)), ]]
 """
 
-MAX_SIZE = 5
+MAX_SIZE = 11
 
 def main():
 	print("Loading Initial Data")
-	#etaData = util.load(DATA_FOLDER / "etaData.json")
-	evens = set(util.load(DATA_FOLDER / "evens.json"))
-
-	workingNodesData = util.load(DATA_FOLDER / "workingNodes.json")
+	#etaData = util.load(DATA_FOLDER / "etaData.dat")
+	n_evens = util.load(DATA_FOLDER / "n&evens.dat")
+	startN = n_evens[0]
+	evens = set(n_evens[1])
 	print("Loaded")
 
 	timeBeginExpand = time.time()
@@ -44,91 +45,103 @@ def main():
 
 		timeWriter.writerow(["N", "Time Added", "Total Time"])
 
-		for count in range(0, MAX_SIZE-workingNodesData[0]):
+		for n in range(startN+1, MAX_SIZE+1):
 			timeStart = time.time()
-			#data of form {node : eta}
-			n = workingNodesData[0] + 1
-			print("\nExpanding to " + str(n)+"X"+str(n))
-			#working nodes [g]
-			G = workingNodesData[1]
 
-			evens, workingNodesData = expand(n, G, evens)
+			print("\nExpanding to " + str(n)+"X"+str(n))
+
+			evens = expandLCentric(n, evens)
 			timeEnd = time.time()
 			timeWriter.writerow([n, timeEnd-timeStart, timeEnd-timeBeginExpand])
 
-def expand(n, G, evens):
-	nextWorkingNodes = []
-	#for each g + l combo find eta and add to data
-	newNodes = gInNewGs(gInGs(G), n)
-	del G
-	sortNodes(newNodes)
 
-	newEtaData = nodeInNodes(newNodes, evens, nextWorkingNodes, n)
+def expandLCentric(n, evens):
+	prevDir = ETA_FOLDER / (str(n-1)+"X"+str(n-1))
+	newDir = ETA_FOLDER / (str(n)+"X"+str(n))
+	try:
+		os.mkdir(newDir)
+	except:
+		pass
 
+	#For each l in L
+	print("n: " + str(n))
+	for i in reversed(range(1, n+1)):
+		#reversed(range(1, min(i,n-1)+1)):
+		for j in reversed(range(1, min(i,n-1)+1)):
+			#l = [i,j]
+			l = (i,j)
 
-	#print("finished expand, etaData: " + str(etaData) + "\tnextWorkingNodes: " + str(nextWorkingNodes))
-	#print("Storing...")
-	util.store([n, nextWorkingNodes], DATA_FOLDER / "workingNodes.json")
-	util.store(newEtaData, DATA_FOLDER / (str(n)+"X"+str(n)+"etaData.json"))
-	util.store(list(evens), DATA_FOLDER / "evens.json")
-	#print("Stored")
+			#if n == 3 and i == 3 and j == 2:
+				#print("\n\nYessir\n\n")
+				#continue
+			print("l: " + str(l))
 
-	return evens, [n, nextWorkingNodes]
-
-def gInGs(G):
-	newGs = []
-	for g in G:
-		if len(g) == g[0] and util.file(g) > util.rank(g):
-			newGs.append(util.mirror(g))
-
-	G = G + newGs
-	return G
-
-def gInNewGs(newGs, n):
-	newNodes = []
-	#print(newGs)
-	for g in newGs:
-
-		L = util.getL(g,n)
-		for l in L:
-			N = util.combineG_L(g ,l)
-			dat = [N, g, l]
-
-			newNodes.append(dat)
-
-	return newNodes
-
-def sortNodes(newNodes):
-	newNodes.sort(key = lambda x: sum(x[0]))
-
-def nodeInNodes(newNodes, evens, nextWorkingNodes, n):
-	newEtaData = {}
-	for node in newNodes:
-
-		N = node[0]
-		g = node[1]
-		l = node[2]
-
-		num = eta.eta(g, l, n, evens)
-
-		if num % 2 == 0:
-			evens.add(str(N))
-			#if len(N) == N[0] and util.file(N) > util.rank(N):
-			if N[0] > len(N):
-				evens.add(str(util.mirror(N)))
+			# newWorkingNodes = []
+			newEtaData = []
+			if j == 1:
+				g = [n-1]*(n-1)
+				newEtaData.append(etaLG(l, g, n, evens))
+				util.store(newEtaData, newDir / ("f="+str(i)+"_r="+str(j)+".dat") )
+				del newEtaData
+				continue
 
 
-		newEtaData[str(N)] = num
-		nextWorkingNodes.append(N)
-	return newEtaData
+			#f = InvFile, r = InvRank
+			for f in range(n-i, n):
+				for r in range(n-j, f+1):
+					#if n == 3 and i == 3 and j == 2:
+					print("f: " + str(f) + "\tr: " + str(r))
+					if f == n-1 or r == n-1:
+						g = [n-1]*(n-1)
+						newEtaData.append(etaLG(l, g, n, evens))
+						util.store(newEtaData, newDir / ("f="+str(n-i)+"_r="+str(n-j)+".dat") )
+						# if n == 3 and i == 3 and j == 2:
+							# print("Falsely continued")
+						# continue
+					#print("f: " + str(f) + "\tr: " + str(r))
+					#G = [g]
+					G = util.load(prevDir / ("f="+str(f)+"_r="+str(r)+".dat"))
+					G.sort(key = lambda x: sum(x[0]))
+					for g in G:
+						if n == 3 and i == 3 and j == 2:
+							print(g)
+						newEtaData.append(etaLG(l, g[0], n, evens))
+						# newWorkingNodes.append(node)
+					del G
+			# util.store(newWorkingNodes, newDir / ("invF="+str(invF)+"_invR="+str(invR+".dat"))
+			util.store(newEtaData, newDir / ("f="+str(n-i)+"_r="+str(n-j)+".dat") )
+			del newEtaData
+			#storing in case of crash (nothing else is designed to handle a crash)
+			# util.store(list(evens), DATA_FOLDER / "evens.dat")
+	#L = [(0,0)]
+	util.store([[[n]*n,1]], newDir / ("f="+str(n)+"_r="+str(n)+".dat") )
+
+	util.store([n, list(evens)], DATA_FOLDER / "n&evens.dat")
+	return evens
+
+def etaLG(l, g, n, evens):
+	num = eta.eta(g, l, n, evens)
+	node = util.combineG_L(g, l)
+	print("node: " + str(node))
+	if num % 2 == 0:
+		evens.add(str(node))
+		if len(node) == node[0] and util.file(node) > util.rank(node):
+			evens.add(mirror(node))
+	return [node, num]
 
 def seed():
 	print("Seeding")
-	etaData, workingNodes, evens= util.seed()
-	#print([2, workingNodes])
-	util.store([2, workingNodes], DATA_FOLDER / "workingNodes.json")
-	util.store(etaData, DATA_FOLDER / "2X2etaData.json")
-	util.store(evens, DATA_FOLDER / "evens.json")
+	o_o = [[[1],0]]
+
+	evens = [str([1])]
+
+	try:
+		os.mkdir(ETA_FOLDER / "1X1/")
+	except:
+		pass
+
+	util.store(o_o, ETA_FOLDER / "1X1/f=1_r=1.dat")
+	util.store((1,evens), DATA_FOLDER / "n&evens.dat")
 	print("Seeded")
 
 def profileIt():
@@ -136,5 +149,9 @@ def profileIt():
 	main()
 
 if __name__ == "__main__":
+	try:
+		os.mkdir(ETA_FOLDER)
+	except:
+		pass
 	seed()
 	main()

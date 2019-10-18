@@ -7,7 +7,7 @@ import ast
 #for square
 #G MUST BE SQUARE OR IT BREAK
 def eta(g, l, n, evens):
-	#print("\n\neta for g: "+str(g)+" l: "+str(l))
+	#print("\neta for g: "+str(g)+" l: "+str(l))
 	#rank(g) < n-1 and file(g) < n-1
 	#first part for if square
 	if g[0] == len(g)  and util.rank(g) < n-1 and util.file(g) < n-1:
@@ -17,6 +17,9 @@ def eta(g, l, n, evens):
 			if l == (n-1, n-1):
 				return 0
 			elif l == (n, n-1):
+				return 1
+			#because including mirrors for now
+			elif l == (n-1, n):
 				return 1
 			else:
 				print("This should not have happend - eta case 1")
@@ -39,11 +42,12 @@ def eta(g, l, n, evens):
 
 #for not square, only called by eta
 def etaPrime(gP, lP, evens):
-	#print("etaPrime gP: " + str(gP)+"\tlP: " + str(lP))
+	# print("etaPrime gP: " + str(gP)+"\tlP: " + str(lP))
 	if str(gP) in evens:
 		return 1
+	#maybe pass in?
 	N = util.combineGP_LP(gP, lP)
-	print("\netaPrime N: "+str(N))
+	#print("\netaPrime N: "+str(N))
 	return etaGraph(N, evens)
 
 #@profile
@@ -61,10 +65,10 @@ def etaGraph(node, evens):
 	for bite in bites:
 		child = util.bite(node, bite)
 		if str(child) in evens:
-			print("Even child: " + str(child))
+			#print("Even child: " + str(child))
 			return 1
 		else:
-			print("Odd child: " + str(child))
+			#print("Odd child: " + str(child))
 			mirrors.append(child)
 		#elif str(util.mirror(child)) in evens:
 			#return 1
@@ -72,11 +76,3 @@ def etaGraph(node, evens):
 		if str(util.mirror(child)) in evens:
 			return 1
 	return 0
-
-	"""
-	for evenS in evens:
-		even = util.toBoard(evenS)
-		if util.isDirectChild(node, even):
-			return 1
-	return 0
-	"""
