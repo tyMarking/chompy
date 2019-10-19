@@ -50,7 +50,7 @@ def etaPrime(gP, lP, evens):
 		return 1
 	#maybe pass in?
 	N = util.combineGP_LP(gP, lP)
-	#print("\netaPrime N: "+str(N))
+	# print("\netaPrime N: "+str(N))
 	return etaGraph(N, evens)
 
 #@profile
@@ -67,8 +67,9 @@ def etaGraph(node, evens):
 	mirrors = []
 	for bite in bites:
 		child = util.bite(node, bite)
+		# print("child: " + str(child))
 		if str(child) in evens:
-			#print("Even child: " + str(child))
+			# print("Even child: " + str(child))
 			return 1
 		else:
 			#print("Odd child: " + str(child))
@@ -76,6 +77,6 @@ def etaGraph(node, evens):
 		#elif str(util.mirror(child)) in evens:
 			#return 1
 	for mirror in mirrors:
-		if str(util.mirror(child)) in evens:
+		if str(util.mirror(mirror)) in evens:
 			return 1
 	return 0

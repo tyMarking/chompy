@@ -76,30 +76,33 @@ def expandLCentric(n, evens):
 		newEtaData = []
 		print("\nl: " + str(l))
 		#file >= rank
-		for f in range(1,l[0]):
-			for r in range(1,min(f,l[1]-1)+1):
+		#MUST DO INVERSE FILE BECAUSE SOME BOARDS NOT SQUARE
+		#reg f: range(1,l[0])
+		for f in range(n-l[0]+1,n-1):
+			#reg r: range(1,min(f,l[1]-1)+1)
+			for r in range(max(n-l[1]+1, f), n-1):
 				print("f: " + str(f)+"\tr: " + str(r))
-				G = util.load(prevDir / ("f="+str(f)+"_r="+str(r)+".dat"))
-				print("G: " +str(G))
+				G = util.load(prevDir / ("invF="+str(f)+"_invR="+str(r)+".dat"))
+				# print("G: " +str(G))
 				#getting mirrors
 
 				newG = []
 				for g in G:
-					print("g: " + str(g))
+					# print("g: " + str(g))
 					gF = util.file(g[0])
 					gR = util.rank(g[0])
 					#if mirror would have rank and file compatable
 					#also if rank != file?
 					if gF <= l[1] and gR <= l[0] and gF != gR:
-						print("Mirroring")
+						# print("Mirroring")
 						newG.append([util.mirror(g[0]), g[1]])
 
 				G += newG
-				print("postG: " + str(G))
+				# print("postG: " + str(G))
 				#sorting by num choices (least choices first) => earlier nodes don't rely on
 				#later nodes as children in etaGraph
 				G.sort(key = lambda x: sum(x[0]))
-				print("sorted")
+				# print("sorted")
 				for g in G:
 
 					newEtaData.append(etaLG(l, g[0], n, evens))
@@ -108,7 +111,7 @@ def expandLCentric(n, evens):
 		g = [n-1]*(n-1)
 		newEtaData.append(etaLG(l, g, n, evens))
 
-		util.store(newEtaData, newDir / ("f="+str(l[0])+"_r="+str(l[1])+".dat") )
+		util.store(newEtaData, newDir / ("invF="+str(n-l[0])+"_invR="+str(n-l[1])+".dat") )
 		del newEtaData
 
 	#L = [(0,0)]
@@ -120,7 +123,7 @@ def expandLCentric(n, evens):
 def etaLG(l, g, n, evens):
 	num = eta.eta(g, l, n, evens)
 	node = util.combineG_L(g, l)
-	print("node: " + str(node) +"\tnum: " + str(num))
+	# print("node: " + str(node) +"\tnum: " + str(num))
 	if num % 2 == 0:
 		evens.add(str(node))
 		#if len(node) == node[0] and util.file(node) > util.rank(node):
@@ -138,8 +141,8 @@ def seed():
 	except:
 		pass
 
-	util.store(o_o, ETA_FOLDER / "1X1/f=0_r=0.dat")
-	util.store([], ETA_FOLDER / "1X1/f=1_r=1.dat")
+	util.store(o_o, ETA_FOLDER / "1X1/invF=1_invR=1.dat")
+	util.store([], ETA_FOLDER / "1X1/invF=0_invR=0.dat")
 	util.store((1,evens), DATA_FOLDER / "n&evens.dat")
 	print("Seeded")
 
