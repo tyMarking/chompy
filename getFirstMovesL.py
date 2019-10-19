@@ -14,30 +14,31 @@ ETA_FOLDER = DATA_FOLDER / "etaData/"
 
 #print(util.file([3]))
 
-n = 4
+n = 5
 
 etaData = {}
 for i in range (1,n+1):
 	nFolder = ETA_FOLDER / (str(i)+"X"+str(i)+"/")
 	print("Loading: " + str(i)+"X"+str(i))
-	for f in range(i):
-		for r in range(i):
-			if f == 0 and r == 0:
-				continue
-			partData = util.load(nFolder / ("f="+str(r)+"_r="+str(f)+".dat"))
+	for f in range(1,i+1):
+		for r in range(1,min(f+1,i)):
+			# if f == 0 and r == 0:
+			# 	continue
+			partData = util.load(nFolder / ("f="+str(f)+"_r="+str(r)+".dat"))
+			# print("partData: " + str(partData))
 			for nodeN in partData:
 				etaData[str(nodeN[0])] = nodeN[1]
 
-	partData = util.load(nFolder / ("f="+str(i)+"_r="+str(i)+".dat"))
+	partData = util.load(nFolder / ("f="+str(0)+"_r="+str(0)+".dat"))
 	for nodeN in partData:
 		etaData[str(nodeN[0])] = nodeN[1]
 
 	print("Loaded")
 
-if str([2]) in etaData.keys():
-    print("It's there!")
-else:
-    print("Nope sorry")
+# if str([2]) in etaData.keys():
+#     print("It's there!")
+# else:
+#     print("Nope sorry")
 
 firstMoves = {}
 mirrors = 0
@@ -55,5 +56,5 @@ for i in range(2,n+1):
 			if cNum % 2 == 0:
 				fms.append(child)
 		firstMoves[str(i)+"X"+str(j)] = fms
-util.storeJson(firstMoves, DATA_FOLDER / "firstMovesV3-5_new_2.json")
+util.storeJson(firstMoves, DATA_FOLDER / "firstMovesV3-5_new_3.json")
 print("Mirrors: " + str(mirrors))

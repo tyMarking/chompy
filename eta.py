@@ -7,13 +7,14 @@ import ast
 #for square
 #G MUST BE SQUARE OR IT BREAK
 def eta(g, l, n, evens):
-	#print("\neta for g: "+str(g)+" l: "+str(l))
+	# print("\neta for g: "+str(g)+" l: "+str(l))
 	#rank(g) < n-1 and file(g) < n-1
 	#first part for if square
 	if g[0] == len(g)  and util.rank(g) < n-1 and util.file(g) < n-1:
 		#if g = correct first move for a bite
-		if g[0] == n-1 and len(g) > 1 and g[1] == 1:
-			#print("SQUARE bite detected for " + str(g))
+		# print("roughly square")
+		if g[0] == n-1 and ((len(g) == 1 and l[0] > 0) or (len(g) > 1 and g[1] == 1)):
+			# print("SQUARE bite detected for " + str(g))
 			if l == (n-1, n-1):
 				return 0
 			elif l == (n, n-1):
@@ -22,11 +23,13 @@ def eta(g, l, n, evens):
 			elif l == (n-1, n):
 				return 1
 			else:
-				print("This should not have happend - eta case 1")
+				# print("This should not have happend - eta case 1")
+				return 1
 		#bite at winning square move then calc remaining moves
 		else:
 			#if l doesn't extend into first col or top row
 			if l[0] < n and l[1] < n:
+				# print("returning here")
 				return 1
 			#turned into a rectangle board
 			#if l[1] = n then l[0] = n which isn't in L therefore this is for l[0] = n
