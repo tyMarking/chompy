@@ -20,16 +20,16 @@ etaData = {}
 for i in range (1,n+1):
 	nFolder = ETA_FOLDER / (str(i)+"X"+str(i)+"/")
 	print("Loading: " + str(i)+"X"+str(i))
-	for f in range(1,i+1):
-		for r in range(1,min(f+1,i)):
+	for f in range(i):
+		for r in range(max(f,1),min(f+1,i)):
 			# if f == 0 and r == 0:
 			# 	continue
-			partData = util.load(nFolder / ("f="+str(f)+"_r="+str(r)+".dat"))
+			partData = util.load(nFolder / ("invF="+str(f)+"_invR="+str(r)+".dat"))
 			# print("partData: " + str(partData))
 			for nodeN in partData:
 				etaData[str(nodeN[0])] = nodeN[1]
 
-	partData = util.load(nFolder / ("f="+str(0)+"_r="+str(0)+".dat"))
+	partData = util.load(nFolder / ("invF="+str(i)+"_invR="+str(i)+".dat"))
 	for nodeN in partData:
 		etaData[str(nodeN[0])] = nodeN[1]
 
