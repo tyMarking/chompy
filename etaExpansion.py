@@ -95,6 +95,8 @@ def expandLCentric(n, evens):
 					#also if rank != file?
 					if gF < l[1] and gR < l[0] and gF != gR:
 						# print("Mirroring")
+						# if [util.mirror(g[0]), g[1]] in newG:
+						# 	print("Excess mirror " + str(g[0]))
 						newG.append([util.mirror(g[0]), g[1]])
 
 				G += newG

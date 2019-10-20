@@ -46,7 +46,7 @@ def eta(g, l, n, evens):
 #for not square, only called by eta
 def etaPrime(gP, lP, evens):
 	# print("etaPrime gP: " + str(gP)+"\tlP: " + str(lP))
-	if str(gP) in evens:
+	if inEvens(gP, evens):
 		return 1
 	#maybe pass in?
 	N = util.combineGP_LP(gP, lP)
@@ -68,15 +68,18 @@ def etaGraph(node, evens):
 	for bite in bites:
 		child = util.bite(node, bite)
 		# print("child: " + str(child))
-		if str(child) in evens:
+		if inEvens(child, evens):
 			# print("Even child: " + str(child))
 			return 1
 		else:
 			#print("Odd child: " + str(child))
 			mirrors.append(child)
-		#elif str(util.mirror(child)) in evens:
-			#return 1
-	for mirror in mirrors:
-		if str(util.mirror(mirror)) in evens:
-			return 1
+		# elif inEvens(util.mirror(child), evens):
+			# return 1
+	# for mirror in mirrors:
+	# 	if inEvens(util.mirror(mirror), evens):
+	# 		return 1
 	return 0
+
+def inEvens(node, evens):
+	return (str(node) in evens)
