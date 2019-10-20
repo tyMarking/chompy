@@ -24,7 +24,7 @@ etaData = {N : eta(N)}
 workingNodes = [n-1,[(g,eta(g)), ]]
 """
 
-MAX_SIZE = 5
+MAX_SIZE = 11
 
 def main():
 	print("Loading Initial Data")
@@ -64,7 +64,7 @@ def expandLCentric(n, evens):
 		pass
 
 	#For each l in L
-	print("\n\nn: " + str(n)+"\n")
+	# print("\n\nn: " + str(n)+"\n")
 	L = []
 	#Largest L first
 	for i in reversed(range(1, n+1)):
@@ -74,14 +74,14 @@ def expandLCentric(n, evens):
 
 	for l in L:
 		newEtaData = []
-		print("\nl: " + str(l))
+		# print("\nl: " + str(l))
 		#file >= rank
 		#MUST DO INVERSE FILE BECAUSE SOME BOARDS NOT SQUARE
 		#reg f: range(1,l[0])
-		for f in range(n-l[0]+1,n-1):
-			#reg r: range(1,min(f,l[1]-1)+1)
-			for r in range(max(n-l[1]+1, f), n-1):
-				print("f: " + str(f)+"\tr: " + str(r))
+		for f in range(n-l[0],n-1):
+			# reg r: range(1,min(f,l[1]-1)+1)
+			for r in range(max(n-l[1], f), n-1):
+				# print("f: " + str(f)+"\tr: " + str(r))
 				G = util.load(prevDir / ("invF="+str(f)+"_invR="+str(r)+".dat"))
 				# print("G: " +str(G))
 				#getting mirrors
@@ -93,7 +93,7 @@ def expandLCentric(n, evens):
 					gR = util.rank(g[0])
 					#if mirror would have rank and file compatable
 					#also if rank != file?
-					if gF <= l[1] and gR <= l[0] and gF != gR:
+					if gF < l[1] and gR < l[0] and gF != gR:
 						# print("Mirroring")
 						newG.append([util.mirror(g[0]), g[1]])
 

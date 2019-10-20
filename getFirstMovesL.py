@@ -14,22 +14,25 @@ ETA_FOLDER = DATA_FOLDER / "etaData/"
 
 #print(util.file([3]))
 
-n = 5
+n = 11
 
 etaData = {}
 for i in range (1,n+1):
 	nFolder = ETA_FOLDER / (str(i)+"X"+str(i)+"/")
 	print("Loading: " + str(i)+"X"+str(i))
 	for f in range(i):
-		for r in range(max(f,1),min(f+1,i)):
+		# print("f: " + str(f))
+		for r in range(max(f,1), i):
+			# print("f: " + str(f)+"\tr: " + str(r))
 			# if f == 0 and r == 0:
 			# 	continue
 			partData = util.load(nFolder / ("invF="+str(f)+"_invR="+str(r)+".dat"))
 			# print("partData: " + str(partData))
 			for nodeN in partData:
 				etaData[str(nodeN[0])] = nodeN[1]
-
+	# print("f: " + str(i)+"\tr: " + str(i))
 	partData = util.load(nFolder / ("invF="+str(i)+"_invR="+str(i)+".dat"))
+	# print("partData: " + str(partData))
 	for nodeN in partData:
 		etaData[str(nodeN[0])] = nodeN[1]
 
@@ -53,6 +56,9 @@ for i in range(2,n+1):
 			else:
 				mirrors += 1
 				cNum = etaData[str(util.mirror(child))]
+
+			# if i == 5 and j == 6:
+			# 	print("child: " + str(child) + "\tnum: " + str(cNum))
 			if cNum % 2 == 0:
 				fms.append(child)
 		firstMoves[str(i)+"X"+str(j)] = fms
