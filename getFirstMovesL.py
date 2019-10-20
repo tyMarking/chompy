@@ -62,7 +62,11 @@ for i in range(2,n+1):
 			if cNum % 2 == 0:
 				fms.append(child)
 		firstMoves[str(i)+"X"+str(j)] = fms
+<<<<<<< HEAD
 util.storeJson(firstMoves, DATA_FOLDER / "firstMovesV3-5_16.json")
+=======
+util.storeJson(firstMoves, DATA_FOLDER / "firstMovesV3-5_new_4.json")
+>>>>>>> fd328fcf2026c6573264d600b2550c50345c804b
 print("Mirrors: " + str(mirrors))
 """
 firstMoves = {}

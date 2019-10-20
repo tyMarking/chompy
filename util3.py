@@ -24,7 +24,7 @@ def bite(b, pos):
 		if board[row] > pos[1]:
 			board[row] = pos[1];
 		else:
-			break;
+			break
 
 	# board = [r if r > pos[1] else r for r in b]
 
@@ -124,7 +124,7 @@ def getLPrime(board):
 
 def combineG_L(g, l):
 	#print("Combining g: " + str(g) + " and l: " + str(l))
-	node = g.copy()
+	node = g[:]
 	n = g[0] + 1
 
 	#print("g pre expansion: " + str(node))
