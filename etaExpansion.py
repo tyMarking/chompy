@@ -24,7 +24,7 @@ etaData = {N : eta(N)}
 workingNodes = [n-1,[(g,eta(g)), ]]
 """
 
-MAX_SIZE = 11
+MAX_SIZE = 20
 
 def main():
 	print("Loading Initial Data")
@@ -98,6 +98,7 @@ def expandLCentric(n, evens):
 						newG.append([util.mirror(g[0]), g[1]])
 
 				G += newG
+				del newG
 				# print("postG: " + str(G))
 				#sorting by num choices (least choices first) => earlier nodes don't rely on
 				#later nodes as children in etaGraph
@@ -107,6 +108,7 @@ def expandLCentric(n, evens):
 
 					newEtaData.append(etaLG(l, g[0], n, evens))
 				del G
+
 		#adding g = empty prev board
 		g = [n-1]*(n-1)
 		newEtaData.append(etaLG(l, g, n, evens))
